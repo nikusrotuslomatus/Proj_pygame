@@ -3,20 +3,36 @@ import random
 screenSize(1000, 1000)
 setBackgroundColour("blue")
 drawRect(0,450,1000,280,"black")
-setAutoUpdate(False)
+setAutoUpdate(10)
+text=makeTextBox(0,450,1000,fontSize=20)
+showTextBox(text)
 owl = makeSprite("Desktop/project folder/owl.png")
 fpsDisplay = makeLabel("FPS:",30,10,10,"white")
 showLabel(fpsDisplay)
-xPos = 500
-yPos = 320
-moveSprite(owl, xPos, yPos,True)
+xPositon = 500
+yPosition = 320
+moveSprite(owl, xPositon, yPosition,True)
 showSprite(owl)
 nextframe = clock()
 
 class units(object):
-    def __init__(self,xpos,ypos):
-        self.xpos=xpos
-        self.ypos=ypos
+    class normal_unit(object):
+        def __init__(self,xpos,ypos,spritename):
+            self.xpos=xpos
+            self.ypos=ypos
+            self.spritename=spritename
+            self.speed=3
+        def move(self):
+            if keyPressed("left"):
+                self.xpos -= self.speed
+            elif keyPressed("right"):
+                self.xpos += self.speed
+            if keyPressed("up"):
+                self.ypos -= self.speed
+            elif keyPressed("down"):
+                self.ypos += self.speed
+            moveSprite(self.spritename, self.xpos, self.ypos)
+
 class buildings(object):
     def __init__(self,xpos,ypos):
         self.xpos=xpos
@@ -31,25 +47,9 @@ for x in range(10):
     moveSprite(thisbush, thisbush.x, thisbush.y)
     showSprite(thisbush)
     bushes.append(thisbush)
-xSpeed = 0
-ySpeed = 0
+owlunit=units.normal_unit(xPositon,yPosition,owl)
 while True:
-    xSpeed,ySpeed=0,0
-    if keyPressed("left"):
-        xSpeed=-2
-    elif keyPressed("right"):
-        xSpeed=2
-    if keyPressed("up"):
-        ySpeed=-2
-    elif keyPressed("down"):
-        ySpeed=2
-    #xSpeed += math.sin(math.radians(angle)) * thrustAmount
-    #ySpeed -= math.cos(math.radians(angle)) * thrustAmount
-    if yPos > 420:
-        yPos=420
-    xPos += xSpeed
-    yPos += ySpeed
-    moveSprite(owl, xPos, yPos,True)
+    owlunit.move() 
     fps= tick(60)
     changeLabel(fpsDisplay, "FPS: {0}".format(str(round(fps, 2))))
     updateDisplay()
