@@ -8,6 +8,7 @@ text=makeTextBox(0,450,1000,fontSize=20)
 showTextBox(text)
 owl = "Desktop/project folder/owl.png"
 bush="Desktop/project folder/bush.png"
+
 tree="Desktop/project folder/tree.png"
 fpsDisplay = makeLabel("FPS:",30,10,10,"white")
 showLabel(fpsDisplay)
@@ -22,6 +23,7 @@ class units(object):
             self.ypos=ypos
             self.speed=3
             self.sprite=makeSprite(owl)
+            self.berry=0
             showSprite(self.sprite)
         def move(self):
             if keyPressed("left"):
@@ -33,6 +35,12 @@ class units(object):
             elif keyPressed("down"):
                 self.ypos += self.speed
             moveSprite(self.sprite, self.xpos, self.ypos)
+        def harvest(self):
+            collectibles=allTouching(self.sprite)
+            for collectible in collectibles:
+                if collectible in bushes:
+                    changeSpriteImage(collectible,1)
+                    self.berry+=1
 
 class buildings(object):
     class main_hall(object):
@@ -49,7 +57,7 @@ class buildings(object):
 bushes = []
 for x in range(10):
     thisbush = makeSprite("Desktop/project folder/bush.png")
-    addSpriteImage(thisbush, "Desktop/project folder/tree.png")
+    addSpriteImage(thisbush, "Desktop/project folder/bushcollected.png")
     thisbush.x = random.randint(0,1000)
     thisbush.y = random.randint(0,375)
     moveSprite(thisbush, thisbush.x, thisbush.y)
@@ -71,6 +79,8 @@ while True:
         owlunit1.move()
     if acounter:
         owlunit2.move()
+    if keyPressed("h"):
+        owlunit1.harvest()
     fps= tick(60)
     changeLabel(fpsDisplay, "FPS: {0}".format(str(round(fps, 2))))
     updateDisplay()
