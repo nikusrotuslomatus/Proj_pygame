@@ -6,22 +6,23 @@ drawRect(0,450,1000,280,"black")
 setAutoUpdate(10)
 text=makeTextBox(0,450,1000,fontSize=20)
 showTextBox(text)
-owl = makeSprite("Desktop/project folder/owl.png")
+owl = "Desktop/project folder/owl.png"
+bush="Desktop/project folder/bush.png"
+tree="Desktop/project folder/tree.png"
 fpsDisplay = makeLabel("FPS:",30,10,10,"white")
 showLabel(fpsDisplay)
 xPositon = 500
 yPosition = 320
-moveSprite(owl, xPositon, yPosition,True)
-showSprite(owl)
 nextframe = clock()
 
 class units(object):
     class normal_unit(object):
-        def __init__(self,xpos,ypos,spritename):
+        def __init__(self,xpos,ypos):
             self.xpos=xpos
             self.ypos=ypos
-            self.spritename=spritename
             self.speed=3
+            self.sprite=makeSprite(owl)
+            showSprite(self.sprite)
         def move(self):
             if keyPressed("left"):
                 self.xpos -= self.speed
@@ -31,12 +32,19 @@ class units(object):
                 self.ypos -= self.speed
             elif keyPressed("down"):
                 self.ypos += self.speed
-            moveSprite(self.spritename, self.xpos, self.ypos)
+            moveSprite(self.sprite, self.xpos, self.ypos)
 
 class buildings(object):
-    def __init__(self,xpos,ypos):
-        self.xpos=xpos
-        self.ypos=ypos
+    class main_hall(object):
+        def __init__(self,builder):
+            self.xPos=builder.xpos
+            self.yPos=builder.ypos
+        def build(self):
+            building=makeSprite(tree)
+            moveSprite(building,self.xPos,self.yPos)
+            showSprite(building)
+
+
 
 bushes = []
 for x in range(10):
@@ -47,9 +55,22 @@ for x in range(10):
     moveSprite(thisbush, thisbush.x, thisbush.y)
     showSprite(thisbush)
     bushes.append(thisbush)
-owlunit=units.normal_unit(xPositon,yPosition,owl)
+owlunit1=units.normal_unit(xPositon+100,yPosition+100)
+owlunit2=units.normal_unit(xPositon,yPosition)
+acounter=False
 while True:
-    owlunit.move() 
+    if keyPressed("a"):
+        acounter=True
+    if keyPressed("b"):
+        acounter=False
+    if keyPressed("u"):
+        mh=buildings.main_hall(owlunit1)
+        mh.build()
+        pause(500)
+    if  not acounter :
+        owlunit1.move()
+    if acounter:
+        owlunit2.move()
     fps= tick(60)
     changeLabel(fpsDisplay, "FPS: {0}".format(str(round(fps, 2))))
     updateDisplay()
