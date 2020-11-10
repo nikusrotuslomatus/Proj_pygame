@@ -1,5 +1,6 @@
 from pygame_functions import *
 import random
+from collections import deque
 screenSize(1000, 1000)
 setBackgroundColour("blue")
 drawRect(0,450,1000,280,"black")
@@ -15,12 +16,13 @@ showLabel(fpsDisplay)
 xPositon = 500
 yPosition = 320
 nextframe = clock()
+normalunits=deque()
+warriors=[]
 def iscollectible(x):
     if x.collectability==0:
         return True
     else:
         return False
-
 class units(object):
     class normal_unit(object):
         def __init__(self,xpos,ypos):
@@ -76,6 +78,7 @@ class units(object):
                 killSprite(enemy)
 class buildings(object):
     class main_hall(object):
+        global normalunits
         def __init__(self,builder):
             self.xPos=builder.xpos
             self.yPos=builder.ypos
@@ -83,9 +86,9 @@ class buildings(object):
             building=makeSprite(tree)
             moveSprite(building,self.xPos,self.yPos)
             showSprite(building)
-        
-
-
+        def born_normal_unit(self):
+            normunit=units.normal_unit(self.xPos,self.yPos)
+            normalunits.append(normunit)
 bushes = []
 for x in range(10):
     thisbush = makeSprite("Desktop/project folder/bush.png")
@@ -96,30 +99,37 @@ for x in range(10):
     moveSprite(thisbush, thisbush.x, thisbush.y)
     showSprite(thisbush)
     bushes.append(thisbush)
-owlunit1=units.normal_unit(xPositon+100,yPosition+100)
-
-owlunit2=units.normal_unit(xPositon,yPosition)
+owlunit1=units.normal_unit(xPositon,yPosition)
+normalunits.append(owlunit1)
 warrior=units.warrior(100,100)
 acounter=False
+mainhall=False
 while True:
-    if keyPressed("a"):
-        acounter=True
-    if keyPressed("b"):
+    if keyPressed("n"):
         acounter=False
+        normalunits.rotate(1)
+        pause(200)
+    if keyPressed("w"):
+        acounter=True
     if keyPressed("u"):
-        mh=buildings.main_hall(owlunit1)
-        mh.build()
-        pause(500)
+        if not mainhall:
+            mh=buildings.main_hall(normalunits[0])
+            mh.build()
+            pause(500)
+            mainhall=True
+    if keyPressed("b"):
+        mh.born_normal_unit()
+        pause(200)
     if  not acounter :
-        owlunit1.move()
+        normalunits[0].move()
+        if keyPressed("h"):
+            normalunits[0].harvest()
+        if keyPressed("p"):
+            normalunits[0].put_res()
     if acounter:
         warrior.move()
-    if keyPressed("h"):
-        owlunit1.harvest()
-    if keyPressed("p"):
-        owlunit1.put_res()
-    if keyPressed("k"):
-        warrior.attack()
+        if keyPressed("k"):
+            warrior.attack()
     fps= tick(60)
     changeLabel(fpsDisplay, "FPS: {0}".format(str(round(fps, 2))))
     updateDisplay()
