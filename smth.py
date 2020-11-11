@@ -2,16 +2,20 @@ from pygame_functions import *
 import random
 from collections import deque
 screenSize(1000, 1000)
-setBackgroundColour("blue")
+setBackgroundColour((91,118,27))
 drawRect(0,450,1000,280,"black")
 setAutoUpdate(0)
 text=makeTextBox(0,450,1000,fontSize=20)
 showTextBox(text)
+wood = "Desktop/project folder/wood.png"
+rock = "Desktop/project folder/rock.png"
 owl = "Desktop/project folder/owl.png"
 bush="Desktop/project folder/bush.png"
 warriorowl="Desktop/project folder/warriorowl.png"
 tree="Desktop/project folder/tree.png"
+
 warriortree="Desktop/project folder/warriortree.png"
+storage="Desktop/project folder/storage.png"
 fpsDisplay = makeLabel("FPS:",30,10,10,"white")
 showLabel(fpsDisplay)
 xPositon = 500
@@ -24,6 +28,17 @@ def iscollectible(x):
         return True
     else:
         return False
+def create_random_env(spritename,secondspritename,hp,collectability):
+    thissprite = makeSprite(spritename)
+    addSpriteImage(thissprite, secondspritename)
+    thissprite.x = random.randint(0,1000)
+    thissprite.y = random.randint(0,375)
+    thissprite.collectability=collectability
+    thissprite.hp=hp
+    moveSprite(thissprite, thissprite.x, thissprite.y)
+    showSprite(thissprite)
+    return thissprite
+    
 class units(object):
     class normal_unit(object):
         def __init__(self,xpos,ypos):
@@ -52,9 +67,11 @@ class units(object):
                     changeSpriteImage(collectible,1)
                     self.berry+=1
                     collectible.collectability=1
-        def put_res(self):
+        def put_res(self,storage_name):
             reslabel=makeLabel("ты положил "+str(self.berry)+" ягод на склад",50,30,30)
             showLabel(reslabel)
+            self.storage_name=storage_name
+            self.storage_name.berry+=self.berry
             self.berry=0
             pause(1000)
             hideLabel(reslabel)
@@ -82,7 +99,7 @@ class units(object):
             for enemy in enemies:
                 enemy.hp-=10
                 if enemy.hp==0:
-                    killSprite(enemy)
+                    hideSprite(enemy)
 class buildings(object):
     class main_hall(object):
         global normalunits
@@ -111,34 +128,61 @@ class buildings(object):
         def born_warrior(self):
             warriorowl=units.warrior(self.xPos,self.yPos)
             warriors.append(warriorowl)
+    class storage(object):
+        global storages
+        def __init__(self, builder):
+            self.xPos=builder.xpos
+            self.yPos=builder.ypos
+            self.building=None
+        def build(self):
+            self.building = makeSprite(storage)
+            self.building.hp = 200
+            self.building.berry = 0
+            self.building.wood = 0
+            self.building.stone = 0
+            self.building.x = self.xPos
+            self.building.y = self.yPos
+            storages.append(self.building)
+            moveSprite(self.building, self.xPos, self.yPos)
+            showSprite(self.building)
+
 bushes = []
+woods=[]
+rocks=[]
 for x in range(10):
-    thisbush = makeSprite("Desktop/project folder/bush.png")
-    addSpriteImage(thisbush, "Desktop/project folder/bushcollected.png")
-    thisbush.x = random.randint(0,1000)
-    thisbush.y = random.randint(0,375)
-    thisbush.collectability=0
-    thisbush.hp=10
-    moveSprite(thisbush, thisbush.x, thisbush.y)
-    showSprite(thisbush)
-    bushes.append(thisbush)
+    envbush=create_random_env(bush,"Desktop/project folder/bushcollected.png",20,0)
+    bushes.append(envbush)
+    envwood=create_random_env(wood,"Desktop/project folder/woodcollected.png",100,1)
+    woods.append(envwood)
+    envrock=create_random_env(rock,"Desktop/project folder/rockcollected.png",400,1)
+    rocks.append(envrock)
 owlunit1=units.normal_unit(xPositon,yPosition)
 normalunits.append(owlunit1)
 acounter=False
 mainhall=False
+storages=deque()
 while True:
-    if keyPressed("n"):
+    if keyPressed("1"):
         acounter=False
         normalunits.rotate(1)
         pause(200)
-    if keyPressed("w"):
+    if keyPressed("2"):
         acounter=True
         warriors.rotate(1)
         pause(200)
-    if keyPressed("b"):
-        mh.born_normal_unit()
-        pause(200)
-    if keyPressed("q"):
+    if keyPressed("3"):
+        storages.rotate(1)
+        stsign=makeSprite(owl)
+        moveSprite(stsign,storages[0].x,storages[0].y+50)
+        showSprite(stsign)
+        pause(300)
+        hideSprite(stsign)
+    if keyPressed("n"):
+        if storages[0].berry>=3:
+            mh.born_normal_unit()
+            storages[0].berry-=3
+            pause(200)
+    if keyPressed("w"):
         forge.born_warrior()
         pause(200)
     if  not acounter :
@@ -146,8 +190,13 @@ while True:
         if keyPressed("h"):
             normalunits[0].harvest()
         if keyPressed("p"):
-            normalunits[0].put_res()
-        if keyPressed("u"):
+            normalunits[0].put_res(storages[0])
+        if keyPressed("s"):
+            sg=buildings.storage(normalunits[0])
+            sg.build()
+            pause(200)
+
+        if keyPressed("b"):
             if not mainhall:
                 mh=buildings.main_hall(normalunits[0])
                 mh.build()
