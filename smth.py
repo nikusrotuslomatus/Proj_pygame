@@ -3,19 +3,19 @@ import random
 from collections import deque
 from units_and_buildings import *
 screenSize(1000, 1000)
-setBackgroundColour((91,118,27))
+setBackgroundColour("blue")
 drawRect(0,450,1000,280,"black")
 setAutoUpdate(0)
 text=makeTextBox(0,450,1000,fontSize=20)
 showTextBox(text)
-wood = "Desktop/project folder/wood.png"
-rock = "Desktop/project folder/rock.png"
-owl = "Desktop/project folder/owl.png"
-bush="Desktop/project folder/bush.png"
-warriorowl="Desktop/project folder/warriorowl.png"
-tree="Desktop/project folder/tree.png"
-warriortree="Desktop/project folder/warriortree.png"
-storage="Desktop/project folder/storage.png"
+storage="storage.png"
+owl = "owl.png"
+bush="bush.png"
+warriorowl="warriorowl.png"
+tree="tree.png"
+warriortree="warriortree.png"
+rock = "rock.png"
+wood = "wood.png"
 fpsDisplay = makeLabel("FPS:",30,10,10,"white")
 showLabel(fpsDisplay)
 xPositon = 500
@@ -37,11 +37,11 @@ bushes = []
 woods=[]
 rocks=[]
 for x in range(10):
-    envbush=create_random_env(bush,"Desktop/project folder/bushcollected.png",20,0)
+    envbush=create_random_env(bush,"bushcollected.png",20,0)
     bushes.append(envbush)
-    envwood=create_random_env(wood,"Desktop/project folder/woodcollected.png",100,1)
+    envwood=create_random_env(wood,"woodcollected.png",100,1)
     woods.append(envwood)
-    envrock=create_random_env(rock,"Desktop/project folder/rockcollected.png",400,1)
+    envrock=create_random_env(rock,"rockcollected.png",400,1)
     rocks.append(envrock)
 owlunit1=units.normal_unit(xPositon,yPosition)
 normalunits.append(owlunit1)

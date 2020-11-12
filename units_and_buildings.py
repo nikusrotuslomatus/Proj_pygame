@@ -1,14 +1,14 @@
 from pygame_functions import *
 import random
 from collections import deque
-wood = "Desktop/project folder/wood.png"
-rock = "Desktop/project folder/rock.png"
-owl = "Desktop/project folder/owl.png"
-bush="Desktop/project folder/bush.png"
-warriorowl="Desktop/project folder/warriorowl.png"
-tree="Desktop/project folder/tree.png"
-warriortree="Desktop/project folder/warriortree.png"
-storage="Desktop/project folder/storage.png"
+wood = "wood.png"
+rock = "rock.png"
+owl = "owl.png"
+bush="bush.png"
+warriorowl="warriorowl.png"
+tree="tree.png"
+warriortree="warriortree.png"
+storage="storage.png"
 def iscollectible(x):
     if x.collectability==0:
         return True
