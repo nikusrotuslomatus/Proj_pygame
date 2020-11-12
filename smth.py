@@ -47,9 +47,10 @@ def main():
         rocks.append(envrock)
     owlunit1=units.normal_unit(xPositon,yPosition)
     normalunits.append(owlunit1)
-    acounter=False
-    mainhall=False
-    storages=deque()
+    acounter = False
+    mainhall = False
+    storages = deque()
+    sawmills = deque()
     while True:
         if keyPressed("0"):
             acounter=False
@@ -73,7 +74,6 @@ def main():
                 pause(200)
         if keyPressed("6"):
             warriors.append(forge.born_warrior())
-
             pause(200)
         if  not acounter :
             normalunits[0].move()
@@ -82,8 +82,15 @@ def main():
             if keyPressed("3"):
                 normalunits[0].put_res(storages[0])
             if keyPressed("2"):
-                sg=buildings.storage(normalunits[0])
+                sg = buildings.storage(normalunits[0])
                 storages.append(sg.build())
+                pause(200)
+            if keyPressed("n"):
+                sw = buildings.sawmill(normalunits[0])
+                sawmills.append(sw.build()[0])
+                sw.sawing(woods)
+                if woods[0] == 100:
+                    changeSpriteImage(woods[0],1)
                 pause(200)
 
             if keyPressed("4"):

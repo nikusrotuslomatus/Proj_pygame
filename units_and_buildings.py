@@ -9,6 +9,8 @@ warriorowl="warriorowl.png"
 tree="tree.png"
 warriortree="warriortree.png"
 storage="storage.png"
+sawmill = 'sawmill.png'
+range_sprite = 'range_sprite.png'
 def iscollectible(x):
     if x.collectability==0:
         return True
@@ -110,11 +112,40 @@ class buildings(object):
         def build(self):
             self.building = makeSprite(storage)
             self.building.hp = 200
-            self.building.berry = 0
             self.building.wood = 0
-            self.building.stone = 0
             self.building.x = self.xPos
             self.building.y = self.yPos
             moveSprite(self.building, self.xPos, self.yPos)
             showSprite(self.building)
             return self.building
+
+    class sawmill(object):
+        def __init__(self, builder):
+            self.xPos = builder.xpos
+            self.yPos = builder.ypos
+            self.building = None
+            self.collader_of_building = None
+
+        def build(self):
+            self.building = makeSprite(sawmill)
+            self.collader_of_building = makeSprite(range_sprite)
+            self.building.hp = 200
+            self.building.wood = 0
+            self.building.damage_to_trees = 100
+            self.building.x = self.xPos
+            self.building.y = self.yPos
+            self.collader_of_building.x = self.xPos
+            self.collader_of_building.y = self.yPos
+            moveSprite(self.building, self.xPos, self.yPos)
+            moveSprite(self.collader_of_building, self.xPos, self.yPos,True)
+            showSprite(self.building)
+            #showSprite(self.collader_of_building)
+            return self.building,self.collader_of_building
+
+        def sawing(self,woods):
+            pass
+            for i in range(10):
+                if touching(self.collader_of_building, woods[i]):
+                    woods[i].hp -= self.building.damage_to_trees
+                    if woods[i].hp <= 0:
+                        changeSpriteImage(woods[i],1)
