@@ -1,7 +1,7 @@
 from pygame_functions import *
 import random
 from collections import deque
-wood = "wood.png"
+wood = "Desktop/project folder/wood.png"
 rock = "rock.png"
 owl = "owl.png"
 bush="bush.png"
