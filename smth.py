@@ -26,8 +26,8 @@ warriors=deque()
 def create_random_env(spritename,secondspritename,hp,collectability):
     thissprite = makeSprite(spritename)
     addSpriteImage(thissprite, secondspritename)
-    thissprite.x = random.randint(0,1000)
-    thissprite.y = random.randint(0,375)
+    thissprite.x = random.random()*1000-30
+    thissprite.y = random.random()*375-20
     thissprite.collectability=collectability
     thissprite.hp=hp
     moveSprite(thissprite, thissprite.x, thissprite.y)
