@@ -141,9 +141,11 @@ class buildings(object):
 
         def sawing(self):
             if len(self.near_woods):
-                self.near_woods[0].hp = 0
+                self.near_woods[0].hp -= self.building.damage_to_trees
                 changeSpriteImage(self.near_woods[0],1)
+                self.building.wood += 1
                 self.near_woods.pop(0)
+
 
     class quarry(object):
         def __init__(self, builder, stones):
@@ -160,15 +162,16 @@ class buildings(object):
                     self.near_stones[self.a] = self.stones[i]
                     self.a += 1
             self.building.hp = 200
-            self.building.wood = 0
-            self.building.damage_to_trees = 100
+            self.building.stones = 0
+            self.building.damage_to_stones = 100
             moveSprite(self.building, self.building.x, self.building.y)
             showSprite(self.building)
 
         def stonecutting(self):
             if len(self.near_stones):
-                self.near_stones[0].hp = 0
+                self.near_stones[0].hp -= self.building.damage_to_stones
                 changeSpriteImage(self.near_stones[0], 1)
+                self.building.stones += 1
                 self.near_stones.pop(0)
 
             '''
