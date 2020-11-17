@@ -3,7 +3,7 @@ import random
 from collections import deque
 from units_and_buildings import *
 screenSize(1000, 1000)
-setBackgroundColour("blue")
+setBackgroundColour((91,118,27))
 drawRect(0,450,1000,280,"black")
 setAutoUpdate(0)
 text=makeTextBox(0,450,1000,fontSize=20)
@@ -93,6 +93,9 @@ def main():
                 sg = buildings.storage(normalunits[0])
                 storages.append(sg.build())
                 pause(200)
+            if keyPressed("p"):
+            normalunits[0].get_wood(sawmills)
+            normalunits[0].get_rock(quarries)
             if keyPressed("n"):
                 sawmills.append(buildings.sawmill(normalunits[0],woods))
                 #buildings.sawmill(normalunits[0]).sawing(woods)
