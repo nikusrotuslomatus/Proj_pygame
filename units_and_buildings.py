@@ -37,6 +37,13 @@ class units(object):
             elif keyPressed("down"):
                 self.ypos += self.speed
             moveSprite(self.sprite, self.xpos, self.ypos)
+        def get_wood(self,sawmills):
+            self.sawmills=sawmills
+            collectibles=allTouching(self.sprite)
+            for collectible in collectibles:
+                if collectible in self.sawmills:
+                    self.wood+=collectible.wood
+                    collectible.wood=0
         def harvest(self,bushes):
             self.bushes=bushes
             collectibles=allTouching(self.sprite)
@@ -45,12 +52,25 @@ class units(object):
                     changeSpriteImage(collectible,1)
                     self.berry+=1
                     collectible.collectability=1
+        def get_rock(self,quarries):
+            self.quarries=quarries
+            collectibles=allTouching(self.sprite)
+            for collectible in collectibles:
+                if collectible in self.quarries:
+                    self.rock+=collectible.rock
+                    collectible.rock=0
         def put_res(self,storage_name):
             reslabel=makeLabel("ты положил "+str(self.berry)+" ягод на склад",50,30,30)
+            reslabel=makeLabel("ты положил "+str(self.rock)+" ягод на склад",50,30,30)
+            reslabel=makeLabel("ты положил "+str(self.wood)+" ягод на склад",50,30,30)
             showLabel(reslabel)
             self.storage_name=storage_name
             self.storage_name.berry+=self.berry
+            self.storage_name.wood+=self.wood
+            self.storage_name.rock+=self.rock
             self.berry=0
+            self.wood=0
+            self.rock=0
             pause(1000)
             hideLabel(reslabel)
     class warrior(normal_unit):
