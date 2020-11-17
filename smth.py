@@ -52,7 +52,7 @@ def main():
     mainhall = False
     storages = deque()
     sawmills = deque()
-    quarryes = deque()
+    quarries = deque()
     while True:
         if keyPressed("0"):
             sawmills.rotate(1)
