@@ -20,7 +20,6 @@ fpsDisplay = makeLabel("FPS:",30,10,10,"white")
 showLabel(fpsDisplay)
 xPositon = 500
 yPosition = 320
-nextframe = clock()
 normalunits=deque()
 warriors=deque()
 def create_random_env(spritename,secondspritename,hp,collectability):
@@ -35,6 +34,8 @@ def create_random_env(spritename,secondspritename,hp,collectability):
     return thissprite
 
 def main():
+    nextFrame_woods = clock()
+    nextFrame_rocks = clock()
     bushes = []
     woods=[]
     rocks=[]
@@ -51,11 +52,15 @@ def main():
     mainhall = False
     storages = deque()
     sawmills = deque()
+    quarryes = deque()
     while True:
         if keyPressed("0"):
-            acounter=False
-            normalunits.rotate(1)
+            sawmills.rotate(1)
+            stsign = makeSprite(owl)
+            moveSprite(stsign, sawmills[0].xPos, sawmills[0].yPos + 50)
+            showSprite(stsign)
             pause(200)
+            hideSprite(stsign)
         if keyPressed("9"):
             acounter=True
             warriors.rotate(1)
@@ -72,6 +77,9 @@ def main():
                 normalunits.append(mh.born_normal_unit())
                 storages[0].berry-=3
                 pause(200)
+        if keyPressed("b"):
+            sawmills[0].sawing(woods)
+            #normalunits[0].spiling(woods)
         if keyPressed("6"):
             warriors.append(forge.born_warrior())
             pause(200)
@@ -86,11 +94,14 @@ def main():
                 storages.append(sg.build())
                 pause(200)
             if keyPressed("n"):
-                sw = buildings.sawmill(normalunits[0])
-                sawmills.append(sw.build()[0])
-                sw.sawing(woods)
-                if woods[0] == 100:
-                    changeSpriteImage(woods[0],1)
+                sawmills.append(buildings.sawmill(normalunits[0],woods))
+                #buildings.sawmill(normalunits[0]).sawing(woods)
+                nextFrame_woods =clock() + 5000
+                pause(200)
+            if keyPressed("m"):
+                quarryes.append(buildings.quarry(normalunits[0],rocks))
+                #buildings.sawmill(normalunits[0]).sawing(woods)
+                nextFrame_rocks = clock() + 5000
                 pause(200)
 
             if keyPressed("4"):
@@ -108,6 +119,14 @@ def main():
             if keyPressed("k"):
                 warriors[0].attack()
                 pause(200)
+        if len(sawmills):
+            if clock() >= nextFrame_woods:
+                sawmills[0].sawing()
+                nextFrame_woods += 5000
+        if len(quarryes):
+            if clock() >= nextFrame_rocks:
+                quarryes[0].stonecutting()
+                nextFrame_rocks += 5000
         fps= tick(60)
         changeLabel(fpsDisplay, "FPS: {0}".format(str(round(fps, 2))))
         updateDisplay()

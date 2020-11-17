@@ -10,7 +10,7 @@ tree="tree.png"
 warriortree="warriortree.png"
 storage="storage.png"
 sawmill = 'sawmill.png'
-range_sprite = 'range_sprite.png'
+quarry = 'quarry.png'
 def iscollectible(x):
     if x.collectability==0:
         return True
@@ -120,32 +120,80 @@ class buildings(object):
             return self.building
 
     class sawmill(object):
-        def __init__(self, builder):
-            self.xPos = builder.xpos
-            self.yPos = builder.ypos
-            self.building = None
-            self.collader_of_building = None
-
-        def build(self):
+        def __init__(self, builder,woods):
+            self.woods = woods
+            self.a = 0
+            self.near_woods = []
             self.building = makeSprite(sawmill)
-            self.collader_of_building = makeSprite(range_sprite)
+            self.building.x = builder.xpos
+            self.building.y = builder.ypos
+            for i in range(len(self.woods)):
+                if (((self.woods[i].x - self.building.x)**2+(self.woods[i].y-self.building.y)**2) ** 0.5) <= 300:
+                    self.near_woods.append(0)
+                    self.near_woods[self.a] = self.woods[i]
+                    self.a += 1
             self.building.hp = 200
             self.building.wood = 0
             self.building.damage_to_trees = 100
-            self.building.x = self.xPos
-            self.building.y = self.yPos
-            self.collader_of_building.x = self.xPos
-            self.collader_of_building.y = self.yPos
-            moveSprite(self.building, self.xPos, self.yPos)
-            moveSprite(self.collader_of_building, self.xPos, self.yPos,True)
+            moveSprite(self.building,self.building.x, self.building.y)
             showSprite(self.building)
-            #showSprite(self.collader_of_building)
-            return self.building,self.collader_of_building
 
-        def sawing(self,woods):
-            pass
-            for i in range(10):
-                if touching(self.collader_of_building, woods[i]):
-                    woods[i].hp -= self.building.damage_to_trees
-                    if woods[i].hp <= 0:
-                        changeSpriteImage(woods[i],1)
+
+        def sawing(self):
+            if len(self.near_woods):
+                self.near_woods[0].hp = 0
+                changeSpriteImage(self.near_woods[0],1)
+                self.near_woods.pop(0)
+
+    class quarry(object):
+        def __init__(self, builder, stones):
+            self.stones = stones
+            self.a = 0
+            self.near_stones = []
+            self.building = makeSprite(quarry)
+            self.building.x = builder.xpos
+            self.building.y = builder.ypos
+            for i in range(len(self.stones)):
+                if (((self.stones[i].x - self.building.x) ** 2 + (
+                    self.stones[i].y - self.building.y) ** 2) ** 0.5) <= 300:
+                    self.near_stones.append(0)
+                    self.near_stones[self.a] = self.stones[i]
+                    self.a += 1
+            self.building.hp = 200
+            self.building.wood = 0
+            self.building.damage_to_trees = 100
+            moveSprite(self.building, self.building.x, self.building.y)
+            showSprite(self.building)
+
+        def stonecutting(self):
+            if len(self.near_stones):
+                self.near_stones[0].hp = 0
+                changeSpriteImage(self.near_stones[0], 1)
+                self.near_stones.pop(0)
+
+            '''
+            self.woods = woods
+            showSprite(self.collader_of_building)
+            collectibles=allTouching(self.collader_of_building)
+            hideSprite(self.collader_of_building)
+            for collectible in collectibles:
+                if collectible in self.woods:
+                    collectible.hp -= 100
+                    if collectible.hp <= 0:
+                        changeSpriteImage(collectible,1)
+                        
+            print(len(self.collectibles))
+            self.collectibles = allTouching(self.collader_of_building)
+             for collectible in self.collectibles:
+             if collectible not in self.woods:
+             self.collectibles.remove(collectible)
+             moveSprite(self.collectibles[0], 0 , 0)
+            changeSpriteImage(self.collectibles[self.kost], 1)
+
+            self.collectibles.remove(self.collectibles[0])
+                self.collectibles[0].hp -= self.building.damage_to_trees
+                if self.collectibles[0].hp <= 0:
+                    changeSpriteImage(self.collectibles[0],1)
+                    self.collectibles.popleft()
+                self.kost += 1
+                '''
