@@ -160,7 +160,7 @@ class buildings(object):
                     self.near_stones[self.a] = self.stones[i]
                     self.a += 1
             self.building.hp = 200
-            self.building.wood = 0
+            self.building.rock = 0
             self.building.damage_to_trees = 100
             moveSprite(self.building, self.building.x, self.building.y)
             showSprite(self.building)
