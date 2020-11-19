@@ -2,71 +2,8 @@ from pygame_functions import *
 import random
 from collections import deque
 from units_and_buildings import *
-screenSize(1000, 1000)
-setBackgroundColour((43,94,65))
-drawRect(0,450,1000,280,"black")
-setAutoUpdate(0)
-text=makeTextBox(0,450,1000,fontSize=20)
-showTextBox(text)
-wood = "Desktop/project folder/wood.png"
-rock = "Desktop/project folder/rock.png"
-owl = "Desktop/project folder/owl.png"
-bush="Desktop/project folder/bush.png"
-warriorowl="Desktop/project folder/warriorowl.png"
-tree="Desktop/project folder/tree.png"
-warriortree="Desktop/project folder/warriortree.png"
-storage="Desktop/project folder/storage.png"
-pebble="Desktop/project folder/pebble.png"
-branch="Desktop/project folder/branch.png"
-berry="Desktop/project folder/berries.png"
-menu="Desktop/project folder/menu.png"
-sawmill = "Desktop/project folder/sawmill.png"
-quarry = "Desktop/project folder/quarry.png"
-fpsDisplay = makeLabel("FPS:",30,10,10,"white")
-showLabel(fpsDisplay)
-xPositon = 500
-yPosition = 320
-menustorage=makeSprite(storage)
-menumainhall=makeSprite(tree)
-menuforge=makeSprite(warriortree)
-menusawmill=makeSprite(sawmill)
-menuquarry=makeSprite(quarry)
-menusprite=makeSprite(menu)
-menuowl=makeSprite(owl)
-menuwarrior=makeSprite(warriorowl)
-moveSprite(menusprite,700,70)
-moveSprite(menustorage,725,100)
-moveSprite(menumainhall,825,100)
-moveSprite(menuforge,925,100)
-moveSprite(menusawmill,725,250)
-moveSprite(menuquarry,825,250)
-moveSprite(menuowl,925,250)
-moveSprite(menuwarrior,725,400)
-showSprite(menusprite)
-showSprite(menustorage)
-showSprite(menumainhall)
-showSprite(menuforge)
-showSprite(menusawmill)
-showSprite(menuquarry)
-showSprite(menuowl)
-showSprite(menuwarrior)
-hideSprite(menusprite)
-hideSprite(menustorage)
-hideSprite(menumainhall)
-hideSprite(menuforge)
-hideSprite(menusawmill)
-hideSprite(menuquarry)
-hideSprite(menuowl)
-hideSprite(menuwarrior)
-normalunits=deque()
-warriors=deque()
-pebbleicon=makeSprite(pebble)
-branchicon=makeSprite(branch)
-berryicon=makeSprite(berry)
-moveSprite(pebbleicon,210,10)
-moveSprite(branchicon,310,10)
-moveSprite(berryicon,410,10)
-
+import environment
+a=environment.start()
 def create_random_env(spritename,secondspritename,hp,collectability):
     thissprite = makeSprite(spritename)
     addSpriteImage(thissprite, secondspritename)
@@ -77,7 +14,6 @@ def create_random_env(spritename,secondspritename,hp,collectability):
     moveSprite(thissprite, thissprite.x, thissprite.y)
     showSprite(thissprite)
     return thissprite
-
 def main():
     labelpebble=makeLabel("0",30,250,10,"white")
     lableberry=makeLabel("0",30,450,10,"white")
@@ -90,15 +26,15 @@ def main():
     pebbles=[]
     branches=[]
     for x in range(10):
-        envbush=create_random_env(bush,"Desktop/project folder/bushcollected.png",20,0)
+        envbush=create_random_env(a.bush,"Desktop/project folder/bushcollected.png",20,0)
         bushes.append(envbush)
-        envwood=create_random_env(wood,"Desktop/project folder/woodcollected.png",100,0)
+        envwood=create_random_env(a.wood,"Desktop/project folder/woodcollected.png",100,0)
         woods.append(envwood)
-        envrock=create_random_env(rock,"Desktop/project folder/rockcollected.png",400,0)
+        envrock=create_random_env(a.rock,"Desktop/project folder/rockcollected.png",400,0)
         rocks.append(envrock)
-        envpebble=create_random_env(pebble,pebble,20,0)
+        envpebble=create_random_env(a.pebble,a.pebble,20,0)
         pebbles.append(envpebble)
-        envbranch=create_random_env(branch,branch,20,0)
+        envbranch=create_random_env(a.branch,a.branch,20,0)
         branches.append(envbranch)
     def menu():
         unhideAll()
@@ -117,10 +53,10 @@ def main():
         for brnch in branches:
             if brnch.x>=640:
                 hideSprite(brnch)
-    owlunit1=units.normal_unit(xPositon,yPosition)
-    normalunits.append(owlunit1)
-    warrior1=units.warrior(xPositon+100,yPosition+100)
-    warriors.append(warrior1)
+    owlunit1=units.normal_unit(a.xPositon,a.yPosition)
+    a.normalunits.append(owlunit1)
+    warrior1=units.warrior(a.xPositon+100,a.yPosition+100)
+    a.warriors.append(warrior1)
     acounter = False
     mainhall = False
     storages = deque()
@@ -146,21 +82,18 @@ def main():
                 for brnch in branches :
                     if brnch.x>=640 and brnch.collectability==0:
                         showSprite(brnch)
-            hideSprite(menusprite)
-            hideSprite(menustorage)
-            hideSprite(menumainhall)
-            hideSprite(menuforge)
-            hideSprite(menusawmill)
-            hideSprite(menuquarry)
-            hideSprite(menuowl)
-            hideSprite(menuwarrior)
-
-                    
-
+            hideSprite(a.menusprite)
+            hideSprite(a.menustorage)
+            hideSprite(a.menumainhall)
+            hideSprite(a.menuforge)
+            hideSprite(a.menusawmill)
+            hideSprite(a.menuquarry)
+            hideSprite(a.menuowl)
+            hideSprite(a.menuwarrior)
         drawRect(175,0,830,60,(102,0,204))
-        showSprite(pebbleicon)
-        showSprite(branchicon)
-        showSprite(berryicon)
+        showSprite(a.pebbleicon)
+        showSprite(a.branchicon)
+        showSprite(a.berryicon)
         showLabel(labelpebble)
         showLabel(lableberry)
         showLabel(labelbranch)
@@ -170,7 +103,7 @@ def main():
         if keyPressed("0"):
             try:
                 sawmills.rotate(1)
-                stsign = makeSprite(owl)
+                stsign = makeSprite(a.owl)
                 moveSprite(stsign, sawmills[0].xPos, sawmills[0].yPos + 50)
                 showSprite(stsign)
                 pause(200)
@@ -188,7 +121,7 @@ def main():
         if keyPressed("r"):
             try:
                 acounter=False
-                normalunits.rotate(1)
+                a.normalunits.rotate(1)
                 pause(200)
             except:
                 errorlabel=makeLabel("ты еще не создавал рабочих",50,30,30)
@@ -197,7 +130,7 @@ def main():
                 hideLabel(errorlabel)
         if keyPressed("9"):
             acounter=True
-            warriors.rotate(1)
+            a.warriors.rotate(1)
             pause(200)
         if keyPressed("8"):
             try:
@@ -212,10 +145,10 @@ def main():
                 showLabel(errorlabel)
                 pause(1000)
                 hideLabel(errorlabel)
-        if spriteClicked(menuowl):
+        if spriteClicked(a.menuowl):
             try:
                 if storages[0].berry>=3 and mainhall:
-                    normalunits.append(mh.born_normal_unit())
+                    a.normalunits.append(mh.born_normal_unit())
                     storages[0].berry-=3
                     pause(200)
             except:
@@ -223,11 +156,11 @@ def main():
                 showLabel(errorlabel)
                 pause(1000)
                 hideLabel(errorlabel)
-        if spriteClicked(menuwarrior):
+        if spriteClicked(a.menuwarrior):
             try:
                 if  storages[0].rock>=1:
                         storages[0].rock-=1
-                        warriors.append(forge.born_warrior())
+                        a.warriors.append(forge.born_warrior())
                         pause(200)
             except:
                 errorlabel=makeLabel("ты еще не построил кузницу",50,30,30)
@@ -235,24 +168,24 @@ def main():
                 pause(1000)
                 hideLabel(errorlabel)
         if  not acounter :
-            normalunits[0].move()
+            a.normalunits[0].move()
             try:
                 if keyPressed("1"):
-                    normalunits[0].get(sawmills,bushes,quarries,branches,pebbles)
+                    a.normalunits[0].get(sawmills,bushes,quarries,branches,pebbles)
             except:
                 pass
             try:
                 if keyPressed("3"):
-                    normalunits[0].put_res(storages[0])
+                    a.normalunits[0].put_res(storages[0])
             except:
                 errorlabel=makeLabel("ты еще не построил склад",50,30,30)
                 showLabel(errorlabel)
                 pause(1000)
                 hideLabel(errorlabel)
-            if spriteClicked(menustorage):
+            if spriteClicked(a.menustorage):
                 try:
-                    if normalunits[0].wood>=1:
-                        normalunits[0].wood-=1
+                    if a.normalunits[0].wood>=1:
+                        a.normalunits[0].wood-=1
                         sg = buildings.storage(normalunits[0])
                         storages.append(sg.build())
                         pause(200)
@@ -261,11 +194,9 @@ def main():
                         sg = buildings.storage(normalunits[0])
                         storages.append(sg.build())
                         pause(200)
-                    
-
                 except:
                     pass
-            if spriteClicked(menusawmill):
+            if spriteClicked(a.menusawmill):
                 try:
                     if  storages[0].wood>=2:
                         storages[0].wood-=2
@@ -275,7 +206,7 @@ def main():
                         pause(200)
                 except:
                     pass
-            if spriteClicked(menuquarry):
+            if spriteClicked(a.menuquarry):
                 try:
                     if  storages[0].wood>=2 and storages[0].rock>=2:
                         storages[0].wood-=2
@@ -286,18 +217,18 @@ def main():
                         pause(200)
                 except:
                     pass
-            if spriteClicked(menumainhall):
+            if spriteClicked(a.menumainhall):
                 if not mainhall:
                     try:
                         if  storages[0].wood>=4:
                             storages[0].wood-=4
-                            mh=buildings.main_hall(normalunits[0])
+                            mh=buildings.main_hall(a.normalunits[0])
                             mh.build()
                             pause(500)
                             mainhall=True
                     except:
                         pass
-            if spriteClicked(menuforge):
+            if spriteClicked(a.menuforge):
                 try:
                     if storages[0].rock>=4 and storages[0].wood>=3:
                         storages[0].rock-=4
@@ -309,9 +240,9 @@ def main():
                     pass
         if acounter:
             try:
-                warriors[0].move()
+                a.warriors[0].move()
                 if keyPressed("k"):
-                    warriors[0].attack()
+                    a.warriors[0].attack()
                     pause(200)
             except:
                 errorlabel=makeLabel("ты еще не обучил воинов",50,30,30)
@@ -327,16 +258,11 @@ def main():
                 quarries[0].stonecutting()
                 nextFrame_rocks += 200
         fps= tick(60)
-        changeLabel(fpsDisplay, "FPS: {0}".format(str(round(fps, 2))))
+        changeLabel(a.fpsDisplay, "FPS: {0}".format(str(round(fps, 2))))
         for mainloopstorage in storages:
             mainloopberries+=mainloopstorage.berry
             mainloopwoods+=mainloopstorage.wood
             mainlooprocks+=mainloopstorage.rock
-
-
-
-
-
         try:
             changeLabel(labelpebble,str(mainlooprocks))
             changeLabel(labelbranch,str(mainloopwoods))
