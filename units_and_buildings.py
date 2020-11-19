@@ -1,16 +1,8 @@
 from pygame_functions import *
 import random
 from collections import deque
-wood = "Desktop/project folder/wood.png"
-rock = "Desktop/project folder/rock.png"
-owl = "Desktop/project folder/owl.png"
-bush="Desktop/project folder/bush.png"
-warriorowl="Desktop/project folder/warriorowl.png"
-tree="Desktop/project folder/tree.png"
-warriortree="Desktop/project folder/warriortree.png"
-storage="Desktop/project folder/storage.png"
-sawmill = "Desktop/project folder/sawmill.png"
-quarry = "Desktop/project folder/quarry.png"
+import environment
+a=environment.start()
 def iscollectible(x):
     if x.collectability==0:
         return True
@@ -22,7 +14,7 @@ class units(object):
             self.xpos=xpos
             self.ypos=ypos
             self.speed=3
-            self.sprite=makeSprite(owl)
+            self.sprite=makeSprite(a.owl)
             self.berry=0
             self.wood=0
             self.rock=0
@@ -70,11 +62,11 @@ class units(object):
         def put_res(self,storage_name):
             self.storage_name=storage_name
             self.storage_name.berry+=self.berry
-            self.storage_name.wood+=self.wood
-            self.storage_name.rock+=self.rock
+            self.storage_name.wood+=self.rock
+            self.storage_name.rock+=self.wood
             reslabel=makeLabel("ты положил "+str(self.berry)+" ягод на склад",50,30,30)
-            reslabel1=makeLabel("ты положил "+str(self.rock)+" дров на склад",50,30,70)
-            reslabel2=makeLabel("ты положил "+str(self.wood)+" камней на склад",50,30,110)
+            reslabel1=makeLabel("ты положил "+str(self.rock)+" камней на склад",50,30,70)
+            reslabel2=makeLabel("ты положил "+str(self.wood)+" дров на склад",50,30,110)
             showLabel(reslabel)
             showLabel(reslabel1)
             showLabel(reslabel2)
@@ -90,7 +82,7 @@ class units(object):
             self.xpos=xpos
             self.ypos=ypos
             self.speed=3
-            self.sprite=makeSprite(warriorowl)
+            self.sprite=makeSprite(a.warriorowl)
             self.sprite.hp=60
             moveSprite(self.sprite,self.xpos,self.ypos)
             showSprite(self.sprite)
@@ -117,7 +109,7 @@ class buildings(object):
             self.yPos=builder.ypos
             self.building=None
         def build(self):
-            self.building=makeSprite(tree)
+            self.building=makeSprite(a.tree)
             self.building.hp=200
             moveSprite(self.building,self.xPos,self.yPos)
             showSprite(self.building)
@@ -129,7 +121,7 @@ class buildings(object):
             self.xPos=builder.xpos
             self.yPos=builder.ypos
         def build(self):
-            self.building=makeSprite(warriortree)
+            self.building=makeSprite(a.warriortree)
             self.building.hp=300
             moveSprite(self.building,self.xPos,self.yPos)
             showSprite(self.building)
@@ -141,7 +133,7 @@ class buildings(object):
             self.xPos=builder.xpos
             self.yPos=builder.ypos
             self.building=None
-            self.building = makeSprite(storage)
+            self.building = makeSprite(a.storage)
             self.building.hp = 200
             self.building.berry = 0
             self.building.rock = 0
@@ -158,7 +150,7 @@ class buildings(object):
             self.woods = woods
             self.a = 0
             self.near_woods = []
-            self.building = makeSprite(sawmill)
+            self.building = makeSprite(a.sawmill)
             self.building.x = builder.xpos
             self.building.y = builder.ypos
             for i in range(len(self.woods)):
@@ -185,7 +177,7 @@ class buildings(object):
             self.stones = stones
             self.a = 0
             self.near_stones = []
-            self.building = makeSprite(quarry)
+            self.building = makeSprite(a.quarry)
             self.building.x = builder.xpos
             self.building.y = builder.ypos
             for i in range(len(self.stones)):
@@ -202,7 +194,7 @@ class buildings(object):
 
         def stonecutting(self):
             if len(self.near_stones):
-                self.building.rock+=1
+                self.building.rock+=11
                 self.near_stones[0].hp = 0
                 changeSpriteImage(self.near_stones[0], 1)
                 self.near_stones.pop(0)
