@@ -70,11 +70,11 @@ class units(object):
         def put_res(self,storage_name):
             self.storage_name=storage_name
             self.storage_name.berry+=self.berry
-            self.storage_name.wood+=self.wood
-            self.storage_name.rock+=self.rock
+            self.storage_name.wood+=self.rock
+            self.storage_name.rock+=self.wood
             reslabel=makeLabel("ты положил "+str(self.berry)+" ягод на склад",50,30,30)
-            reslabel1=makeLabel("ты положил "+str(self.rock)+" дров на склад",50,30,70)
-            reslabel2=makeLabel("ты положил "+str(self.wood)+" камней на склад",50,30,110)
+            reslabel1=makeLabel("ты положил "+str(self.rock)+" камней на склад",50,30,70)
+            reslabel2=makeLabel("ты положил "+str(self.wood)+" дров на склад",50,30,110)
             showLabel(reslabel)
             showLabel(reslabel1)
             showLabel(reslabel2)
@@ -202,7 +202,7 @@ class buildings(object):
 
         def stonecutting(self):
             if len(self.near_stones):
-                self.building.rock+=1
+                self.building.rock+=11
                 self.near_stones[0].hp = 0
                 changeSpriteImage(self.near_stones[0], 1)
                 self.near_stones.pop(0)
