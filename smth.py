@@ -105,7 +105,7 @@ def main():
     rocks=[]
     pebbles=[]
     branches=[]
-    for x in range(10):
+    for x in range(11):
         envbush=create_random_env(bush,"bushcollected.png",20,0)
         bushes.append(envbush)
         envwood=create_random_env(wood,"woodcollected.png",100,0)
@@ -211,6 +211,7 @@ def main():
                 showLabel(errorlabel)
                 pause(1000)
                 hideLabel(errorlabel)
+
         if keyPressed("9"):
             acounter=True
             warriors.rotate(1)
@@ -362,8 +363,9 @@ def main():
         if(len(sawmills)):
              if a:
                  for i in branches:
-                     if i.collectability == 0 and (((i.x - normalunits[0].x)**2+(i.y - normalunits[0].y)**2) ** 0.5) <= 10000):
+                     if i.collectability == 0 and ((((i.x - normalunits[0].xpos)**2+(i.y - normalunits[0].ypos)**2) ** 0.5) <= 10000):
                          killSprite(i)
+                         print(normalunits[0].xpos,normalunits[0].ypos)
                          a = 0
         updateDisplay()
 

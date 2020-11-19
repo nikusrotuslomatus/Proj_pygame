@@ -39,39 +39,44 @@ class units(object):
             elif keyPressed("down"):
                 self.ypos += self.speed
             moveSprite(self.sprite, self.xpos, self.ypos)
-        def get(self,sawmills,bushes,quarries,pebbles,branches):
+        def get(self,sawmills,bushes,quarries,branches, pebbles):
             self.sawmills=sawmills
             self.bushes=bushes
             self.quarries=quarries
             self.pebbles=pebbles
             self.branches=branches
-            collectibles=allTouching(self.sprite)
-            for i in range(len(sawmills)):
-                 if (((self.sawmills[i].x - self.xpos)**2+(self.sawmills[i].y-self.ypos)**2) ** 0.5) <= 30:
-                    self.wood+=self.sawmills[i].wood
-                    sawmills[i].wood=0
-            for collectible in collectibles:
-                if collectible in self.bushes and iscollectible(collectible):
-                    changeSpriteImage(collectible,1)
+        #   collectibles=allTouching(self.sprite)
+         #  for i in range(len(sawmills)):
+             #   if (((self.sawmills[i].x - self.xpos)**2+(self.sawmills[i].y-self.ypos)**2) ** 0.5) <= 30:
+           #        self.wood+=self.sawmills[i].wood
+            #       sawmills[i].wood=0
+            for i in range(len(self.bushes)):
+                if (((((self.bushes[i].x - self.xpos) ** 2 + (self.bushes[i].y - self.ypos) ** 2) ** 0.5) <= 39) and iscollectible(bushes[i])):
+                    changeSpriteImage(bushes[i],1)
                     self.berry+=1
-                    collectible.collectability=1
-                if collectible in self.branches:
-                    self.wood+=1
-                    killSprite(collectible)
-                    collectible.collectability=1
-                if collectible in self.pebbles:
-                    self.rock+=1
-                    killSprite(collectible)
-                    collectible.collectability=1
-            for i in range(len(quarries)):
-                 if (((self.quarries[i].x - self.xpos)**2+(self.quarries[i].y-self.ypos)**2) ** 0.5) <= 30:
-                    self.rock+=self.quarries[i].rock
-                    quarries[i].rock=0
+                    bushes[i].collectability=1
+            for i in range(len(self.branches)):
+                if (((((self.branches[i].x - self.xpos) ** 2 + (self.branches[i].y - self.ypos) ** 2) ** 0.5) <= 39) and(iscollectible(branches[i]))):
+                    self.wood += 1
+                    branches[i].collectability = 1
+                    killSprite(branches[i])
+
+            for i in range(len(self.pebbles)):
+                if ((((self.pebbles[i].x - self.xpos) ** 2 + (self.pebbles[i].y - self.ypos) ** 2) ** 0.5) <= 39) and(iscollectible(pebbles[i])):
+                    self.rock += 1
+                    pebbles[i].collectability = 1
+                    killSprite(pebbles[i])
+
+       #    for i in range(len(quarries)):
+        #       if ((((self.quarries[i].x - self.xpos)**2+(self.quarries[i].y-self.ypos)**2) ** 0.5) <= 39):
+            #       self.rock+=self.quarries[i].rock
+                  # quarries[i].rock=0
+
         def put_res(self,storage_name):
             self.storage_name=storage_name
             self.storage_name.berry+=self.berry
-            self.storage_name.wood+=self.rock
-            self.storage_name.rock+=self.wood
+            self.storage_name.wood+=self.wood
+            self.storage_name.rock+=self.rock
             reslabel=makeLabel("ты положил "+str(self.berry)+" ягод на склад",50,30,30)
             reslabel1=makeLabel("ты положил "+str(self.rock)+" камней на склад",50,30,70)
             reslabel2=makeLabel("ты положил "+str(self.wood)+" дров на склад",50,30,110)
@@ -162,7 +167,7 @@ class buildings(object):
             self.building.x = builder.xpos
             self.building.y = builder.ypos
             for i in range(len(self.woods)):
-                if (((self.woods[i].x - self.building.x)**2+(self.woods[i].y-self.building.y)**2) ** 0.5) <= 300:
+                if ((((self.woods[i].x - self.building.x)**2+(self.woods[i].y-self.building.y)**2) ** 0.5) <= 300)and(not(iscollectible(self.woods[i]))):
                     self.near_woods.append(0)
                     self.near_woods[self.a] = self.woods[i]
                     self.a += 1
