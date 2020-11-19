@@ -2,15 +2,15 @@ from pygame_functions import *
 import random
 from collections import deque
 wood = "Desktop/project folder/wood.png"
-rock = "rock.png"
-owl = "owl.png"
-bush="bush.png"
-warriorowl="warriorowl.png"
-tree="tree.png"
-warriortree="warriortree.png"
-storage="storage.png"
-sawmill = 'sawmill.png'
-quarry = 'quarry.png'
+rock = "Desktop/project folder/rock.png"
+owl = "Desktop/project folder/owl.png"
+bush="Desktop/project folder/bush.png"
+warriorowl="Desktop/project folder/warriorowl.png"
+tree="Desktop/project folder/tree.png"
+warriortree="Desktop/project folder/warriortree.png"
+storage="Desktop/project folder/storage.png"
+sawmill = "Desktop/project folder/sawmill.png"
+quarry = "Desktop/project folder/quarry.png"
 def iscollectible(x):
     if x.collectability==0:
         return True
@@ -24,6 +24,8 @@ class units(object):
             self.speed=3
             self.sprite=makeSprite(owl)
             self.berry=0
+            self.wood=0
+            self.rock=0
             self.sprite.hp=30
             moveSprite(self.sprite,self.xpos,self.ypos)
             showSprite(self.sprite)
@@ -37,42 +39,52 @@ class units(object):
             elif keyPressed("down"):
                 self.ypos += self.speed
             moveSprite(self.sprite, self.xpos, self.ypos)
-        def get_wood(self,sawmills):
+        def get(self,sawmills,bushes,quarries,pebbles,branches):
             self.sawmills=sawmills
-            collectibles=allTouching(self.sprite)
-            for collectible in collectibles:
-                if collectible in self.sawmills:
-                    self.wood+=collectible.wood
-                    collectible.wood=0
-        def harvest(self,bushes):
             self.bushes=bushes
+            self.quarries=quarries
+            self.pebbles=pebbles
+            self.branches=branches
             collectibles=allTouching(self.sprite)
+            for i in range(len(sawmills)):
+                 if (((self.sawmills[i].x - self.xpos)**2+(self.sawmills[i].y-self.ypos)**2) ** 0.5) <= 30:
+                    self.wood+=self.sawmills[i].wood
+                    sawmills[i].wood=0
             for collectible in collectibles:
                 if collectible in self.bushes and iscollectible(collectible):
                     changeSpriteImage(collectible,1)
                     self.berry+=1
                     collectible.collectability=1
-        def get_rock(self,quarries):
-            self.quarries=quarries
-            collectibles=allTouching(self.sprite)
-            for collectible in collectibles:
-                if collectible in self.quarries:
-                    self.rock+=collectible.rock
-                    collectible.rock=0
+                if collectible in self.branches:
+                    self.wood+=1
+                    killSprite(collectible)
+                    collectible.collectability=1
+                if collectible in self.pebbles:
+                    self.rock+=1
+                    killSprite(collectible)
+                    collectible.collectability=1
+            for i in range(len(quarries)):
+                 if (((self.quarries[i].x - self.xpos)**2+(self.quarries[i].y-self.ypos)**2) ** 0.5) <= 30:
+                    self.rock+=self.quarries[i].rock
+                    quarries[i].rock=0
         def put_res(self,storage_name):
-            reslabel=makeLabel("ты положил "+str(self.berry)+" ягод на склад",50,30,30)
-            reslabel=makeLabel("ты положил "+str(self.rock)+" ягод на склад",50,30,30)
-            reslabel=makeLabel("ты положил "+str(self.wood)+" ягод на склад",50,30,30)
-            showLabel(reslabel)
             self.storage_name=storage_name
             self.storage_name.berry+=self.berry
             self.storage_name.wood+=self.wood
             self.storage_name.rock+=self.rock
+            reslabel=makeLabel("ты положил "+str(self.berry)+" ягод на склад",50,30,30)
+            reslabel1=makeLabel("ты положил "+str(self.rock)+" дров на склад",50,30,70)
+            reslabel2=makeLabel("ты положил "+str(self.wood)+" камней на склад",50,30,110)
+            showLabel(reslabel)
+            showLabel(reslabel1)
+            showLabel(reslabel2)
             self.berry=0
             self.wood=0
             self.rock=0
             pause(1000)
             hideLabel(reslabel)
+            hideLabel(reslabel1)
+            hideLabel(reslabel2)
     class warrior(normal_unit):
         def __init__(self,xpos,ypos):
             self.xpos=xpos
@@ -95,8 +107,8 @@ class units(object):
         def attack(self):
             enemies=allTouching(self.sprite)
             for enemy in enemies:
-                enemy.hp-=10
-                if enemy.hp==0:
+                enemy.hp-=100
+                if enemy.hp<=0:
                     hideSprite(enemy)
 class buildings(object):
     class main_hall(object):
@@ -129,12 +141,14 @@ class buildings(object):
             self.xPos=builder.xpos
             self.yPos=builder.ypos
             self.building=None
-        def build(self):
             self.building = makeSprite(storage)
             self.building.hp = 200
+            self.building.berry = 0
+            self.building.rock = 0
             self.building.wood = 0
             self.building.x = self.xPos
             self.building.y = self.yPos
+        def build(self):
             moveSprite(self.building, self.xPos, self.yPos)
             showSprite(self.building)
             return self.building
@@ -161,6 +175,7 @@ class buildings(object):
 
         def sawing(self):
             if len(self.near_woods):
+                self.building.wood+=1
                 self.near_woods[0].hp = 0
                 changeSpriteImage(self.near_woods[0],1)
                 self.near_woods.pop(0)
@@ -187,33 +202,7 @@ class buildings(object):
 
         def stonecutting(self):
             if len(self.near_stones):
+                self.building.rock+=1
                 self.near_stones[0].hp = 0
                 changeSpriteImage(self.near_stones[0], 1)
                 self.near_stones.pop(0)
-
-            '''
-            self.woods = woods
-            showSprite(self.collader_of_building)
-            collectibles=allTouching(self.collader_of_building)
-            hideSprite(self.collader_of_building)
-            for collectible in collectibles:
-                if collectible in self.woods:
-                    collectible.hp -= 100
-                    if collectible.hp <= 0:
-                        changeSpriteImage(collectible,1)
-                        
-            print(len(self.collectibles))
-            self.collectibles = allTouching(self.collader_of_building)
-             for collectible in self.collectibles:
-             if collectible not in self.woods:
-             self.collectibles.remove(collectible)
-             moveSprite(self.collectibles[0], 0 , 0)
-            changeSpriteImage(self.collectibles[self.kost], 1)
-
-            self.collectibles.remove(self.collectibles[0])
-                self.collectibles[0].hp -= self.building.damage_to_trees
-                if self.collectibles[0].hp <= 0:
-                    changeSpriteImage(self.collectibles[0],1)
-                    self.collectibles.popleft()
-                self.kost += 1
-                '''
