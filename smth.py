@@ -8,7 +8,7 @@ drawRect(0,450,1000,280,"black")
 setAutoUpdate(0)
 text=makeTextBox(0,450,1000,fontSize=20)
 showTextBox(text)
-'''
+
 wood = "wood.png"
 rock = "rock.png"
 owl = "owl.png"
@@ -38,19 +38,26 @@ berry="Desktop/project folder/berries.png"
 menu="Desktop/project folder/menu.png"
 sawmill = "Desktop/project folder/sawmill.png"
 quarry = "Desktop/project folder/quarry.png"
-
+'''
 fpsDisplay = makeLabel("FPS:",30,10,10,"white")
 showLabel(fpsDisplay)
 xPositon = 500
 yPosition = 320
 menustorage=makeSprite(storage)
+menustorage.clickability = 0
 menumainhall=makeSprite(tree)
+menumainhall.clickability = 0
 menuforge=makeSprite(warriortree)
+menuforge.clickability = 0
 menusawmill=makeSprite(sawmill)
+menusawmill.clickability = 0
 menuquarry=makeSprite(quarry)
+menuquarry.clickability = 0
 menusprite=makeSprite(menu)
 menuowl=makeSprite(owl)
+menuowl.clickability = 0
 menuwarrior=makeSprite(warriorowl)
+menuwarrior.clickability = 0
 moveSprite(menusprite,700,70)
 moveSprite(menustorage,725,100)
 moveSprite(menumainhall,825,100)
@@ -108,11 +115,12 @@ def main():
     pebbles=[]
     branches=[]
     for x in range(11):
-        envbush=create_random_env(bush,"Desktop/project folder/bushcollected.png",20,0)
+        envbush=create_random_env(bush,"bushcollected.png",20,0)
+        #Desktop/project folder/
         bushes.append(envbush)
-        envwood=create_random_env(wood,"Desktop/project folder/woodcollected.png",100,0)
+        envwood=create_random_env(wood,"woodcollected.png",100,0)
         woods.append(envwood)
-        envrock=create_random_env(rock,"Desktop/project folder/rockcollected.png",400,0)
+        envrock=create_random_env(rock,"rockcollected.png",400,0)
         rocks.append(envrock)
         envpebble=create_random_env(pebble,pebble,20,0)
         pebbles.append(envpebble)
@@ -149,7 +157,22 @@ def main():
     while True:
         if drawmenu==0:
             menu()
+            menustorage.clickability = 1
+            menumainhall.clickability =1
+            menuforge.clickability =1
+            menusawmill.clickability = 1
+            menuquarry.clickability = 1
+            menuowl.clickability = 1
+            menuwarrior.clickability = 1
         elif drawmenu==1:
+            menustorage.clickability = 0
+            menumainhall.clickability =0
+            menuforge.clickability =0
+            menusawmill.clickability = 0
+            menuquarry.clickability = 0
+            menuowl.clickability = 0
+            menuwarrior.clickability = 0
+
             for pebl in pebbles:
                 if pebl.x>=640 and pebl.collectability==0:
                     showSprite(pebl)
@@ -233,7 +256,7 @@ def main():
                 showLabel(errorlabel)
                 pause(1000)
                 hideLabel(errorlabel)
-        if spriteClicked(menuowl):
+        if spriteClicked(menuowl) and menuowl.clickability:
             try:
                 if storages[0].berry>=3 and mainhall:
                     normalunits.append(mh.born_normal_unit())
@@ -244,7 +267,7 @@ def main():
                 showLabel(errorlabel)
                 pause(1000)
                 hideLabel(errorlabel)
-        if spriteClicked(menuwarrior):
+        if spriteClicked(menuwarrior) and menuwarrior.clickability:
             try:
                 if  storages[0].rock>=1:
                         storages[0].rock-=1
@@ -265,7 +288,7 @@ def main():
                 showLabel(errorlabel)
                 pause(1000)
                 hideLabel(errorlabel)
-            if spriteClicked(menustorage):
+            if spriteClicked(menustorage)and menustorage.clickability:
                 try:
                     if normalunits[0].wood>=1:
                         normalunits[0].wood-=1
@@ -281,7 +304,7 @@ def main():
 
                 except:
                     pass
-            if spriteClicked(menusawmill):
+            if spriteClicked(menusawmill) and menusawmill.clickability:
                 try:
                     if  storages[0].wood>=2:
                         storages[0].wood-=2
@@ -291,7 +314,7 @@ def main():
                         pause(200)
                 except:
                     pass
-            if spriteClicked(menuquarry):
+            if spriteClicked(menuquarry)and menuquarry.clickability:
                 try:
                     if  storages[0].wood>=2 and storages[0].rock>=2:
                         storages[0].wood-=2
@@ -302,7 +325,7 @@ def main():
                         pause(200)
                 except:
                     pass
-            if spriteClicked(menumainhall):
+            if spriteClicked(menumainhall) and menumainhall.clickability:
                 if not mainhall:
                     try:
                         if  storages[0].wood>=4:
@@ -313,7 +336,7 @@ def main():
                             mainhall=True
                     except:
                         pass
-            if spriteClicked(menuforge):
+            if spriteClicked(menuforge)and menuforge.clickability:
                 try:
                     if storages[0].rock>=4 and storages[0].wood>=3:
                         storages[0].rock-=4
@@ -335,6 +358,7 @@ def main():
                 pause(1000)
                 hideLabel(errorlabel)
         if len(sawmills):
+           # print("Pudge is not happy")
             if clock() >= nextFrame_woods:
                 sawmills[0].sawing()
                 nextFrame_woods += 200
@@ -357,17 +381,11 @@ def main():
             changeLabel(lableberry,str(mainloopberries))
         except:
             pass
-        a = 1
 
-        if(len(sawmills)):
-            if a:
-                for i in branches:
-                    if i.collectability == 0 and ((((i.x - normalunits[0].xpos)**2+(i.y - normalunits[0].ypos)**2) ** 0.5) <= 10000):
-                        killSprite(i)
-                        a = 0
+
         if not acounter:
             normalunits[0].goto(pos[0],pos[1])
-            if abs(normalunits[0].xpos-pos[0])<=5 and abs(normalunits[0].ypos-pos[1])<=3:
+            if abs(normalunits[0].xpos-pos[0])<=3.2 and abs(normalunits[0].ypos-pos[1])<=3.1:
                 normalunits[0].get(sawmills,bushes,quarries,pebbles,branches)
         else:
             warriors[0].goto(pos[0],pos[1])

@@ -58,30 +58,32 @@ class units(object):
         def goto(self,xgoto,ygoto):
             self.xgoto=xgoto
             self.ygoto=ygoto
-            for i in range(12):
+            for i in range(300):
                 if self.xgoto>self.xpos:
-                    self.xpos+=0.25
+                    self.xpos+=0.01
                 elif self.xgoto<self.xpos:
-                    self.xpos-=0.25
+                    self.xpos-=0.01
                 else:
                     self.xpos=self.xgoto
                 if self.ygoto>self.ypos:
-                    self.ypos+=0.25
+                    self.ypos+=0.01
                 elif self.ygoto<self.ypos:
-                    self.ypos-=0.25
+                    self.ypos-=0.01
                 else:
                     self.ypos=self.ygoto
-        def get(self,sawmills,bushes,quarries,branches, pebbles):
+        def get(self,sawmills,bushes,quarries,pebbles,branches):
             self.sawmills=sawmills
             self.bushes=bushes
             self.quarries=quarries
             self.pebbles=pebbles
             self.branches=branches
-        #   collectibles=allTouching(self.sprite)
-         #  for i in range(len(sawmills)):
-             #   if (((self.sawmills[i].x - self.xpos)**2+(self.sawmills[i].y-self.ypos)**2) ** 0.5) <= 30:
-           #        self.wood+=self.sawmills[i].wood
-            #       sawmills[i].wood=0
+           #collectibles=allTouching(self.sprite)
+          #  for i in range(len(sawmills)):
+           #     if (((self.sawmills[i].x - self.xpos)**2+(self.sawmills[i].y-self.ypos)**2) ** 0.5) <= 39:
+           #         print(7)
+           #         self.wood+=self.sawmills[i].wood
+            #        self.sawmills[i].wood=0
+
             for i in range(len(self.bushes)):
                 if (((((self.bushes[i].x - self.xpos) ** 2 + (self.bushes[i].y - self.ypos) ** 2) ** 0.5) <= 39) and iscollectible(bushes[i])):
                     changeSpriteImage(bushes[i],1)
@@ -199,7 +201,7 @@ class buildings(object):
             self.building.x = builder.xpos
             self.building.y = builder.ypos
             for i in range(len(self.woods)):
-                if ((((self.woods[i].x - self.building.x)**2+(self.woods[i].y-self.building.y)**2) ** 0.5) <= 300)and(not(iscollectible(self.woods[i]))):
+                if ((((((self.woods[i].x - self.building.x)**2+(self.woods[i].y-self.building.y)**2) ** 0.5) <= 300))):
                     self.near_woods.append(0)
                     self.near_woods[self.a] = self.woods[i]
                     self.a += 1
