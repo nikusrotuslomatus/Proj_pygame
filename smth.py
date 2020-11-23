@@ -8,6 +8,7 @@ drawRect(0,450,1000,280,"black")
 setAutoUpdate(0)
 text=makeTextBox(0,450,1000,fontSize=20)
 showTextBox(text)
+'''
 wood = "wood.png"
 rock = "rock.png"
 owl = "owl.png"
@@ -37,7 +38,7 @@ berry="Desktop/project folder/berries.png"
 menu="Desktop/project folder/menu.png"
 sawmill = "Desktop/project folder/sawmill.png"
 quarry = "Desktop/project folder/quarry.png"
-'''
+
 fpsDisplay = makeLabel("FPS:",30,10,10,"white")
 showLabel(fpsDisplay)
 xPositon = 500
@@ -107,11 +108,11 @@ def main():
     pebbles=[]
     branches=[]
     for x in range(11):
-        envbush=create_random_env(bush,"bushcollected.png",20,0)
+        envbush=create_random_env(bush,"Desktop/project folder/bushcollected.png",20,0)
         bushes.append(envbush)
-        envwood=create_random_env(wood,"woodcollected.png",100,0)
+        envwood=create_random_env(wood,"Desktop/project folder/woodcollected.png",100,0)
         woods.append(envwood)
-        envrock=create_random_env(rock,"rockcollected.png",400,0)
+        envrock=create_random_env(rock,"Desktop/project folder/rockcollected.png",400,0)
         rocks.append(envrock)
         envpebble=create_random_env(pebble,pebble,20,0)
         pebbles.append(envpebble)
@@ -144,6 +145,7 @@ def main():
     sawmills = deque()
     quarries = deque()
     drawmenu=False
+    pos=(0,0)
     while True:
         if drawmenu:
             menu()
@@ -184,6 +186,7 @@ def main():
         mainloopwoods=0
         mainlooprocks=0
         mainloopberries=0
+        
         if keyPressed("0"):
             try:
                 sawmills.rotate(1)
@@ -371,6 +374,7 @@ def main():
                          killSprite(i)
                          print(normalunits[0].xpos,normalunits[0].ypos)
                          a = 0
+        normalunits[0].goto(pos[0],pos[1])
         if abs(normalunits[0].xpos-pos[0])<=5 and abs(normalunits[0].ypos-pos[1])<=3:
             normalunits[0].get(sawmills,bushes,quarries,pebbles,branches)
         updateDisplay()
