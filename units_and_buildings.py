@@ -11,6 +11,22 @@ warriortree="warriortree.png"
 storage="storage.png"
 sawmill = 'sawmill.png'
 quarry = 'quarry.png'
+'''
+wood = "Desktop/project folder/wood.png"
+rock = "Desktop/project folder/rock.png"
+owl = "Desktop/project folder/owl.png"
+bush="Desktop/project folder/bush.png"
+warriorowl="Desktop/project folder/warriorowl.png"
+tree="Desktop/project folder/tree.png"
+warriortree="Desktop/project folder/warriortree.png"
+storage="Desktop/project folder/storage.png"
+pebble="Desktop/project folder/pebble.png"
+branch="Desktop/project folder/branch.png"
+berry="Desktop/project folder/berries.png"
+menu="Desktop/project folder/menu.png"
+sawmill = "Desktop/project folder/sawmill.png"
+quarry = "Desktop/project folder/quarry.png"
+'''
 def iscollectible(x):
     if x.collectability==0:
         return True
