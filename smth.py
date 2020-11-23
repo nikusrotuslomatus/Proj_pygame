@@ -144,12 +144,12 @@ def main():
     storages = deque()
     sawmills = deque()
     quarries = deque()
-    drawmenu=False
+    drawmenu=1
     pos=(0,0)
     while True:
-        if drawmenu:
+        if drawmenu==0:
             menu()
-        else:
+        elif drawmenu==1:
             for pebl in pebbles:
                 if pebl.x>=640 and pebl.collectability==0:
                     showSprite(pebl)
@@ -173,9 +173,7 @@ def main():
             hideSprite(menuquarry)
             hideSprite(menuowl)
             hideSprite(menuwarrior)
-
-                    
-
+            drawmenu+=1
         drawRect(175,0,830,60,(102,0,204))
         showSprite(pebbleicon)
         showSprite(branchicon)
@@ -200,14 +198,13 @@ def main():
                 showLabel(errorlabel)
                 pause(1000)
                 hideLabel(errorlabel)
+        if keyPressed("q"):
+            drawmenu=0
+        if keyPressed("l"):
+            drawmenu=1
         mouseState = pygame.mouse.get_pressed()    
         if mouseState[0]:
             pos = (pygame.mouse.get_pos()[0]-30,pygame.mouse.get_pos()[1]-30)
-        if keyPressed("q"):
-            drawmenu=True
-        if keyPressed("l"):
-            drawmenu=False
-            
         if keyPressed("r"):
             try:
                 acounter=False
@@ -260,11 +257,6 @@ def main():
                 hideLabel(errorlabel)
         if  not acounter :
             normalunits[0].move()
-            try:
-                if keyPressed("1"):
-                    normalunits[0].get(sawmills,bushes,quarries,branches,pebbles)
-            except:
-                pass
             try:
                 if keyPressed("3"):
                     normalunits[0].put_res(storages[0])
@@ -368,15 +360,17 @@ def main():
         a = 1
 
         if(len(sawmills)):
-             if a:
-                 for i in branches:
-                     if i.collectability == 0 and ((((i.x - normalunits[0].xpos)**2+(i.y - normalunits[0].ypos)**2) ** 0.5) <= 10000):
-                         killSprite(i)
-                         print(normalunits[0].xpos,normalunits[0].ypos)
-                         a = 0
-        normalunits[0].goto(pos[0],pos[1])
-        if abs(normalunits[0].xpos-pos[0])<=5 and abs(normalunits[0].ypos-pos[1])<=3:
-            normalunits[0].get(sawmills,bushes,quarries,pebbles,branches)
+            if a:
+                for i in branches:
+                    if i.collectability == 0 and ((((i.x - normalunits[0].xpos)**2+(i.y - normalunits[0].ypos)**2) ** 0.5) <= 10000):
+                        killSprite(i)
+                        a = 0
+        if not acounter:
+            normalunits[0].goto(pos[0],pos[1])
+            if abs(normalunits[0].xpos-pos[0])<=5 and abs(normalunits[0].ypos-pos[1])<=3:
+                normalunits[0].get(sawmills,bushes,quarries,pebbles,branches)
+        else:
+            warriors[0].goto(pos[0],pos[1])
         updateDisplay()
 
     endWait()
