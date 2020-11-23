@@ -82,6 +82,7 @@ berryicon=makeSprite(berry)
 moveSprite(pebbleicon,210,10)
 moveSprite(branchicon,310,10)
 moveSprite(berryicon,410,10)
+pos=(0,0)
 
 def create_random_env(spritename,secondspritename,hp,collectability):
     thissprite = makeSprite(spritename)
@@ -196,6 +197,9 @@ def main():
                 showLabel(errorlabel)
                 pause(1000)
                 hideLabel(errorlabel)
+        mouseState = pygame.mouse.get_pressed()    
+        if mouseState[0]:
+            pos = (pygame.mouse.get_pos()[0]-30,pygame.mouse.get_pos()[1]-30)
         if keyPressed("q"):
             drawmenu=True
         if keyPressed("l"):
@@ -367,6 +371,8 @@ def main():
                          killSprite(i)
                          print(normalunits[0].xpos,normalunits[0].ypos)
                          a = 0
+        if abs(normalunits[0].xpos-pos[0])<=5 and abs(normalunits[0].ypos-pos[1])<=3:
+            normalunits[0].get(sawmills,bushes,quarries,pebbles,branches)
         updateDisplay()
 
     endWait()
