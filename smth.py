@@ -340,7 +340,7 @@ def main():
                 try:
                     if storages[0].rock>=4 and storages[0].wood>=3:
                         storages[0].rock-=4
-                        storages[0].wood-=3
+                        storages[0].ywood-=3
                         forge=buildings.forge(normalunits[0])
                         forge.build()
                         pause(500)

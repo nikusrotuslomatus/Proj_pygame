@@ -78,11 +78,16 @@ class units(object):
             self.pebbles=pebbles
             self.branches=branches
            #collectibles=allTouching(self.sprite)
-          #  for i in range(len(sawmills)):
-           #     if (((self.sawmills[i].x - self.xpos)**2+(self.sawmills[i].y-self.ypos)**2) ** 0.5) <= 39:
-           #         print(7)
-           #         self.wood+=self.sawmills[i].wood
-            #        self.sawmills[i].wood=0
+            for i in range(len(sawmills)):
+                if (((self.sawmills[i].x - self.xpos)**2+(self.sawmills[i].y-self.ypos)**2) ** 0.5) <= 25:
+                    print(7)
+                    self.wood+=self.sawmills[i].wood
+                    self.sawmills[i].wood=0
+            for i in range(len(quarries)):
+                if (((self.quarries[i].x - self.xpos)**2+(self.quarries[i].y-self.ypos)**2) ** 0.5) <= 25:
+                    print(7)
+                    self.rock+=self.quarries[i].rock
+                    self.quarries[i].rock=0
 
             for i in range(len(self.bushes)):
                 if (((((self.bushes[i].x - self.xpos) ** 2 + (self.bushes[i].y - self.ypos) ** 2) ** 0.5) <= 39) and iscollectible(bushes[i])):
@@ -198,23 +203,23 @@ class buildings(object):
             self.a = 0
             self.near_woods = []
             self.building = makeSprite(sawmill)
-            self.building.x = builder.xpos
-            self.building.y = builder.ypos
+            self.x = builder.xpos
+            self.y = builder.ypos
             for i in range(len(self.woods)):
-                if ((((((self.woods[i].x - self.building.x)**2+(self.woods[i].y-self.building.y)**2) ** 0.5) <= 300))):
+                if ((((((self.woods[i].x - self.x)**2+(self.woods[i].y-self.y)**2) ** 0.5) <= 300))):
                     self.near_woods.append(0)
                     self.near_woods[self.a] = self.woods[i]
                     self.a += 1
             self.building.hp = 200
-            self.building.wood = 0
+            self.wood = 0
             self.building.damage_to_trees = 100
-            moveSprite(self.building,self.building.x, self.building.y)
+            moveSprite(self.building,self.x, self.y)
             showSprite(self.building)
 
 
         def sawing(self):
             if len(self.near_woods):
-                self.building.wood+=1
+                self.wood+=1
                 self.near_woods[0].hp = 0
                 changeSpriteImage(self.near_woods[0],1)
                 self.near_woods.pop(0)
@@ -225,23 +230,23 @@ class buildings(object):
             self.a = 0
             self.near_stones = []
             self.building = makeSprite(quarry)
-            self.building.x = builder.xpos
-            self.building.y = builder.ypos
+            self.x = builder.xpos
+            self.y = builder.ypos
             for i in range(len(self.stones)):
-                if (((self.stones[i].x - self.building.x) ** 2 + (
-                    self.stones[i].y - self.building.y) ** 2) ** 0.5) <= 300:
+                if (((self.stones[i].x - self.x) ** 2 + (
+                    self.stones[i].y - self.y) ** 2) ** 0.5) <= 300:
                     self.near_stones.append(0)
                     self.near_stones[self.a] = self.stones[i]
                     self.a += 1
             self.building.hp = 200
-            self.building.rock = 0
+            self.rock = 0
             self.building.damage_to_trees = 100
-            moveSprite(self.building, self.building.x, self.building.y)
+            moveSprite(self.building, self.x, self.y)
             showSprite(self.building)
 
         def stonecutting(self):
             if len(self.near_stones):
-                self.building.rock+=11
+                self.rock+=2
                 self.near_stones[0].hp = 0
                 changeSpriteImage(self.near_stones[0], 1)
                 self.near_stones.pop(0)
