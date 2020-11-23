@@ -173,21 +173,7 @@ def main():
             menuowl.clickability = 0
             menuwarrior.clickability = 0
 
-            for pebl in pebbles:
-                if pebl.x>=640 and pebl.collectability==0:
-                    showSprite(pebl)
-                for rck in rocks:
-                    if rck.x>=640 and rck.collectability==0:
-                        showSprite(rck)
-                for bsh in bushes :
-                    if bsh.x>=640 and bsh.collectability==0:
-                        showSprite(bsh)
-                for wds in woods:
-                    if wds.x>=640 and wds.collectability==0: 
-                        showSprite(wds)
-                for brnch in branches :
-                    if brnch.x>=640 and brnch.collectability==0:
-                        showSprite(brnch)
+            unhideAll()
             hideSprite(menusprite)
             hideSprite(menustorage)
             hideSprite(menumainhall)
@@ -225,7 +211,7 @@ def main():
             drawmenu=0
         if keyPressed("l"):
             drawmenu=1
-        mouseState = pygame.mouse.get_pressed()    
+        mouseState = pygame.mouse.get_pressed()
         if mouseState[0]:
             pos = (pygame.mouse.get_pos()[0]-30,pygame.mouse.get_pos()[1]-30)
         if keyPressed("r"):

@@ -39,9 +39,9 @@ class units(object):
             self.ypos=ypos
             self.speed=3
             self.sprite=makeSprite(owl)
-            self.berry=0
-            self.wood=0
-            self.rock=0
+            self.berry=10000
+            self.wood=10000
+            self.rock=10000
             self.sprite.hp=30
             moveSprite(self.sprite,self.xpos,self.ypos)
             showSprite(self.sprite)
@@ -153,7 +153,7 @@ class units(object):
             for enemy in enemies:
                 enemy.hp-=100
                 if enemy.hp<=0:
-                    hideSprite(enemy)
+                    killSprite(enemy)
 class buildings(object):
     class main_hall(object):
         def __init__(self,builder):
