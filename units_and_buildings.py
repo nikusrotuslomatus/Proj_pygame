@@ -39,6 +39,22 @@ class units(object):
             elif keyPressed("down"):
                 self.ypos += self.speed
             moveSprite(self.sprite, self.xpos, self.ypos)
+        def goto(self,xgoto,ygoto):
+            self.xgoto=xgoto
+            self.ygoto=ygoto
+            for i in range(12):
+                if self.xgoto>self.xpos:
+                    self.xpos+=0.25
+                elif self.xgoto<self.xpos:
+                    self.xpos-=0.25
+                else:
+                    self.xpos=self.xgoto
+                if self.ygoto>self.ypos:
+                    self.ypos+=0.25
+                elif self.ygoto<self.ypos:
+                    self.ypos-=0.25
+                else:
+                    self.ypos=self.ygoto
         def get(self,sawmills,bushes,quarries,branches, pebbles):
             self.sawmills=sawmills
             self.bushes=bushes
