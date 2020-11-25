@@ -8,7 +8,7 @@ drawRect(0,450,1000,280,"black")
 setAutoUpdate(0)
 text=makeTextBox(0,450,1000,fontSize=20)
 showTextBox(text)
-
+'''
 wood = "wood.png"
 rock = "rock.png"
 owl = "owl.png"
@@ -38,7 +38,6 @@ berry="Desktop/project folder/berries.png"
 menu="Desktop/project folder/menu.png"
 sawmill = "Desktop/project folder/sawmill.png"
 quarry = "Desktop/project folder/quarry.png"
-'''
 fpsDisplay = makeLabel("FPS:",30,10,10,"white")
 showLabel(fpsDisplay)
 xPositon = 500
@@ -91,7 +90,6 @@ moveSprite(pebbleicon,210,10)
 moveSprite(branchicon,310,10)
 moveSprite(berryicon,410,10)
 pos=(0,0)
-
 def create_random_env(spritename,secondspritename,hp,collectability):
     thissprite = makeSprite(spritename)
     addSpriteImage(thissprite, secondspritename)
@@ -102,7 +100,6 @@ def create_random_env(spritename,secondspritename,hp,collectability):
     moveSprite(thissprite, thissprite.x, thissprite.y)
     showSprite(thissprite)
     return thissprite
-
 def main():
     labelpebble=makeLabel("0",30,250,10,"white")
     lableberry=makeLabel("0",30,450,10,"white")
@@ -115,12 +112,12 @@ def main():
     pebbles=[]
     branches=[]
     for x in range(11):
-        envbush=create_random_env(bush,"bushcollected.png",20,0)
+        envbush=create_random_env(bush,"Desktop/project folder/bushcollected.png",20,0)
         #Desktop/project folder/
         bushes.append(envbush)
-        envwood=create_random_env(wood,"woodcollected.png",100,0)
+        envwood=create_random_env(wood,"Desktop/project folder/woodcollected.png",100,0)
         woods.append(envwood)
-        envrock=create_random_env(rock,"rockcollected.png",400,0)
+        envrock=create_random_env(rock,"Desktop/project folder/rockcollected.png",400,0)
         rocks.append(envrock)
         envpebble=create_random_env(pebble,pebble,20,0)
         pebbles.append(envpebble)
@@ -130,19 +127,34 @@ def main():
         unhideAll()
         for pebl in pebbles:
             if pebl.x>=640:
-                hideSprite(pebl)
+                if pebl.hp<=0:
+                    killSprite(pebl)
+                else:
+                    hideSprite(pebl)
         for rck in rocks:
             if rck.x>=640:
-                hideSprite(rck)
+                if rck.hp<=0:
+                    killSprite(rck)
+                else:
+                    hideSprite(rck)
         for bsh in bushes:
             if bsh.x>=640:
-                hideSprite(bsh)
+                if bsh.hp<=0:
+                    killSprite(bsh)
+                else:
+                    hideSprite(bsh)
         for wds in woods:
             if wds.x>=640:
-                hideSprite(wds)
+                if wds.hp<=0:
+                    killSprite(wds)
+                else:
+                    hideSprite(wds)
         for brnch in branches:
             if brnch.x>=640:
-                hideSprite(brnch)
+                if brnch.hp<=0:
+                    killSprite(brnch)
+                else:
+                    hideSprite(brnch)
     owlunit1=units.normal_unit(xPositon,yPosition)
     normalunits.append(owlunit1)
     warrior1=units.warrior(xPositon+100,yPosition+100)
@@ -172,7 +184,6 @@ def main():
             menuquarry.clickability = 0
             menuowl.clickability = 0
             menuwarrior.clickability = 0
-
             unhideAll()
             hideSprite(menusprite)
             hideSprite(menustorage)
@@ -193,7 +204,6 @@ def main():
         mainloopwoods=0
         mainlooprocks=0
         mainloopberries=0
-        
         if keyPressed("0"):
             try:
                 sawmills.rotate(1)
@@ -224,7 +234,6 @@ def main():
                 showLabel(errorlabel)
                 pause(1000)
                 hideLabel(errorlabel)
-
         if keyPressed("9"):
             acounter=True
             warriors.rotate(1)
@@ -286,8 +295,6 @@ def main():
                         sg = buildings.storage(normalunits[0])
                         storages.append(sg.build())
                         pause(200)
-                    
-
                 except:
                     pass
             if spriteClicked(menusawmill) and menusawmill.clickability:
@@ -295,7 +302,6 @@ def main():
                     if  storages[0].wood>=2:
                         storages[0].wood-=2
                         sawmills.append(buildings.sawmill(normalunits[0],woods))
-                        #buildings.sawmill(normalunits[0]).sawing(woods)
                         nextFrame_woods =clock() + 5000
                         pause(200)
                 except:
@@ -306,7 +312,6 @@ def main():
                         storages[0].wood-=2
                         storages[0].rock-=2
                         quarries.append(buildings.quarry(normalunits[0],rocks))
-                        #buildings.sawmill(normalunits[0]).sawing(woods)
                         nextFrame_rocks = clock() + 5000
                         pause(200)
                 except:
@@ -344,7 +349,6 @@ def main():
                 pause(1000)
                 hideLabel(errorlabel)
         if len(sawmills):
-           # print("Pudge is not happy")
             if clock() >= nextFrame_woods:
                 sawmills[0].sawing()
                 nextFrame_woods += 200
@@ -358,17 +362,12 @@ def main():
             mainloopberries+=mainloopstorage.berry
             mainloopwoods+=mainloopstorage.wood
             mainlooprocks+=mainloopstorage.rock
-
-
-
         try:
             changeLabel(labelpebble,str(mainlooprocks))
             changeLabel(labelbranch,str(mainloopwoods))
             changeLabel(lableberry,str(mainloopberries))
         except:
             pass
-
-
         if not acounter:
             normalunits[0].goto(pos[0],pos[1])
             if abs(normalunits[0].xpos-pos[0])<=3.2 and abs(normalunits[0].ypos-pos[1])<=3.1:
@@ -376,8 +375,6 @@ def main():
         else:
             warriors[0].goto(pos[0],pos[1])
         updateDisplay()
-
     endWait()
-
 if __name__ == '__main__':
     main()
