@@ -1,7 +1,7 @@
 from pygame_functions import *
 import random
 from collections import deque
-wood = "wood.png"
+'''wood = "wood.png"
 rock = "rock.png"
 owl = "owl.png"
 bush="bush.png"
@@ -10,8 +10,7 @@ tree="tree.png"
 warriortree="warriortree.png"
 storage="storage.png"
 sawmill = 'sawmill.png'
-quarry = 'quarry.png'
-'''
+quarry = 'quarry.png'''
 wood = "Desktop/project folder/wood.png"
 rock = "Desktop/project folder/rock.png"
 owl = "Desktop/project folder/owl.png"
@@ -26,7 +25,6 @@ berry="Desktop/project folder/berries.png"
 menu="Desktop/project folder/menu.png"
 sawmill = "Desktop/project folder/sawmill.png"
 quarry = "Desktop/project folder/quarry.png"
-'''
 def iscollectible(x):
     if x.collectability==0:
         return True
@@ -77,40 +75,29 @@ class units(object):
             self.quarries=quarries
             self.pebbles=pebbles
             self.branches=branches
-           #collectibles=allTouching(self.sprite)
             for i in range(len(sawmills)):
-                if (((self.sawmills[i].x - self.xpos)**2+(self.sawmills[i].y-self.ypos)**2) ** 0.5) <= 25:
-                    print(7)
+                if (((self.sawmills[i].x - self.xpos)**2+(self.sawmills[i].y-self.ypos)**2) ** 0.5) <= 25 and self.sawmills[i].hp>0:
                     self.wood+=self.sawmills[i].wood
                     self.sawmills[i].wood=0
             for i in range(len(quarries)):
-                if (((self.quarries[i].x - self.xpos)**2+(self.quarries[i].y-self.ypos)**2) ** 0.5) <= 25:
-                    print(7)
+                if (((self.quarries[i].x - self.xpos)**2+(self.quarries[i].y-self.ypos)**2) ** 0.5) <= 25 and self.quarries[i].hp>0:
                     self.rock+=self.quarries[i].rock
                     self.quarries[i].rock=0
-
             for i in range(len(self.bushes)):
-                if (((((self.bushes[i].x - self.xpos) ** 2 + (self.bushes[i].y - self.ypos) ** 2) ** 0.5) <= 39) and iscollectible(bushes[i])):
+                if (((((self.bushes[i].x - self.xpos) ** 2 + (self.bushes[i].y - self.ypos) ** 2) ** 0.5) <= 39) and iscollectible(bushes[i])) and self.bushes[i].hp>0:
                     changeSpriteImage(bushes[i],1)
                     self.berry+=1
                     bushes[i].collectability=1
             for i in range(len(self.branches)):
-                if (((((self.branches[i].x - self.xpos) ** 2 + (self.branches[i].y - self.ypos) ** 2) ** 0.5) <= 39) and(iscollectible(branches[i]))):
+                if (((((self.branches[i].x - self.xpos) ** 2 + (self.branches[i].y - self.ypos) ** 2) ** 0.5) <= 39) and(iscollectible(branches[i]))) and self.branches[i].hp>0:
                     self.wood += 1
                     branches[i].collectability = 1
                     killSprite(branches[i])
-
             for i in range(len(self.pebbles)):
-                if ((((self.pebbles[i].x - self.xpos) ** 2 + (self.pebbles[i].y - self.ypos) ** 2) ** 0.5) <= 39) and(iscollectible(pebbles[i])):
+                if ((((self.pebbles[i].x - self.xpos) ** 2 + (self.pebbles[i].y - self.ypos) ** 2) ** 0.5) <= 39) and(iscollectible(pebbles[i])) and self.pebbles[i].hp>0:
                     self.rock += 1
                     pebbles[i].collectability = 1
                     killSprite(pebbles[i])
-
-       #    for i in range(len(quarries)):
-        #       if ((((self.quarries[i].x - self.xpos)**2+(self.quarries[i].y-self.ypos)**2) ** 0.5) <= 39):
-            #       self.rock+=self.quarries[i].rock
-                  # quarries[i].rock=0
-
         def put_res(self,storage_name):
             self.storage_name=storage_name
             self.storage_name.berry+=self.berry
@@ -196,7 +183,6 @@ class buildings(object):
             moveSprite(self.building, self.xPos, self.yPos)
             showSprite(self.building)
             return self.building
-
     class sawmill(object):
         def __init__(self, builder,woods):
             self.woods = woods
@@ -215,15 +201,12 @@ class buildings(object):
             self.building.damage_to_trees = 100
             moveSprite(self.building,self.x, self.y)
             showSprite(self.building)
-
-
         def sawing(self):
             if len(self.near_woods):
                 self.wood+=1
                 self.near_woods[0].hp = 0
                 changeSpriteImage(self.near_woods[0],1)
                 self.near_woods.pop(0)
-
     class quarry(object):
         def __init__(self, builder, stones):
             self.stones = stones
@@ -243,37 +226,9 @@ class buildings(object):
             self.building.damage_to_trees = 100
             moveSprite(self.building, self.x, self.y)
             showSprite(self.building)
-
         def stonecutting(self):
             if len(self.near_stones):
                 self.rock+=2
                 self.near_stones[0].hp = 0
                 changeSpriteImage(self.near_stones[0], 1)
                 self.near_stones.pop(0)
-
-            '''
-            self.woods = woods
-            showSprite(self.collader_of_building)
-            collectibles=allTouching(self.collader_of_building)
-            hideSprite(self.collader_of_building)
-            for collectible in collectibles:
-                if collectible in self.woods:
-                    collectible.hp -= 100
-                    if collectible.hp <= 0:
-                        changeSpriteImage(collectible,1)
-                        
-            print(len(self.collectibles))
-            self.collectibles = allTouching(self.collader_of_building)
-             for collectible in self.collectibles:
-             if collectible not in self.woods:
-             self.collectibles.remove(collectible)
-             moveSprite(self.collectibles[0], 0 , 0)
-            changeSpriteImage(self.collectibles[self.kost], 1)
-
-            self.collectibles.remove(self.collectibles[0])
-                self.collectibles[0].hp -= self.building.damage_to_trees
-                if self.collectibles[0].hp <= 0:
-                    changeSpriteImage(self.collectibles[0],1)
-                    self.collectibles.popleft()
-                self.kost += 1
-                '''
