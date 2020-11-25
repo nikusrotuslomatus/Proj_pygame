@@ -240,7 +240,8 @@ def main():
                 showSprite(stsign)
                 pause(200)
                 hideSprite(stsign)
-            except:
+            except Exception as e:
+                print(e)
                 errorlabel = makeLabel("ты еще не строил лесопилок", 50, 30, 30)
                 showLabel(errorlabel)
                 pause(1000)
@@ -257,7 +258,8 @@ def main():
                 acounter = False
                 normalunits.rotate(1)
                 pause(200)
-            except:
+            except Exception as e:
+                print(e)
                 errorlabel = makeLabel("ты еще не создавал рабочих", 50, 30, 30)
                 showLabel(errorlabel)
                 pause(1000)
@@ -274,7 +276,8 @@ def main():
                 showSprite(stsign)
                 pause(300)
                 hideSprite(stsign)
-            except:
+            except Exception as e:
+                print(e)
                 errorlabel = makeLabel("ты еще не построил склад", 50, 30, 30)
                 showLabel(errorlabel)
                 pause(1000)
@@ -285,7 +288,8 @@ def main():
                     normalunits.append(mh.born_normal_unit())
                     storages[0].berry -= 3
                     pause(200)
-            except:
+            except Exception as e:
+                print(e)
                 errorlabel = makeLabel("ты еще не построил склад или мэинхол", 50, 30, 30)
                 showLabel(errorlabel)
                 pause(1000)
@@ -296,7 +300,8 @@ def main():
                     storages[0].rock -= 1
                     warriors.append(forge.born_warrior())
                     pause(200)
-            except:
+            except Exception as e:
+                print(e)
                 errorlabel = makeLabel("ты еще не построил кузницу", 50, 30, 30)
                 showLabel(errorlabel)
                 pause(1000)
@@ -306,7 +311,8 @@ def main():
             try:
                 if keyPressed("3"):
                     normalunits[0].put_res(storages[0])
-            except:
+            except Exception as e:
+                print(e)
                 errorlabel = makeLabel("ты еще не построил склад", 50, 30, 30)
                 showLabel(errorlabel)
                 pause(1000)
@@ -323,8 +329,9 @@ def main():
                         sg = buildings.storage(normalunits[0])
                         storages.append(sg.build())
                         pause(200)
-                except:
-                    pass
+                except Exception as e:
+                    print(e)
+                  
             if spriteClicked(menusawmill) and menusawmill.clickability:
                 try:
                     if storages[0].wood >= 2:
@@ -332,8 +339,9 @@ def main():
                         sawmills.append(buildings.sawmill(normalunits[0], woods))
                         nextFrame_woods = clock() + 5000
                         pause(200)
-                except:
-                    pass
+                except Exception as e:
+                    print(e)
+                  
             if spriteClicked(menuquarry) and menuquarry.clickability:
                 try:
                     if storages[0].wood >= 2 and storages[0].rock >= 2:
@@ -342,8 +350,9 @@ def main():
                         quarries.append(buildings.quarry(normalunits[0], rocks))
                         nextFrame_rocks = clock() + 5000
                         pause(200)
-                except:
-                    pass
+                except Exception as e:
+                    print(e)
+                    
             if spriteClicked(menumainhall) and menumainhall.clickability:
                 if not mainhall:
                     try:
@@ -353,8 +362,9 @@ def main():
                             mh.build()
                             pause(500)
                             mainhall = True
-                    except:
-                        pass
+                    except Exception as e:
+                        print(e)
+                      
             if spriteClicked(menuforge) and menuforge.clickability:
                 try:
                     if storages[0].rock >= 4 and storages[0].wood >= 3:
@@ -363,15 +373,17 @@ def main():
                         forge = buildings.forge(normalunits[0])
                         forge.build()
                         pause(500)
-                except:
-                    pass
+                except Exception as e:
+                    print(e)
+               
         if acounter:
             try:
                 warriors[0].move()
                 if keyPressed("k"):
                     warriors[0].attack()
                     pause(200)
-            except:
+            except Exception as e:
+                print(e)
                 errorlabel = makeLabel("ты еще не обучил воинов", 50, 30, 30)
                 showLabel(errorlabel)
                 pause(1000)
@@ -394,8 +406,8 @@ def main():
             changeLabel(labelpebble, str(mainlooprocks))
             changeLabel(labelbranch, str(mainloopwoods))
             changeLabel(lableberry, str(mainloopberries))
-        except:
-            pass
+        except Exception as e:
+            print(e)
         if not acounter:
             normalunits[0].goto(pos[0], pos[1])
             if abs(normalunits[0].xpos - pos[0]) <= 3.2 and abs(normalunits[0].ypos - pos[1]) <= 3.1:
