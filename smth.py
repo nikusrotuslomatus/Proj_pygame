@@ -185,6 +185,26 @@ def main():
             menuowl.clickability = 0
             menuwarrior.clickability = 0
             unhideAll()
+            for pebl in pebbles:
+                if pebl.x>=640:
+                    if pebl.hp<=0:
+                        killSprite(pebl)
+            for rck in rocks:
+                if rck.x>=640:
+                    if rck.hp<=0:
+                        killSprite(rck)
+            for bsh in bushes:
+                if bsh.x>=640:
+                    if bsh.hp<=0:
+                        killSprite(bsh)
+            for wds in woods:
+                if wds.x>=640:
+                    if wds.hp<=0:
+                        killSprite(wds)
+            for brnch in branches:
+                if brnch.x>=640:
+                    if brnch.hp<=0:
+                        killSprite(brnch)
             hideSprite(menusprite)
             hideSprite(menustorage)
             hideSprite(menumainhall)
