@@ -89,14 +89,17 @@ class units(object):
                     self.berry+=1
                     bushes[i].collectability=1
             for i in range(len(self.branches)):
-                if (((((self.branches[i].x - self.xpos) ** 2 + (self.branches[i].y - self.ypos) ** 2) ** 0.5) <= 39) and(iscollectible(branches[i]))) and self.branches[i].hp>0:
+                if (((((self.branches[i].x - self.xpos) ** 2 + (self.branches[i].y - self.ypos) ** 2) ** 0.5) <= 39) and (iscollectible(branches[i]))) and self.branches[i].hp>0:
                     self.wood += 1
                     branches[i].collectability = 1
+                    branches[i].hp=-1
                     killSprite(branches[i])
+                    
             for i in range(len(self.pebbles)):
                 if ((((self.pebbles[i].x - self.xpos) ** 2 + (self.pebbles[i].y - self.ypos) ** 2) ** 0.5) <= 39) and(iscollectible(pebbles[i])) and self.pebbles[i].hp>0:
                     self.rock += 1
                     pebbles[i].collectability = 1
+                    pebbles[i].hp=-1
                     killSprite(pebbles[i])
         def put_res(self,storage_name):
             self.storage_name=storage_name
