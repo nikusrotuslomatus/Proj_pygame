@@ -118,47 +118,47 @@ def main():
     pebbles = []
     branches = []
     for x in range(11):
-        envbush = create_random_env(bush, "bushcollected.png", 20, 0)
+        envbush = create_random_env(bush, "bushcollected.png", [20], 0)
         # Desktop/project folder/
         bushes.append(envbush)
-        envwood = create_random_env(wood, "woodcollected.png", 100, 0)
+        envwood = create_random_env(wood, "woodcollected.png", [100], 0)
         woods.append(envwood)
-        envrock = create_random_env(rock, "rockcollected.png", 400, 0)
+        envrock = create_random_env(rock, "rockcollected.png", [400], 0)
         rocks.append(envrock)
-        envpebble = create_random_env(pebble, pebble, 20, 0)
+        envpebble = create_random_env(pebble, pebble, [20], 0)
         pebbles.append(envpebble)
-        envbranch = create_random_env(branch, branch, 20, 0)
+        envbranch = create_random_env(branch, branch, [20], 0)
         branches.append(envbranch)
 
     def menu():
         unhideAll()
         for pebl in pebbles:
             if pebl.x >= 640:
-                if pebl.hp <= 0:
+                if pebl.hp[0] <= 0:
                     killSprite(pebl)
                 else:
                     hideSprite(pebl)
         for rck in rocks:
             if rck.x >= 640:
-                if rck.hp <= 0:
+                if rck.hp[0] <= 0:
                     killSprite(rck)
                 else:
                     hideSprite(rck)
         for bsh in bushes:
             if bsh.x >= 640:
-                if bsh.hp <= 0:
+                if bsh.hp[0] <= 0:
                     killSprite(bsh)
                 else:
                     hideSprite(bsh)
         for wds in woods:
             if wds.x >= 640:
-                if wds.hp <= 0:
+                if wds.hp[0] <= 0:
                     killSprite(wds)
                 else:
                     hideSprite(wds)
         for brnch in branches:
             if brnch.x >= 640:
-                if brnch.hp <= 0:
+                if brnch.hp[0] <= 0:
                     killSprite(brnch)
                 else:
                     hideSprite(brnch)
@@ -195,23 +195,23 @@ def main():
             unhideAll()
             for pebl in pebbles:
                 if pebl.x >= 640:
-                    if pebl.hp <= 0:
+                    if pebl.hp[0] <= 0:
                         killSprite(pebl)
             for rck in rocks:
                 if rck.x >= 640:
-                    if rck.hp <= 0:
+                    if rck.hp[0] <= 0:
                         killSprite(rck)
             for bsh in bushes:
                 if bsh.x >= 640:
-                    if bsh.hp <= 0:
+                    if bsh.hp[0] <= 0:
                         killSprite(bsh)
             for wds in woods:
                 if wds.x >= 640:
-                    if wds.hp <= 0:
+                    if wds.hp[0] <= 0:
                         killSprite(wds)
             for brnch in branches:
                 if brnch.x >= 640:
-                    if brnch.hp <= 0:
+                    if brnch.hp[0] <= 0:
                         killSprite(brnch)
             hideSprite(menusprite)
             hideSprite(menustorage)
@@ -253,6 +253,12 @@ def main():
         mouseState = pygame.mouse.get_pressed()
         if mouseState[0]:
             pos = (pygame.mouse.get_pos()[0] - 30, pygame.mouse.get_pos()[1] - 30)
+        if not acounter:
+            normalunits[0].goto(pos[0], pos[1])
+            if abs(normalunits[0].xpos - pos[0]) <= 3.2 and abs(normalunits[0].ypos - pos[1]) <= 3.1:
+                normalunits[0].get(sawmills, bushes, quarries, pebbles, branches)
+        else:
+            warriors[0].goto(pos[0], pos[1])
         if keyPressed("r"):
             try:
                 acounter = False
@@ -284,10 +290,11 @@ def main():
                 hideLabel(errorlabel)
         if spriteClicked(menuowl) and menuowl.clickability:
             try:
-                if storages[0].berry >= 3 and mainhall:
-                    normalunits.append(mh.born_normal_unit())
-                    storages[0].berry -= 3
-                    pause(200)
+                if normalunits[0].hp[0] > 0:
+                    if storages[0].berry >= 3 and mainhall:
+                        normalunits.append(mh.born_normal_unit())
+                        storages[0].berry -= 3
+                        pause(200)
             except Exception as e:
                 print(e)
                 errorlabel = makeLabel("ты еще не построил склад или мэинхол", 50, 30, 30)
@@ -296,10 +303,11 @@ def main():
                 hideLabel(errorlabel)
         if spriteClicked(menuwarrior) and menuwarrior.clickability:
             try:
-                if storages[0].rock >= 1:
-                    storages[0].rock -= 1
-                    warriors.append(forge.born_warrior())
-                    pause(200)
+                if normalunits[0].hp[0] > 0:
+                    if storages[0].rock >= 1:
+                        storages[0].rock -= 1
+                        warriors.append(forge.born_warrior())
+                        pause(200)
             except Exception as e:
                 print(e)
                 errorlabel = makeLabel("ты еще не построил кузницу", 50, 30, 30)
@@ -319,60 +327,65 @@ def main():
                 hideLabel(errorlabel)
             if spriteClicked(menustorage) and menustorage.clickability:
                 try:
-                    if normalunits[0].wood >= 1:
-                        normalunits[0].wood -= 1
-                        sg = buildings.storage(normalunits[0])
-                        storages.append(sg.build())
-                        pause(200)
-                    elif storages[0].wood >= 1:
-                        storages[0].wood -= 1
-                        sg = buildings.storage(normalunits[0])
-                        storages.append(sg.build())
-                        pause(200)
+                    if normalunits[0].hp[0] > 0:
+                        if normalunits[0].wood >= 1:
+                            normalunits[0].wood -= 1
+                            sg = buildings.storage(normalunits[0])
+                            storages.append(sg.build())
+                            pause(200)
+                        elif storages[0].wood >= 1:
+                            storages[0].wood -= 1
+                            sg = buildings.storage(normalunits[0])
+                            storages.append(sg.build())
+                            pause(200)
                 except Exception as e:
                     print(e)
                   
             if spriteClicked(menusawmill) and menusawmill.clickability:
                 try:
-                    if storages[0].wood >= 2:
-                        storages[0].wood -= 2
-                        sawmills.append(buildings.sawmill(normalunits[0], woods))
-                        nextFrame_woods = clock() + 5000
-                        pause(200)
+                    if normalunits[0].hp[0] > 0:
+                        if storages[0].wood >= 2:
+                            storages[0].wood -= 2
+                            sawmills.append(buildings.sawmill(normalunits[0], woods))
+                            nextFrame_woods = clock() + 5000
+                            pause(200)
                 except Exception as e:
                     print(e)
                   
             if spriteClicked(menuquarry) and menuquarry.clickability:
                 try:
-                    if storages[0].wood >= 2 and storages[0].rock >= 2:
-                        storages[0].wood -= 2
-                        storages[0].rock -= 2
-                        quarries.append(buildings.quarry(normalunits[0], rocks))
-                        nextFrame_rocks = clock() + 5000
-                        pause(200)
+                    if normalunits[0].hp[0] > 0:
+                        if storages[0].wood >= 2 and storages[0].rock >= 2:
+                            storages[0].wood -= 2
+                            storages[0].rock -= 2
+                            quarries.append(buildings.quarry(normalunits[0], rocks))
+                            nextFrame_rocks = clock() + 5000
+                            pause(200)
                 except Exception as e:
                     print(e)
                     
             if spriteClicked(menumainhall) and menumainhall.clickability:
                 if not mainhall:
                     try:
-                        if storages[0].wood >= 4:
-                            storages[0].wood -= 4
-                            mh = buildings.main_hall(normalunits[0])
-                            mh.build()
-                            pause(500)
-                            mainhall = True
+                        if normalunits[0].hp[0] > 0:
+                            if storages[0].wood >= 4:
+                                storages[0].wood -= 4
+                                mh = buildings.main_hall(normalunits[0])
+                                mh.build()
+                                pause(500)
+                                mainhall = True
                     except Exception as e:
                         print(e)
                       
             if spriteClicked(menuforge) and menuforge.clickability:
                 try:
-                    if storages[0].rock >= 4 and storages[0].wood >= 3:
-                        storages[0].rock -= 4
-                        storages[0].ywood -= 3
-                        forge = buildings.forge(normalunits[0])
-                        forge.build()
-                        pause(500)
+                    if normalunits[0].hp[0] > 0:
+                        if storages[0].rock >= 4 and storages[0].wood >= 3:
+                            storages[0].rock -= 4
+                            storages[0].wood -= 3
+                            forge = buildings.forge(normalunits[0])
+                            forge.build()
+                            pause(500)
                 except Exception as e:
                     print(e)
                
@@ -384,7 +397,7 @@ def main():
                     pause(200)
             except Exception as e:
                 print(e)
-                errorlabel = makeLabel("ты еще не обучил воинов", 50, 30, 30)
+                errorlabel = makeLabel("Вы еще не готовы атаковать эту цель", 50, 30, 30)
                 showLabel(errorlabel)
                 pause(1000)
                 hideLabel(errorlabel)
@@ -408,12 +421,7 @@ def main():
             changeLabel(lableberry, str(mainloopberries))
         except Exception as e:
             print(e)
-        if not acounter:
-            normalunits[0].goto(pos[0], pos[1])
-            if abs(normalunits[0].xpos - pos[0]) <= 3.2 and abs(normalunits[0].ypos - pos[1]) <= 3.1:
-                normalunits[0].get(sawmills, bushes, quarries, pebbles, branches)
-        else:
-            warriors[0].goto(pos[0], pos[1])
+
         updateDisplay()
     endWait()
 
