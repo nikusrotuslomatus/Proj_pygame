@@ -2,15 +2,13 @@ from pygame_functions import *
 import random
 from collections import deque
 from units_and_buildings import *
-
-screenSize(1000, 1000)
+screenSize(1000, 730)
 setBackgroundColour((43, 94, 65))
 drawRect(0, 450, 1000, 280, "black")
 setAutoUpdate(0)
 text = makeTextBox(0, 450, 1000, fontSize=20)
 showTextBox(text)
-
-wood = "wood.png"
+'''wood = "wood.png"
 rock = "rock.png"
 owl = "owl.png"
 bush = "bush.png"
@@ -23,8 +21,7 @@ branch = "branch.png"
 berry = "berries.png"
 menu = "menu.png"
 sawmill = "sawmill.png"
-quarry = "quarry.png"
-'''
+quarry = "quarry.png"'''
 wood = "Desktop/project folder/wood.png"
 rock = "Desktop/project folder/rock.png"
 owl = "Desktop/project folder/owl.png"
@@ -39,7 +36,6 @@ berry="Desktop/project folder/berries.png"
 menu="Desktop/project folder/menu.png"
 sawmill = "Desktop/project folder/sawmill.png"
 quarry = "Desktop/project folder/quarry.png"
-'''
 fpsDisplay = makeLabel("FPS:", 30, 10, 10, "white")
 showLabel(fpsDisplay)
 xPositon = 500
@@ -83,17 +79,13 @@ hideSprite(menusawmill)
 hideSprite(menuquarry)
 hideSprite(menuowl)
 hideSprite(menuwarrior)
-normalunits = deque()
-warriors = deque()
 pebbleicon = makeSprite(pebble)
 branchicon = makeSprite(branch)
 berryicon = makeSprite(berry)
 moveSprite(pebbleicon, 210, 10)
 moveSprite(branchicon, 310, 10)
 moveSprite(berryicon, 410, 10)
-pos = (0, 0)
-
-
+pos = (500, 300)
 def create_random_env(spritename, secondspritename, hp, collectability):
     thissprite = makeSprite(spritename)
     addSpriteImage(thissprite, secondspritename)
@@ -104,8 +96,6 @@ def create_random_env(spritename, secondspritename, hp, collectability):
     moveSprite(thissprite, thissprite.x, thissprite.y)
     showSprite(thissprite)
     return thissprite
-
-
 def main():
     labelpebble = makeLabel("0", 30, 250, 10, "white")
     lableberry = makeLabel("0", 30, 450, 10, "white")
@@ -117,19 +107,27 @@ def main():
     rocks = []
     pebbles = []
     branches = []
+    normalunits = deque()
+    storages = deque()
+    sawmills = deque()
+    quarries = deque()
+    warriors = deque()
+    allspries=[]
+    forges=[]
+    mainhalls=[]
+    allspries.append([mainhalls,forges,warriors,quarries,sawmills,storages,normalunits,branches,pebbles,rocks,woods,bushes])
     for x in range(11):
-        envbush = create_random_env(bush, "bushcollected.png", [20], 0)
+        envbush = create_random_env(bush, "Desktop/project folder/bushcollected.png", [20], 0)
         # Desktop/project folder/
         bushes.append(envbush)
-        envwood = create_random_env(wood, "woodcollected.png", [100], 0)
+        envwood = create_random_env(wood, "Desktop/project folder/woodcollected.png", [100], 0)
         woods.append(envwood)
-        envrock = create_random_env(rock, "rockcollected.png", [400], 0)
+        envrock = create_random_env(rock, "Desktop/project folder/rockcollected.png", [400], 0)
         rocks.append(envrock)
         envpebble = create_random_env(pebble, pebble, [20], 0)
         pebbles.append(envpebble)
         envbranch = create_random_env(branch, branch, [20], 0)
         branches.append(envbranch)
-
     def menu():
         unhideAll()
         for pebl in pebbles:
@@ -162,19 +160,18 @@ def main():
                     killSprite(brnch)
                 else:
                     hideSprite(brnch)
-
     owlunit1 = units.normal_unit(xPositon, yPosition)
     normalunits.append(owlunit1)
     warrior1 = units.warrior(xPositon + 100, yPosition + 100)
     warriors.append(warrior1)
     acounter = False
     mainhall = False
-    storages = deque()
-    sawmills = deque()
-    quarries = deque()
     drawmenu = 1
-    pos = (0, 0)
+    pos = (500, 500)
+    xmovescreen=0
+    ymovescreen=0
     while True:
+        pos2=pygame.mouse.get_pos()
         if drawmenu == 0:
             menu()
             menustorage.clickability = 1
@@ -258,7 +255,9 @@ def main():
             if abs(normalunits[0].xpos - pos[0]) <= 3.2 and abs(normalunits[0].ypos - pos[1]) <= 3.1:
                 normalunits[0].get(sawmills, bushes, quarries, pebbles, branches)
         else:
-            warriors[0].goto(pos[0], pos[1])
+            warriors[0].goto(pos[0]-xmovescreen, pos[1]-ymovescreen)
+            if abs(warriors[0].xpos - pos[0]) <= 3.2 and abs(warriors[0].ypos - pos[1]) <= 3.1:
+                warriors[0].attack()
         if keyPressed("r"):
             try:
                 acounter = False
@@ -331,7 +330,7 @@ def main():
                         if normalunits[0].wood >= 1:
                             normalunits[0].wood -= 1
                             sg = buildings.storage(normalunits[0])
-                            storages.append(sg.build())
+                            storages.append(sg)
                             pause(200)
                         elif storages[0].wood >= 1:
                             storages[0].wood -= 1
@@ -339,8 +338,7 @@ def main():
                             storages.append(sg.build())
                             pause(200)
                 except Exception as e:
-                    print(e)
-                  
+                    print(e) 
             if spriteClicked(menusawmill) and menusawmill.clickability:
                 try:
                     if normalunits[0].hp[0] > 0:
@@ -351,7 +349,6 @@ def main():
                             pause(200)
                 except Exception as e:
                     print(e)
-                  
             if spriteClicked(menuquarry) and menuquarry.clickability:
                 try:
                     if normalunits[0].hp[0] > 0:
@@ -363,7 +360,6 @@ def main():
                             pause(200)
                 except Exception as e:
                     print(e)
-                    
             if spriteClicked(menumainhall) and menumainhall.clickability:
                 if not mainhall:
                     try:
@@ -371,30 +367,25 @@ def main():
                             if storages[0].wood >= 4:
                                 storages[0].wood -= 4
                                 mh = buildings.main_hall(normalunits[0])
-                                mh.build()
+                                mainhalls.append(mh)
                                 pause(500)
                                 mainhall = True
                     except Exception as e:
                         print(e)
-                      
             if spriteClicked(menuforge) and menuforge.clickability:
                 try:
                     if normalunits[0].hp[0] > 0:
                         if storages[0].rock >= 4 and storages[0].wood >= 3:
                             storages[0].rock -= 4
                             storages[0].wood -= 3
-                            forge = buildings.forge(normalunits[0])
-                            forge.build()
+                            myforge = buildings.forge(normalunits[0])
+                            forges.append(myforge)
                             pause(500)
                 except Exception as e:
                     print(e)
-               
         if acounter:
             try:
                 warriors[0].move()
-                if keyPressed("k"):
-                    warriors[0].attack()
-                    pause(200)
             except Exception as e:
                 print(e)
                 errorlabel = makeLabel("Вы еще не готовы атаковать эту цель", 50, 30, 30)
@@ -421,10 +412,18 @@ def main():
             changeLabel(lableberry, str(mainloopberries))
         except Exception as e:
             print(e)
-
+        if pos2[0] <=5:
+            for listsprite in allspries[0]:
+                for sprite in listsprite:
+                    try:
+                        xmovescreen=normalunits[0].xpos-3
+                        sprite.movescreen(-3,0)
+                        
+                    except Exception as e:
+                        print(type(sprite))
+                        pass
         updateDisplay()
-    endWait()
-
-
+        if keyPressed("esc"):
+            endWait()
 if __name__ == '__main__':
     main()
