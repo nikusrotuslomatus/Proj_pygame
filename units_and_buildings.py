@@ -1,7 +1,7 @@
 from pygame_functions import *
 import random
 from collections import deque
-wood = "wood.png"
+'''wood = "wood.png"
 rock = "rock.png"
 owl = "owl.png"
 bush="bush.png"
@@ -10,8 +10,7 @@ tree="tree.png"
 warriortree="warriortree.png"
 storage="storage.png"
 sawmill = 'sawmill.png'
-quarry = 'quarry.png'
-'''
+quarry = "quarry.png"'''
 wood = "Desktop/project folder/wood.png"
 rock = "Desktop/project folder/rock.png"
 owl = "Desktop/project folder/owl.png"
@@ -26,7 +25,6 @@ berry="Desktop/project folder/berries.png"
 menu="Desktop/project folder/menu.png"
 sawmill = "Desktop/project folder/sawmill.png"
 quarry = "Desktop/project folder/quarry.png"
-'''
 def iscollectible(x):
     if x.collectability==0:
         return True
@@ -42,12 +40,12 @@ class units(object):
             self.berry=10000
             self.wood=10000
             self.rock=10000
-            self.building.hp=[30]
-            self.hp = self.building.hp
+            self.hp=[30]
+            self.building.hp = self.hp
             moveSprite(self.building,self.xpos,self.ypos)
             showSprite(self.building)
         def move(self):
-            if self.building.hp[0] > 0:
+            if self.hp[0] > 0:
                 if keyPressed("left"):
                     self.xpos -= self.speed
                 elif keyPressed("right"):
@@ -58,7 +56,7 @@ class units(object):
                     self.ypos += self.speed
                 moveSprite(self.building, self.xpos, self.ypos)
         def goto(self,xgoto,ygoto):
-            if self.building.hp[0] > 0:
+            if self.hp[0] > 0:
                 self.xgoto=xgoto
                 self.ygoto=ygoto
                 for i in range(300):
@@ -75,7 +73,7 @@ class units(object):
                     else:
                         self.ypos=self.ygoto
         def get(self,sawmills,bushes,quarries,pebbles,branches):
-            if self.building.hp[0] > 0:
+            if self.hp[0] > 0:
                 self.sawmills=sawmills
                 self.bushes=bushes
                 self.quarries=quarries
@@ -106,8 +104,14 @@ class units(object):
                         pebbles[i].collectability = 1
                         pebbles[i].hp=-1
                         killSprite(pebbles[i])
+        def movescreen(self,screenx,screeny):
+            self.screenx=screenx
+            self.screeny=screeny
+            self.xpos+=screenx
+            self.ypos+=screeny
+            moveSprite(self.building,self.xpos,self.ypos)
         def put_res(self,storage_name):
-            if self.building.hp[0] > 0:
+            if self.hp[0] > 0:
                 self.storage_name=storage_name
                 self.storage_name.berry+=self.berry
                 self.storage_name.wood+=self.wood
@@ -131,12 +135,12 @@ class units(object):
             self.ypos=ypos
             self.speed=3
             self.building=makeSprite(warriorowl)
-            self.building.hp=[60]
-            self.hp = self.building.hp
+            self.hp=[60]
+            self.building.hp = self.hp
             moveSprite(self.building,self.xpos,self.ypos)
             showSprite(self.building)
         def move(self):
-            if self.building.hp[0] > 0:
+            if self.hp[0] > 0:
                 if keyPressed("left"):
                     self.xpos -= self.speed
                 elif keyPressed("right"):
@@ -147,57 +151,82 @@ class units(object):
                     self.ypos += self.speed
                 moveSprite(self.building, self.xpos, self.ypos)
         def attack(self):
-            if self.building.hp[0] > 0:
+            if self.hp[0] > 0:
                 enemies=allTouching(self.building)
                 for enemy in enemies:
                     enemy.hp[0] = 0
                     if enemy.hp[0]<=0:
                         killSprite(enemy)
+        def movescreen(self,screenx,screeny):
+            self.screenx=screenx
+            self.screeny=screeny
+            self.xpos+=screenx
+            self.ypos+=screeny
+            moveSprite(self.building,self.xpos,self.ypos)
 class buildings(object):
     class main_hall(object):
         def __init__(self,builder):
             self.xPos=builder.xpos
             self.yPos=builder.ypos
             self.building=makeSprite(tree)
-            self.building.hp = [200]
-            self.hp = self.building.hp
-        def build(self):
+            self.hp = [200]
+            self.building.hp = self.hp
             moveSprite(self.building,self.xPos,self.yPos)
             showSprite(self.building)
         def born_normal_unit(self):
-            if self.building.hp[0] > 0:
+            if self.hp[0] > 0:
                 self.normunit=units.normal_unit(self.xPos,self.yPos)
                 return self.normunit
+        def movescreen(self,screenx,screeny):
+            self.screenx=screenx
+            self.screeny=screeny
+            self.xPos+=screenx
+            self.yPos+=screeny
+            moveSprite(self.building,self.xPos,self.yPos)
+
+
     class forge(object):
         def __init__(self,builder):
             self.xPos=builder.xpos
             self.yPos=builder.ypos
             self.building=makeSprite(warriortree)
-            self.building.hp=[300]
-            self.hp = self.building.hp
-        def build(self):
+            self.hp=[300]
+            self.building.hp = self.hp
             moveSprite(self.building,self.xPos,self.yPos)
             showSprite(self.building)
         def born_warrior(self):
-            if self.building.hp[0] > 0:
+            if self.hp[0] > 0:
                 self.warriorowl=units.warrior(self.xPos,self.yPos)
                 return self.warriorowl
+        def movescreen(self,screenx,screeny):
+            self.screenx=screenx
+            self.screeny=screeny
+            self.x+=screenx
+            self.y+=screeny
+            moveSprite(self.building,self.xPos,self.yPos)
+
     class storage(object):
         def __init__(self, builder):
             self.xPos=builder.xpos
             self.yPos=builder.ypos
             self.building = makeSprite(storage)
-            self.building.hp = [200]
-            self.hp = self.building.hp
-            self.building.berry = 0
-            self.building.rock = 0
-            self.building.wood = 0
-            self.building.x = self.xPos
-            self.building.y = self.yPos
-        def build(self):
+            self.hp = [200]
+            self.building.hp = self.hp
+            self.berry = 0
+            self.rock = 0
+            self.wood = 0
+            self.x = self.xPos
+            self.y = self.yPos
             moveSprite(self.building, self.xPos, self.yPos)
             showSprite(self.building)
-            return self.building
+        def movescreen(self,screenx,screeny):
+            self.screenx=screenx
+            self.screeny=screeny
+            self.xPos+=screenx
+            self.yPos+=screeny
+            moveSprite(self.building,self.xPos,self.yPos)
+
+
     class sawmill(object):
         def __init__(self, builder,woods):
             self.woods = woods
@@ -211,19 +240,26 @@ class buildings(object):
                     self.near_woods.append(0)
                     self.near_woods[self.a] = self.woods[i]
                     self.a += 1
-            self.building.hp = [200]
-            self.hp = self.building.hp
+            self.hp = [200]
+            self.building.hp = self.hp
             self.wood = 0
-            self.building.damage_to_trees = 100
+            self.damage_to_trees = 100
             moveSprite(self.building,self.x, self.y)
             showSprite(self.building)
         def sawing(self):
-            if self.building.hp[0] > 0:
+            if self.hp[0] > 0:
                 if len(self.near_woods):
                     self.wood+=1
-                    self.near_woods[0].hp = 0
+                    self.near_woods[0].hp = [0]
                     changeSpriteImage(self.near_woods[0],1)
                     self.near_woods.pop(0)
+        def movescreen(self,screenx,screeny):
+            self.screenx=screenx
+            self.screeny=screeny
+            self.x+=screenx
+            self.y+=screeny
+            moveSprite(self.building,self.x,self.y)
+
     class quarry(object):
         def __init__(self, builder, stones):
             self.stones = stones
@@ -238,16 +274,22 @@ class buildings(object):
                     self.near_stones.append(0)
                     self.near_stones[self.a] = self.stones[i]
                     self.a += 1
-            self.building.hp = [400]
-            self.hp = self.building.hp
+            self.hp = [400]
+            self.building.hp = self.hp
             self.rock = 0
-            self.building.damage_to_trees = 100
+            self.damage_to_trees = 100
             moveSprite(self.building, self.x, self.y)
             showSprite(self.building)
         def stonecutting(self):
-            if self.building.hp[0] > 0:
+            if self.hp[0] > 0:
                 if len(self.near_stones):
                     self.rock+=2
-                    self.near_stones[0].hp = 0
+                    self.near_stones[0].hp = [0]
                     changeSpriteImage(self.near_stones[0], 1)
                     self.near_stones.pop(0)
+        def movescreen(self,screenx,screeny):
+            self.screenx=screenx
+            self.screeny=screeny
+            self.x+=screenx
+            self.y+=screeny
+            moveSprite(self.building,self.x,self.y)
