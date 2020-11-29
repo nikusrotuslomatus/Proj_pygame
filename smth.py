@@ -2,14 +2,15 @@ from pygame_functions import *
 import random
 from collections import deque
 from units_and_buildings import *
-from numba import *
+#from numba import *
 import numpy as np
 screenSize(1000, 730)
 setBackgroundColour((43, 94, 65))
 setAutoUpdate(0)
 text = makeTextBox(0, 450, 1000, fontSize=20)
 showTextBox(text)
-'''wood = "wood.png"
+
+wood = "wood.png"
 rock = "rock.png"
 owl = "owl.png"
 bush = "bush.png"
@@ -22,7 +23,8 @@ branch = "branch.png"
 berry = "berries.png"
 menu = "menu.png"
 sawmill = "sawmill.png"
-quarry = "quarry.png"'''
+quarry = "quarry.png"
+'''
 wood = "Desktop/project folder/wood.png"
 rock = "Desktop/project folder/rock.png"
 owl = "Desktop/project folder/owl.png"
@@ -37,6 +39,7 @@ berry="Desktop/project folder/berries.png"
 menu="Desktop/project folder/menu.png"
 sawmill = "Desktop/project folder/sawmill.png"
 quarry = "Desktop/project folder/quarry.png"
+'''
 fpsDisplay = makeLabel("FPS:", 30, 10, 10, "white")
 showLabel(fpsDisplay)
 xPositon = 500
@@ -103,17 +106,17 @@ def main():
     sawmills = deque()
     quarries = deque()
     warriors = deque()
-    allspries=[]
+    allspries=np.array([])
     forges=np.array([],dtype=object)
     mainhalls=np.array([],dtype=object)
-    allspries.append([mainhalls,forges,warriors,quarries,sawmills,storages,normalunits,branches,pebbles,rocks,woods,bushes])
+    allspries = np.append(allspries,[mainhalls,forges,warriors,quarries,sawmills,storages,normalunits,branches,pebbles,rocks,woods,bushes])
     for x in range(200):
-        envbush = buildings.environment(bush, "Desktop/project folder/bushcollected.png", [20], 0)
+        envbush = buildings.environment(bush, "bushcollected.png", [20], 0)
         # Desktop/project folder/
         bushes=np.append(bushes,envbush)
-        envwood = buildings.environment(wood, "Desktop/project folder/woodcollected.png", [100], 0)
+        envwood = buildings.environment(wood, "woodcollected.png", [100], 0)
         woods=np.append(woods,envwood)
-        envrock = buildings.environment(rock, "Desktop/project folder/rockcollected.png", [400], 0)
+        envrock = buildings.environment(rock, "rockcollected.png", [400], 0)
         rocks=np.append(rocks,envrock)
         envpebble = buildings.environment(pebble, pebble, [20], 0)
         pebbles=np.append(pebbles,envpebble)
@@ -162,7 +165,7 @@ def main():
     xmovescreen=0
     ymovescreen=0
     while True:
-        
+
         pos2=pygame.mouse.get_pos()
         if drawmenu == 0:
             menu()
@@ -299,7 +302,7 @@ def main():
                 if normalunits[0].hp[0] > 0:
                     if storages[0].rock >= 1:
                         storages[0].rock -= 1
-                        warriors.append(forge.born_warrior())
+                        warriors.append(forges[0].born_warrior())
                         pause(200)
             except Exception as e:
                 print(e)
@@ -332,7 +335,7 @@ def main():
                             storages.append(sg.build())
                             pause(200)
                 except Exception as e:
-                    print(e) 
+                    print(e)
             if spriteClicked(menusawmill) and menusawmill.clickability:
                 try:
                     if normalunits[0].hp[0] > 0:
@@ -377,6 +380,7 @@ def main():
                             pause(500)
                 except Exception as e:
                     print(e)
+               
         if acounter:
             try:
                 warriors[0].move()
@@ -407,20 +411,36 @@ def main():
         except Exception as e:
             print(e)
         if keyPressed("space"):
+            print(allspries.shape)
             if pos2[0] <=5:
-                for listsprite in allspries[0]:
+                allspries = np.array([mainhalls,forges,warriors,quarries,sawmills,storages,normalunits,branches,pebbles,rocks,woods,bushes])
+                #for listsprite in range(allspries[0].shape[0]):
+                   # for sprite in range(allspries[0][listsprite].shape[0]):
+                        #allspries[0][listsprite][sprite].movescreen(3,0)
+                for listsprite in allspries:
                     for sprite in listsprite:
-                            sprite.movescreen(3,0)
+                        sprite.movescreen(0,-6)
+
+
             elif pos2[0]>=995:
-                for listsprite in allspries[0]:
+                allspries = np.array(
+                    [mainhalls, forges, warriors, quarries, sawmills, storages, normalunits, branches, pebbles, rocks,
+                     woods, bushes])
+                for listsprite in allspries:
                     for sprite in listsprite:
-                            sprite.movescreen(-3,0)
+                        sprite.movescreen(-3,0)
             elif pos2[1] <=5:
-                for listsprite in allspries[0]:
+                allspries = np.array(
+                    [mainhalls, forges, warriors, quarries, sawmills, storages, normalunits, branches, pebbles, rocks,
+                     woods, bushes])
+                for listsprite in allspries:
                     for sprite in listsprite:
                         sprite.movescreen(0,3)
             elif pos2[1] >=725:
-                for listsprite in allspries[0]:
+                allspries = np.array(
+                    [mainhalls, forges, warriors, quarries, sawmills, storages, normalunits, branches, pebbles, rocks,
+                     woods, bushes])
+                for listsprite in allspries        :
                     for sprite in listsprite:
                         sprite.movescreen(0,-3)
         drawRect(0, 450, 1000, 280, "black")

@@ -1,7 +1,7 @@
 from pygame_functions import *
 import random
 from collections import deque
-'''wood = "wood.png"
+wood = "wood.png"
 rock = "rock.png"
 owl = "owl.png"
 bush="bush.png"
@@ -10,7 +10,9 @@ tree="tree.png"
 warriortree="warriortree.png"
 storage="storage.png"
 sawmill = 'sawmill.png'
-quarry = "quarry.png"'''
+quarry = "quarry.png"
+
+'''
 wood = "Desktop/project folder/wood.png"
 rock = "Desktop/project folder/rock.png"
 owl = "Desktop/project folder/owl.png"
@@ -25,6 +27,7 @@ berry="Desktop/project folder/berries.png"
 menu="Desktop/project folder/menu.png"
 sawmill = "Desktop/project folder/sawmill.png"
 quarry = "Desktop/project folder/quarry.png"
+'''
 def iscollectible(x):
     if x.collectability==0:
         return True
@@ -92,7 +95,6 @@ class units(object):
                         self.rock+=self.quarries[i].rock
                         self.quarries[i].rock=0
                 for i in range(self.bushes.shape[0]):
-                    print(1)
                     if (((((self.bushes[i].x - self.xpos) ** 2 + (self.bushes[i].y - self.ypos) ** 2) ** 0.5) <= 39) and iscollectible(bushes[i])) and self.bushes[i].hp[0]>0:
                         changeSpriteImage(bushes[i].thissprite,1)
                         self.berry+=1
