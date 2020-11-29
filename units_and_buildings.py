@@ -42,6 +42,7 @@ class units(object):
             self.rock=10000
             self.hp=[30]
             self.building.hp = self.hp
+            self.havecome=False
             moveSprite(self.building,self.xpos,self.ypos)
             showSprite(self.building)
         def move(self):
@@ -59,19 +60,22 @@ class units(object):
             if self.hp[0] > 0:
                 self.xgoto=xgoto
                 self.ygoto=ygoto
-                for i in range(300):
-                    if self.xgoto>self.xpos:
-                        self.xpos+=0.01
-                    elif self.xgoto<self.xpos:
-                        self.xpos-=0.01
-                    else:
-                        self.xpos=self.xgoto
-                    if self.ygoto>self.ypos:
-                        self.ypos+=0.01
-                    elif self.ygoto<self.ypos:
-                        self.ypos-=0.01
-                    else:
-                        self.ypos=self.ygoto
+                if abs(self.xpos-self.xgoto)>3 or abs(self.ypos-self.ygoto)>3:
+                    if self.havecome:
+                        self.havecome=False
+                    for i in range(300):
+                        if self.xgoto>self.xpos:
+                            self.xpos+=0.01
+                        elif self.xgoto<self.xpos:
+                            self.xpos-=0.01
+                        else:
+                            self.xpos=self.xgoto
+                        if self.ygoto>self.ypos:
+                            self.ypos+=0.01
+                        elif self.ygoto<self.ypos:
+                            self.ypos-=0.01
+                else:
+                    self.havecome=True
         def get(self,sawmills,bushes,quarries,pebbles,branches):
             if self.hp[0] > 0:
                 self.sawmills=sawmills
@@ -79,31 +83,32 @@ class units(object):
                 self.quarries=quarries
                 self.pebbles=pebbles
                 self.branches=branches
-                for i in range(len(sawmills)):
+                for i in range(len(self.sawmills)):
                     if (((self.sawmills[i].x - self.xpos)**2+(self.sawmills[i].y-self.ypos)**2) ** 0.5) <= 25 and self.sawmills[i].hp[0]>0:
                         self.wood+=self.sawmills[i].wood
                         self.sawmills[i].wood=0
-                for i in range(len(quarries)):
+                for i in range(len(self.quarries)):
                     if (((self.quarries[i].x - self.xpos)**2+(self.quarries[i].y-self.ypos)**2) ** 0.5) <= 25 and self.quarries[i].hp[0]>0:
                         self.rock+=self.quarries[i].rock
                         self.quarries[i].rock=0
-                for i in range(len(self.bushes)):
+                for i in range(self.bushes.shape[0]):
+                    print(1)
                     if (((((self.bushes[i].x - self.xpos) ** 2 + (self.bushes[i].y - self.ypos) ** 2) ** 0.5) <= 39) and iscollectible(bushes[i])) and self.bushes[i].hp[0]>0:
-                        changeSpriteImage(bushes[i],1)
+                        changeSpriteImage(bushes[i].thissprite,1)
                         self.berry+=1
                         bushes[i].collectability=1
-                for i in range(len(self.branches)):
+                for i in range(self.branches.shape[0]):
                     if (((((self.branches[i].x - self.xpos) ** 2 + (self.branches[i].y - self.ypos) ** 2) ** 0.5) <= 39) and (iscollectible(branches[i]))) and self.branches[i].hp[0]>0:
                         self.wood += 1
                         branches[i].collectability = 1
                         branches[i].hp=-1
-                        killSprite(branches[i])
-                for i in range(len(self.pebbles)):
+                        killSprite(branches[i].thissprite)
+                for i in range(self.pebbles.shape[0]):
                     if ((((self.pebbles[i].x - self.xpos) ** 2 + (self.pebbles[i].y - self.ypos) ** 2) ** 0.5) <= 39) and(iscollectible(pebbles[i])) and self.pebbles[i].hp[0]>0:
                         self.rock += 1
                         pebbles[i].collectability = 1
                         pebbles[i].hp=-1
-                        killSprite(pebbles[i])
+                        killSprite(pebbles[i].thissprite)
         def movescreen(self,screenx,screeny):
             self.screenx=screenx
             self.screeny=screeny
@@ -156,7 +161,10 @@ class units(object):
                 for enemy in enemies:
                     enemy.hp[0] = 0
                     if enemy.hp[0]<=0:
-                        killSprite(enemy)
+                        try:
+                            killSprite(enemy)
+                        except:
+                            killSprite(enemy.thissprite)
         def movescreen(self,screenx,screeny):
             self.screenx=screenx
             self.screeny=screeny
@@ -164,6 +172,25 @@ class units(object):
             self.ypos+=screeny
             moveSprite(self.building,self.xpos,self.ypos)
 class buildings(object):
+    class environment(object):
+        def __init__(self,spritename,secondspritename,hp,collectability):
+            self.spritename = spritename
+            self.secondspritename = secondspritename
+            self.hp=hp
+            self.collectability=collectability
+            self.thissprite=makeSprite(spritename)
+            self.thissprite.hp=self.hp
+            addSpriteImage(self.thissprite, self.secondspritename)
+            self.x = random.randint(-2000,2000)
+            self.y = random.randrange(-1000, 1000)
+            moveSprite(self.thissprite, self.x, self.y)
+            showSprite(self.thissprite)
+        def movescreen(self,screenx,screeny):
+            self.screenx=screenx
+            self.screeny=screeny
+            self.x+=screenx
+            self.y+=screeny
+            moveSprite(self.thissprite,self.x,self.y)
     class main_hall(object):
         def __init__(self,builder):
             self.xPos=builder.xpos
@@ -201,8 +228,8 @@ class buildings(object):
         def movescreen(self,screenx,screeny):
             self.screenx=screenx
             self.screeny=screeny
-            self.x+=screenx
-            self.y+=screeny
+            self.xPos+=screenx
+            self.yPos+=screeny
             moveSprite(self.building,self.xPos,self.yPos)
 
     class storage(object):
@@ -251,7 +278,7 @@ class buildings(object):
                 if len(self.near_woods):
                     self.wood+=1
                     self.near_woods[0].hp = [0]
-                    changeSpriteImage(self.near_woods[0],1)
+                    changeSpriteImage(self.near_woods[0].thissprite,1)
                     self.near_woods.pop(0)
         def movescreen(self,screenx,screeny):
             self.screenx=screenx
@@ -285,7 +312,7 @@ class buildings(object):
                 if len(self.near_stones):
                     self.rock+=2
                     self.near_stones[0].hp = [0]
-                    changeSpriteImage(self.near_stones[0], 1)
+                    changeSpriteImage(self.near_stones[0].thissprite, 1)
                     self.near_stones.pop(0)
         def movescreen(self,screenx,screeny):
             self.screenx=screenx
