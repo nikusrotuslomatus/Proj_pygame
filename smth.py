@@ -411,38 +411,11 @@ def main():
         except Exception as e:
             print(e)
         if keyPressed("space"):
-            print(allspries.shape)
-            if pos2[0] <=5:
+            if pos2[0] <=5 or pos2[0] >= 995 or pos2[1] <=5 or pos2[1] >= 725:
                 allspries = np.array([mainhalls,forges,warriors,quarries,sawmills,storages,normalunits,branches,pebbles,rocks,woods,bushes])
-                #for listsprite in range(allspries[0].shape[0]):
-                   # for sprite in range(allspries[0][listsprite].shape[0]):
-                        #allspries[0][listsprite][sprite].movescreen(3,0)
                 for listsprite in allspries:
                     for sprite in listsprite:
-                        sprite.movescreen(0,-6)
-
-
-            elif pos2[0]>=995:
-                allspries = np.array(
-                    [mainhalls, forges, warriors, quarries, sawmills, storages, normalunits, branches, pebbles, rocks,
-                     woods, bushes])
-                for listsprite in allspries:
-                    for sprite in listsprite:
-                        sprite.movescreen(-3,0)
-            elif pos2[1] <=5:
-                allspries = np.array(
-                    [mainhalls, forges, warriors, quarries, sawmills, storages, normalunits, branches, pebbles, rocks,
-                     woods, bushes])
-                for listsprite in allspries:
-                    for sprite in listsprite:
-                        sprite.movescreen(0,3)
-            elif pos2[1] >=725:
-                allspries = np.array(
-                    [mainhalls, forges, warriors, quarries, sawmills, storages, normalunits, branches, pebbles, rocks,
-                     woods, bushes])
-                for listsprite in allspries        :
-                    for sprite in listsprite:
-                        sprite.movescreen(0,-3)
+                        sprite.movescreen(-0.012*pos2[0]+6,-0.01643835616438356*pos2[1]+6)
         drawRect(0, 450, 1000, 280, "black")
         updateDisplay()
         if keyPressed("esc"):
