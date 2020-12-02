@@ -9,7 +9,7 @@ setBackgroundColour((43, 94, 65))
 setAutoUpdate(0)
 text = makeTextBox(0, 450, 1000, fontSize=20)
 showTextBox(text)
-
+'''
 wood = "wood.png"
 rock = "rock.png"
 owl = "owl.png"
@@ -39,7 +39,6 @@ berry="Desktop/project folder/berries.png"
 menu="Desktop/project folder/menu.png"
 sawmill = "Desktop/project folder/sawmill.png"
 quarry = "Desktop/project folder/quarry.png"
-'''
 fpsDisplay = makeLabel("FPS:", 30, 10, 10, "white")
 showLabel(fpsDisplay)
 xPositon = 500
@@ -110,50 +109,57 @@ def main():
     forges=np.array([],dtype=object)
     mainhalls=np.array([],dtype=object)
     allspries = np.append(allspries,[mainhalls,forges,warriors,quarries,sawmills,storages,normalunits,branches,pebbles,rocks,woods,bushes])
-    for x in range(200):
-        envbush = buildings.environment(bush, "bushcollected.png", [20], 0)
+    for x in range(300):
+        envbush = buildings.environment(bush, "Desktop/project folder/bushcollected.png", [20], 0)
         # Desktop/project folder/
         bushes=np.append(bushes,envbush)
-        envwood = buildings.environment(wood, "woodcollected.png", [100], 0)
+        envwood = buildings.environment(wood, "Desktop/project folder/woodcollected.png", [100], 0)
         woods=np.append(woods,envwood)
-        envrock = buildings.environment(rock, "rockcollected.png", [400], 0)
+        envrock = buildings.environment(rock, "Desktop/project folder/rockcollected.png", [400], 0)
         rocks=np.append(rocks,envrock)
         envpebble = buildings.environment(pebble, pebble, [20], 0)
         pebbles=np.append(pebbles,envpebble)
         envbranch = buildings.environment(branch, branch, [20], 0)
         branches=np.append(branches,envbranch)
     def menu():
-        unhideAll()
         for pebl in pebbles:
-            if pebl.x >= 640:
+            if pebl.xpos >= 640 and pebl.xpos<=1100  and pebl.ypos >= 0 and pebl.ypos<=450:
                 if pebl.hp[0] <= 0:
-                    killSprite(pebl.thissprite)
+                    killSprite(pebl.building)
                 else:
-                    hideSprite(pebl.thissprite)
+                    hideSprite(pebl.building)
         for rck in rocks:
-            if rck.x >= 640:
+            if rck.xpos >= 640 and rck.xpos<=1100  and rck.ypos >= 0 and rck.ypos<=450:
                 if rck.hp[0] <= 0:
-                    killSprite(rck.thissprite)
+                    killSprite(rck.building)
                 else:
-                    hideSprite(rck.thissprite)
+                    hideSprite(rck.building)
         for bsh in bushes:
-            if bsh.x >= 640:
+            if bsh.xpos >= 640 and bsh.xpos<=1100  and bsh.ypos >= 0 and bsh.ypos<=450:
                 if bsh.hp[0] <= 0:
-                    killSprite(bsh.thissprite)
+                    killSprite(bsh.building)
                 else:
-                    hideSprite(bsh.thissprite)
+                    hideSprite(bsh.building)
         for wds in woods:
-            if wds.x >= 640:
+            if wds.xpos >= 640 and wds.xpos<=1100  and wds.ypos >= 0 and wds.ypos<=450:
                 if wds.hp[0] <= 0:
-                    killSprite(wds.thissprite)
+                    killSprite(wds.building)
                 else:
-                    hideSprite(wds.thissprite)
+                    hideSprite(wds.building)
         for brnch in branches:
-            if brnch.x >= 640:
+            if brnch.xpos >= 640 and brnch.xpos<=1100  and brnch.ypos >= 0 and brnch.ypos<=450:
                 if brnch.hp[0] <= 0:
-                    killSprite(brnch.thissprite)
+                    killSprite(brnch.building)
                 else:
-                    hideSprite(brnch.thissprite)
+                    hideSprite(brnch.building)
+        showSprite(menusprite)
+        showSprite(menustorage)
+        showSprite(menumainhall)
+        showSprite(menuforge)
+        showSprite(menusawmill)
+        showSprite(menuquarry)
+        showSprite(menuowl)
+        showSprite(menuwarrior)
     owlunit1 = units.normal_unit(xPositon, yPosition)
     normalunits.append(owlunit1)
     warrior1 = units.warrior(xPositon + 100, yPosition + 100)
@@ -184,27 +190,36 @@ def main():
             menuquarry.clickability = 0
             menuowl.clickability = 0
             menuwarrior.clickability = 0
-            unhideAll()
             for pebl in pebbles:
-                if pebl.x >= 640:
+                if pebl.xpos >= 640 and pebl.xpos<=1100  and pebl.ypos >= 0 and pebl.ypos<=450:
                     if pebl.hp[0] <= 0:
-                        killSprite(pebl.thissprite)
+                        killSprite(pebl.building)
+                    else:
+                        showSprite(pebl.building)
             for rck in rocks:
-                if rck.x >= 640:
+                if rck.xpos >= 640 and rck.xpos<=1100  and rck.ypos >= 0 and rck.ypos<=450:
                     if rck.hp[0] <= 0:
-                        killSprite(rck.thissprite)
+                        killSprite(rck.building)
+                    else:
+                        showSprite(rck.building)
             for bsh in bushes:
-                if bsh.x >= 640:
+                if bsh.xpos >= 640 and bsh.xpos<=1100  and bsh.ypos >= 0 and bsh.ypos<=450:
                     if bsh.hp[0] <= 0:
-                        killSprite(bsh.thissprite)
+                        killSprite(bsh.building)
+                    else:
+                        showSprite(bsh.building)
             for wds in woods:
-                if wds.x >= 640:
+                if wds.xpos >= 640 and wds.xpos<=1100  and wds.ypos >= 0 and wds.ypos<=450:
                     if wds.hp[0] <= 0:
                         killSprite(wds.thissprie)
+                    else:
+                        showSprite(wds.building)
             for brnch in branches:
-                if brnch.x >= 640:
+                if brnch.xpos >= 640 and brnch.xpos<=1100  and brnch.ypos >= 0 and brnch.ypos<=450:
                     if brnch.hp[0] <= 0:
                         killSprite(brnch.thissprie)
+                    else:
+                        showSprite(brnch.building)
             hideSprite(menusprite)
             hideSprite(menustorage)
             hideSprite(menumainhall)
@@ -228,7 +243,7 @@ def main():
             try:
                 sawmills.rotate(1)
                 stsign = makeSprite(owl)
-                moveSprite(stsign, sawmills[0].xPos, sawmills[0].yPos + 50)
+                moveSprite(stsign, sawmills[0].xpos, sawmills[0].ypos + 50)
                 showSprite(stsign)
                 pause(200)
                 hideSprite(stsign)
@@ -244,14 +259,14 @@ def main():
             drawmenu = 1
         mouseState = pygame.mouse.get_pressed()
         if mouseState[0] and keyPressed("space"):
-            pos = (pygame.mouse.get_pos()[0] - 30, pygame.mouse.get_pos()[1] - 30)
+            pos = [pygame.mouse.get_pos()[0] - 30, pygame.mouse.get_pos()[1] - 30]
             normalunits[0].havecome=False
         if not acounter:
             if not normalunits[0].havecome:
                 normalunits[0].goto(pos[0], pos[1])
                 if abs(normalunits[0].xpos - pos[0]) <= 3.2 and abs(normalunits[0].ypos - pos[1]) <= 3.1:
                     normalunits[0].get(sawmills, bushes, quarries, pebbles, branches)
-        else:
+        elif acounter:
             warriors[0].goto(pos[0]-xmovescreen, pos[1]-ymovescreen)
             if abs(warriors[0].xpos - pos[0]) <= 3.2 and abs(warriors[0].ypos - pos[1]) <= 3.1:
                 warriors[0].attack()
@@ -274,7 +289,7 @@ def main():
             try:
                 storages.rotate(1)
                 stsign = makeSprite(owl)
-                moveSprite(stsign, storages[0].x, storages[0].y + 50)
+                moveSprite(stsign, storages[0].xpos, storages[0].ypos + 50)
                 showSprite(stsign)
                 pause(300)
                 hideSprite(stsign)
@@ -381,7 +396,7 @@ def main():
                 except Exception as e:
                     print(e)
                
-        if acounter:
+        elif acounter:
             try:
                 warriors[0].move()
             except Exception as e:
@@ -398,7 +413,7 @@ def main():
             if clock() >= nextFrame_rocks:
                 quarries[0].stonecutting()
                 nextFrame_rocks += 200
-        fps = tick(6000)
+        fps = tick(100)
         changeLabel(fpsDisplay, "FPS: {0}".format(str(round(fps, 2))))
         for mainloopstorage in storages:
             mainloopberries += mainloopstorage.berry
@@ -416,6 +431,13 @@ def main():
                 for listsprite in allspries:
                     for sprite in listsprite:
                         sprite.movescreen(-0.012*pos2[0]+6,-0.01643835616438356*pos2[1]+6)
+                        pos[0]+=-0.012*pos2[0]+6
+                        pos[1]+=-0.01643835616438356*pos2[1]+6
+                        if sprite.xpos<=-100 or sprite.xpos>=1100 or sprite.ypos<=-100 or sprite.ypos>=410:
+                            hideSprite(sprite.building)
+                        else:
+                            showSprite(sprite.building)
+
         drawRect(0, 450, 1000, 280, "black")
         updateDisplay()
         if keyPressed("esc"):
