@@ -9,7 +9,7 @@ setBackgroundColour((43, 94, 65))
 setAutoUpdate(0)
 text = makeTextBox(0, 450, 1000, fontSize=20)
 showTextBox(text)
-'''
+
 wood = "wood.png"
 rock = "rock.png"
 owl = "owl.png"
@@ -39,6 +39,7 @@ berry="Desktop/project folder/berries.png"
 menu="Desktop/project folder/menu.png"
 sawmill = "Desktop/project folder/sawmill.png"
 quarry = "Desktop/project folder/quarry.png"
+'''
 fpsDisplay = makeLabel("FPS:", 30, 10, 10, "white")
 showLabel(fpsDisplay)
 xPositon = 500
@@ -89,7 +90,18 @@ moveSprite(pebbleicon, 210, 10)
 moveSprite(branchicon, 310, 10)
 moveSprite(berryicon, 410, 10)
 pos = (500, 300)
+
 def main():
+    wordBox = makeTextBox(10, 80, 300, 1200, "Enter text here", 15, 24)
+    xpos = 10
+    ypos = 80
+    showTextBox(wordBox)
+    entry = textBoxInput(wordBox)
+    hideTextBox(wordBox)
+    wordlabel = makeLabel(entry, 30, random.randint(1, 700), random.randint(50, 700), "yellow")
+    moveLabel(wordlabel, xpos, ypos)
+    moveLabel(wordBox, xpos, ypos)
+    ypos += 34
     labelpebble = makeLabel("0", 30, 250, 10, "white")
     lableberry = makeLabel("0", 30, 450, 10, "white")
     labelbranch = makeLabel("0", 30, 350, 10, "white")
@@ -110,12 +122,12 @@ def main():
     mainhalls=np.array([],dtype=object)
     allspries = np.append(allspries,[mainhalls,forges,warriors,quarries,sawmills,storages,normalunits,branches,pebbles,rocks,woods,bushes])
     for x in range(300):
-        envbush = buildings.environment(bush, "Desktop/project folder/bushcollected.png", [20], 0)
+        envbush = buildings.environment(bush, "bushcollected.png", [20], 0)
         # Desktop/project folder/
         bushes=np.append(bushes,envbush)
-        envwood = buildings.environment(wood, "Desktop/project folder/woodcollected.png", [100], 0)
+        envwood = buildings.environment(wood, "woodcollected.png", [100], 0)
         woods=np.append(woods,envwood)
-        envrock = buildings.environment(rock, "Desktop/project folder/rockcollected.png", [400], 0)
+        envrock = buildings.environment(rock, "rockcollected.png", [400], 0)
         rocks=np.append(rocks,envrock)
         envpebble = buildings.environment(pebble, pebble, [20], 0)
         pebbles=np.append(pebbles,envpebble)
@@ -425,20 +437,26 @@ def main():
             changeLabel(lableberry, str(mainloopberries))
         except Exception as e:
             print(e)
+
         if keyPressed("space"):
             if pos2[0] <=5 or pos2[0] >= 995 or pos2[1] <=5 or pos2[1] >= 725:
                 allspries = np.array([mainhalls,forges,warriors,quarries,sawmills,storages,normalunits,branches,pebbles,rocks,woods,bushes])
                 for listsprite in allspries:
                     for sprite in listsprite:
                         sprite.movescreen(-0.012*pos2[0]+6,-0.01643835616438356*pos2[1]+6)
-                        pos[0]+=-0.012*pos2[0]+6
-                        pos[1]+=-0.01643835616438356*pos2[1]+6
                         if sprite.xpos<=-100 or sprite.xpos>=1100 or sprite.ypos<=-100 or sprite.ypos>=410:
                             hideSprite(sprite.building)
                         else:
                             showSprite(sprite.building)
-
         drawRect(0, 450, 1000, 280, "black")
+        if keyPressed("return"):
+            wordlabel = makeLabel(entry, 30, random.randint(1, 700), random.randint(50, 700), "yellow")
+            showLabel(wordlabel)
+            moveLabel(wordlabel, xpos, ypos - 34)
+            wordBox = makeTextBox(xpos, ypos, 300, 1200, "Enter text here", 15, 24)
+            ypos += 34
+            entry = textBoxInput(wordBox)
+            hideTextBox(wordBox)
         updateDisplay()
         if keyPressed("esc"):
             endWait()

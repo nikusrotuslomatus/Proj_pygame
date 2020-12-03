@@ -1,7 +1,7 @@
 from pygame_functions import *
 import random
 from collections import deque
-'''
+
 wood = "wood.png"
 rock = "rock.png"
 owl = "owl.png"
@@ -27,6 +27,7 @@ berry="Desktop/project folder/berries.png"
 menu="Desktop/project folder/menu.png"
 sawmill = "Desktop/project folder/sawmill.png"
 quarry = "Desktop/project folder/quarry.png"
+'''
 def iscollectible(x):
     if x.collectability==0:
         return True

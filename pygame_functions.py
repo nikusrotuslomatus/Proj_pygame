@@ -1,3 +1,9 @@
+# pygame_functions
+
+# Documentation at www.github.com/stevepaget/pygame_functions
+# Report bugs at https://github.com/StevePaget/Pygame_Functions/issues
+
+
 import pygame, sys, os
 
 pygame.mixer.pre_init(44100, -16, 2, 512)
@@ -155,6 +161,8 @@ class newSprite(pygame.sprite.Sprite):
 
 class newTextBox(pygame.sprite.Sprite):
     def __init__(self, text, xpos, ypos, width, case, maxLength, fontSize):
+        self.xpos = xpos
+        self.ypos = ypos
         pygame.sprite.Sprite.__init__(self)
         self.text = ""
         self.width = width
