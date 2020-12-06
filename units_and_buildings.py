@@ -1,327 +1,278 @@
 from pygame_functions import *
 import random
 from collections import deque
+from units_and_buildings import *
+from environment import *
+#from numba import *
+import numpy as np
+def main():
+    global labelpebble,lableberry,labelbranch,nextFrame_woods,nextFrame_rocks,bushes,woods,rocks,pebbles,branches,normalunits,storages,sawmills,quarries,warriors,allspries,forges,mainhalls 
+    for x in range(200):
+        envbush = buildings.environment(bush, "Desktop/project folder/bushcollected.png", [20], 0)
+        # Desktop/project folder/
+        bushes=np.append(bushes,envbush)
+        envwood = buildings.environment(wood, "Desktop/project folder/woodcollected.png", [100], 0)
+        woods=np.append(woods,envwood)
+        envrock = buildings.environment(rock, "Desktop/project folder/rockcollected.png", [400], 0)
+        rocks=np.append(rocks,envrock)
+        envpebble = buildings.environment(pebble, pebble, [20], 0)
+        pebbles=np.append(pebbles,envpebble)
+        envbranch = buildings.environment(branch, branch, [20], 0)
+        branches=np.append(branches,envbranch)
+    owlunit1 = units.normal_unit(xPositon, yPosition)
+    normalunits.append(owlunit1)
+    warrior1 = units.warrior(xPositon + 100, yPosition + 100)
+    warriors.append(warrior1)
+    acounter = False
+    mainhall = False   
+    drawmenu = 1
+    pos = (500, 500)
+    xmovescreen=0
+    ymovescreen=0
+    menudrawn=False
+    while True:
 
-wood = "wood.png"
-rock = "rock.png"
-owl = "owl.png"
-bush="bush.png"
-warriorowl="warriorowl.png"
-tree="tree.png"
-warriortree="warriortree.png"
-storage="storage.png"
-sawmill = 'sawmill.png'
-quarry = "quarry.png"
-'''
-wood = "Desktop/project folder/wood.png"
-rock = "Desktop/project folder/rock.png"
-owl = "Desktop/project folder/owl.png"
-bush="Desktop/project folder/bush.png"
-warriorowl="Desktop/project folder/warriorowl.png"
-tree="Desktop/project folder/tree.png"
-warriortree="Desktop/project folder/warriortree.png"
-storage="Desktop/project folder/storage.png"
-pebble="Desktop/project folder/pebble.png"
-branch="Desktop/project folder/branch.png"
-berry="Desktop/project folder/berries.png"
-menu="Desktop/project folder/menu.png"
-sawmill = "Desktop/project folder/sawmill.png"
-quarry = "Desktop/project folder/quarry.png"
-'''
-def iscollectible(x):
-    if x.collectability==0:
-        return True
-    else:
-        return False
-class units(object):
-    class normal_unit(object):
-        def __init__(self,xpos,ypos):
-            self.xpos=xpos
-            self.ypos=ypos
-            self.speed=3
-            self.building=makeSprite(owl)
-            self.berry=10000
-            self.wood=10000
-            self.rock=10000
-            self.hp=[30]
-            self.building.hp = self.hp
-            self.havecome=False
-            moveSprite(self.building,self.xpos,self.ypos)
-            showSprite(self.building)
-        def move(self):
-            if self.hp[0] > 0:
-                if keyPressed("left"):
-                    self.xpos -= self.speed
-                elif keyPressed("right"):
-                    self.xpos += self.speed
-                if keyPressed("up"):
-                    self.ypos -= self.speed
-                elif keyPressed("down"):
-                    self.ypos += self.speed
-                moveSprite(self.building, self.xpos, self.ypos)
-        def goto(self,xgoto,ygoto):
-            if self.hp[0] > 0:
-                self.xgoto=xgoto
-                self.ygoto=ygoto
-                if abs(self.xpos-self.xgoto)>3 or abs(self.ypos-self.ygoto)>3:
-                    if self.havecome:
-                        self.havecome=False
-                    for i in range(300):
-                        if self.xgoto>self.xpos:
-                            self.xpos+=0.01
-                        elif self.xgoto<self.xpos:
-                            self.xpos-=0.01
-                        else:
-                            self.xpos=self.xgoto
-                        if self.ygoto>self.ypos:
-                            self.ypos+=0.01
-                        elif self.ygoto<self.ypos:
-                            self.ypos-=0.01
-                else:
-                    self.havecome=True
-                if self.ypos<=420 and self.xpos<=1100 and self.xpos>=-100 and self.ypos>=-100:
-                    showSprite(self.building)
-        def get(self,sawmills,bushes,quarries,pebbles,branches):
-            if self.hp[0] > 0:
-                self.sawmills=sawmills
-                self.bushes=bushes
-                self.quarries=quarries
-                self.pebbles=pebbles
-                self.branches=branches
-                for i in range(len(self.sawmills)):
-                    if (((self.sawmills[i].xpos - self.xpos)**2+(self.sawmills[i].ypos-self.ypos)**2) ** 0.5) <= 25 and self.sawmills[i].hp[0]>0:
-                        self.wood+=self.sawmills[i].wood
-                        self.sawmills[i].wood=0
-                for i in range(len(self.quarries)):
-                    if (((self.quarries[i].xpos - self.xpos)**2+(self.quarries[i].ypos-self.ypos)**2) ** 0.5) <= 25 and self.quarries[i].hp[0]>0:
-                        self.rock+=self.quarries[i].rock
-                        self.quarries[i].rock=0
-                for i in range(self.bushes.shape[0]):
-                    if (((((self.bushes[i].xpos - self.xpos) ** 2 + (self.bushes[i].ypos - self.ypos) ** 2) ** 0.5) <= 39) and iscollectible(bushes[i])) and self.bushes[i].hp[0]>0:
-                        changeSpriteImage(bushes[i].building,1)
-                        self.berry+=1
-                        bushes[i].collectability=1
-                for i in range(self.branches.shape[0]):
-                    if (((((self.branches[i].xpos - self.xpos) ** 2 + (self.branches[i].ypos - self.ypos) ** 2) ** 0.5) <= 39) and (iscollectible(branches[i]))) and self.branches[i].hp[0]>0:
-                        self.wood += 1
-                        branches[i].collectability = 1
-                        branches[i].hp=-1
-                        killSprite(branches[i].building)
-                for i in range(self.pebbles.shape[0]):
-                    if ((((self.pebbles[i].xpos - self.xpos) ** 2 + (self.pebbles[i].ypos - self.ypos) ** 2) ** 0.5) <= 39) and(iscollectible(pebbles[i])) and self.pebbles[i].hp[0]>0:
-                        self.rock += 1
-                        pebbles[i].collectability = 1
-                        pebbles[i].hp=-1
-                        killSprite(pebbles[i].building)
-        def movescreen(self,screenx,screeny):
-            self.screenx=screenx
-            self.screeny=screeny
-            self.xpos+=screenx
-            self.ypos+=screeny
-            if (self.xpos<=-50 or self.xpos>=1050 or self.ypos<=-50 or self.ypos>=420)==False:
-                moveSprite(self.building,self.xpos,self.ypos)
-        def put_res(self,storage_name):
-            if self.hp[0] > 0:
-                self.storage_name=storage_name
-                self.storage_name.berry+=self.berry
-                self.storage_name.wood+=self.wood
-                self.storage_name.rock+=self.rock
-                reslabel=makeLabel("ты положил "+str(self.berry)+" ягод на склад",50,30,30)
-                reslabel1=makeLabel("ты положил "+str(self.rock)+" камней на склад",50,30,70)
-                reslabel2=makeLabel("ты положил "+str(self.wood)+" дров на склад",50,30,110)
-                showLabel(reslabel)
-                showLabel(reslabel1)
-                showLabel(reslabel2)
-                self.berry=0
-                self.wood=0
-                self.rock=0
+        pos2=pygame.mouse.get_pos()
+        if not menudrawn:
+            if drawmenu == 0:
+                menu()
+                menustorage.clickability = 1
+                menumainhall.clickability = 1
+                menuforge.clickability = 1
+                menusawmill.clickability = 1
+                menuquarry.clickability = 1
+                menuowl.clickability = 1
+                menuwarrior.clickability = 1
+                menudrawn=True
+        if drawmenu == 1:
+            menustorage.clickability = 0
+            menumainhall.clickability = 0
+            menuforge.clickability = 0
+            menusawmill.clickability = 0
+            menuquarry.clickability = 0
+            menuowl.clickability = 0
+            menuwarrior.clickability = 0
+            menu(closing=True)
+            hideSprite(menusprite)
+            hideSprite(menustorage)
+            hideSprite(menumainhall)
+            hideSprite(menuforge)
+            hideSprite(menusawmill)
+            hideSprite(menuquarry)
+            hideSprite(menuowl)
+            hideSprite(menuwarrior)
+            drawmenu += 1
+        drawRect(175, 0, 830, 60, (102, 0, 204))
+        showSprite(pebbleicon)
+        showSprite(branchicon)
+        showSprite(berryicon)
+        showLabel(labelpebble)
+        showLabel(lableberry)
+        showLabel(labelbranch)
+        mainloopwoods = 0
+        mainlooprocks = 0
+        mainloopberries = 0
+        if keyPressed("0"):
+            try:
+                sawmills.rotate(1)
+                stsign = makeSprite(owl)
+                moveSprite(stsign, sawmills[0].xpos, sawmills[0].ypos + 50)
+                showSprite(stsign)
+                pause(200)
+                hideSprite(stsign)
+            except Exception as e:
+                print(e)
+                errorlabel = makeLabel("ты еще не строил лесопилок", 50, 30, 30)
+                showLabel(errorlabel)
                 pause(1000)
-                hideLabel(reslabel)
-                hideLabel(reslabel1)
-                hideLabel(reslabel2)
-    class warrior(normal_unit):
-        def __init__(self,xpos,ypos):
-            self.xpos=xpos
-            self.ypos=ypos
-            self.speed=3
-            self.building=makeSprite(warriorowl)
-            self.havecome=False
-            self.hp=[60]
-            self.building.hp = self.hp
-            moveSprite(self.building,self.xpos,self.ypos)
-            showSprite(self.building)
-        def move(self):
-            if self.hp[0] > 0:
-                if keyPressed("left"):
-                    self.xpos -= self.speed
-                elif keyPressed("right"):
-                    self.xpos += self.speed
-                if keyPressed("up"):
-                    self.ypos -= self.speed
-                elif keyPressed("down"):
-                    self.ypos += self.speed
-                moveSprite(self.building, self.xpos, self.ypos)
-        def attack(self):
-            if self.hp[0] > 0:
-                enemies=allTouching(self.building)
-                for enemy in enemies:
-                    enemy.hp[0] = 0
-                    if enemy.hp[0]<=0:
-                        killSprite(enemy)
-        def movescreen(self,screenx,screeny):
-            self.screenx=screenx
-            self.screeny=screeny
-            self.xpos+=screenx
-            self.ypos+=screeny
-            if (self.xpos<=-50 or self.xpos>=1050 or self.ypos<=-50 or self.ypos>=420)==False:
-                moveSprite(self.building,self.xpos,self.ypos)
-class buildings(object):
-    class environment(object):
-        def __init__(self,spritename,secondspritename,hp,collectability):
-            self.spritename = spritename
-            self.secondspritename = secondspritename
-            self.hp=hp
-            self.collectability=collectability
-            self.building=makeSprite(spritename)
-            self.building.hp=self.hp
-            addSpriteImage(self.building, self.secondspritename)
-            self.xpos = random.randint(-2500,2500)
-            self.ypos = random.randrange(-1500,1500)
-            moveSprite(self.building, self.xpos, self.ypos)
-            if (self.ypos>=410 and self.ypos<=750)==False:
-                showSprite(self.building)    
-        def movescreen(self,screenx,screeny):
-            self.screenx=screenx
-            self.screeny=screeny
-            self.xpos+=screenx
-            self.ypos+=screeny
-            if (self.xpos<=-100 or self.xpos>=1100 or self.ypos<=-100 or self.ypos>=420)==False:
-                moveSprite(self.building,self.xpos,self.ypos)
-    class main_hall(object):
-        def __init__(self,builder):
-            self.xpos=builder.xpos
-            self.ypos=builder.ypos
-            self.building=makeSprite(tree)
-            self.hp = [200]
-            self.building.hp = self.hp
-            moveSprite(self.building,self.xpos,self.ypos)
-            showSprite(self.building)
-        def born_normal_unit(self):
-            if self.hp[0] > 0:
-                self.normunit=units.normal_unit(self.xpos,self.ypos)
-                return self.normunit
-        def movescreen(self,screenx,screeny):
-            self.screenx=screenx
-            self.screeny=screeny
-            self.xpos+=screenx
-            self.ypos+=screeny
-            if (self.xpos<=-100 or self.xpos>=1100 or self.ypos<=-100 or self.ypos>=420)==False:
-                moveSprite(self.building,self.xpos,self.ypos)
+                hideLabel(errorlabel)
+        if keyPressed("q"):
+            drawmenu = 0
+            menudrawn=False
+        if keyPressed("l"):
+            drawmenu = 1
+        mouseState = pygame.mouse.get_pressed()
+        if mouseState[0] and keyPressed("space"):
+            pos = [pygame.mouse.get_pos()[0] - 30, pygame.mouse.get_pos()[1] - 30]
+            normalunits[0].havecome=False
+        if not acounter:
+            if not normalunits[0].havecome:
+                normalunits[0].goto(pos[0], pos[1])
+                if abs(normalunits[0].xpos - pos[0]) <= 3.2 and abs(normalunits[0].ypos - pos[1]) <= 3.1:
+                    normalunits[0].get(sawmills, bushes, quarries, pebbles, branches)
+        elif acounter:
+            warriors[0].goto(pos[0]-xmovescreen, pos[1]-ymovescreen)
+            if abs(warriors[0].xpos - pos[0]) <= 3.2 and abs(warriors[0].ypos - pos[1]) <= 3.1:
+                warriors[0].attack()
+        if keyPressed("r"):
+            try:
+                acounter = False
+                normalunits.rotate(1)
+                pause(200)
+            except Exception as e:
+                print(e)
+                errorlabel = makeLabel("ты еще не создавал рабочих", 50, 30, 30)
+                showLabel(errorlabel)
+                pause(1000)
+                hideLabel(errorlabel)
+        if keyPressed("9"):
+            acounter = True
+            warriors.rotate(1)
+            pause(200)
+        if keyPressed("8"):
+            try:
+                storages.rotate(1)
+                stsign = makeSprite(owl)
+                moveSprite(stsign, storages[0].xpos, storages[0].ypos + 50)
+                showSprite(stsign)
+                pause(300)
+                hideSprite(stsign)
+            except Exception as e:
+                print(e)
+                errorlabel = makeLabel("ты еще не построил склад", 50, 30, 30)
+                showLabel(errorlabel)
+                pause(1000)
+                hideLabel(errorlabel)
+        if spriteClicked(menuowl) and menuowl.clickability:
+            try:
+                if normalunits[0].hp[0] > 0:
+                    if storages[0].berry >= 3 and mainhall:
+                        normalunits.append(mh.born_normal_unit())
+                        storages[0].berry -= 3
+                        pause(200)
+            except Exception as e:
+                print(e)
+                errorlabel = makeLabel("ты еще не построил склад или мэинхол", 50, 30, 30)
+                showLabel(errorlabel)
+                pause(1000)
+                hideLabel(errorlabel)
+        if spriteClicked(menuwarrior) and menuwarrior.clickability:
+            try:
+                if normalunits[0].hp[0] > 0:
+                    if storages[0].rock >= 1:
+                        storages[0].rock -= 1
+                        warriors.append(forges[0].born_warrior())
+                        pause(200)
+            except Exception as e:
+                print(e)
+                errorlabel = makeLabel("ты еще не построил кузницу", 50, 30, 30)
+                showLabel(errorlabel)
+                pause(1000)
+                hideLabel(errorlabel)
+        if not acounter:
+            normalunits[0].move()
+            try:
+                if keyPressed("3"):
+                    normalunits[0].put_res(storages[0])
+            except Exception as e:
+                print(e)
+                errorlabel = makeLabel("ты еще не построил склад", 50, 30, 30)
+                showLabel(errorlabel)
+                pause(1000)
+                hideLabel(errorlabel)
+            if spriteClicked(menustorage) and menustorage.clickability:
+                try:
+                    if normalunits[0].hp[0] > 0:
+                        if normalunits[0].wood >= 1:
+                            normalunits[0].wood -= 1
+                            sg = buildings.storage(normalunits[0])
+                            storages.append(sg)
+                            pause(200)
+                        elif storages[0].wood >= 1:
+                            storages[0].wood -= 1
+                            sg = buildings.storage(normalunits[0])
+                            storages.append(sg.build())
+                            pause(200)
+                except Exception as e:
+                    print(e)
+            if spriteClicked(menusawmill) and menusawmill.clickability:
+                try:
+                    if normalunits[0].hp[0] > 0:
+                        if storages[0].wood >= 2:
+                            storages[0].wood -= 2
+                            sawmills.append(buildings.sawmill(normalunits[0], woods))
+                            nextFrame_woods = clock() + 5000
+                            pause(200)
+                except Exception as e:
+                    print(e)
+            if spriteClicked(menuquarry) and menuquarry.clickability:
+                try:
+                    if normalunits[0].hp[0] > 0:
+                        if storages[0].wood >= 2 and storages[0].rock >= 2:
+                            storages[0].wood -= 2
+                            storages[0].rock -= 2
+                            quarries.append(buildings.quarry(normalunits[0], rocks))
+                            nextFrame_rocks = clock() + 5000
+                            pause(200)
+                except Exception as e:
+                    print(e)
+            if spriteClicked(menumainhall) and menumainhall.clickability:
+                if not mainhall:
+                    try:
+                        if normalunits[0].hp[0] > 0:
+                            if storages[0].wood >= 4:
+                                storages[0].wood -= 4
+                                mh = buildings.main_hall(normalunits[0])
+                                mainhalls=np.append(mainhalls,mh)
+                                pause(500)
+                                mainhall = True
+                    except Exception as e:
+                        print(e)
+            if spriteClicked(menuforge) and menuforge.clickability:
+                try:
+                    if normalunits[0].hp[0] > 0:
+                        if storages[0].rock >= 4 and storages[0].wood >= 3:
+                            storages[0].rock -= 4
+                            storages[0].wood -= 3
+                            myforge = buildings.forge(normalunits[0])
+                            forges=np.append(forges,myforge)
+                            pause(500)
+                except Exception as e:
+                    print(e)
+               
+        elif acounter:
+            try:
+                warriors[0].move()
+            except Exception as e:
+                print(e)
+                errorlabel = makeLabel("Вы еще не готовы атаковать эту цель", 50, 30, 30)
+                showLabel(errorlabel)
+                pause(1000)
+                hideLabel(errorlabel)
+        if len(sawmills):
+            if clock() >= nextFrame_woods:
+                sawmills[0].sawing()
+                nextFrame_woods += 200
+        if len(quarries) and len(quarries[0].near_stones):
+            if clock() >= nextFrame_rocks:
+                quarries[0].stonecutting()
+                nextFrame_rocks += 200
+        fps = tick(3000)
+        changeLabel(fpsDisplay, "FPS: {0}".format(str(round(fps, 2))))
+        for mainloopstorage in storages:
+            mainloopberries += mainloopstorage.berry
+            mainloopwoods += mainloopstorage.wood
+            mainlooprocks += mainloopstorage.rock
+        try:
+            changeLabel(labelpebble, str(mainlooprocks))
+            changeLabel(labelbranch, str(mainloopwoods))
+            changeLabel(lableberry, str(mainloopberries))
+        except Exception as e:
+            print(e)
+        if keyPressed("space"):
+            if pos2[0] <=5 or pos2[0] >= 995 or pos2[1] <=5 or pos2[1] >= 725:
+                allspries = np.array([mainhalls,forges,warriors,quarries,sawmills,storages,normalunits,branches,pebbles,rocks,woods,bushes])
+                for listsprite in allspries:
+                    for sprite in listsprite:
+                        sprite.movescreen(-0.012*pos2[0]+6,-0.01643835616438356*pos2[1]+6)
+                        if sprite.xpos<=-100 or sprite.xpos>=1100 or sprite.ypos<=-100 or sprite.ypos>=410:
+                            hideSprite(sprite.building)
+                        else:
+                            showSprite(sprite.building)
 
-    class forge(object):
-        def __init__(self,builder):
-            self.xpos=builder.xpos
-            self.ypos=builder.ypos
-            self.building=makeSprite(warriortree)
-            self.hp=[300]
-            self.building.hp = self.hp
-            moveSprite(self.building,self.xpos,self.ypos)
-            showSprite(self.building)
-        def born_warrior(self):
-            if self.hp[0] > 0:
-                self.warriorowl=units.warrior(self.xpos,self.ypos)
-                return self.warriorowl
-        def movescreen(self,screenx,screeny):
-            self.screenx=screenx
-            self.screeny=screeny
-            self.xpos+=screenx
-            self.ypos+=screeny
-            if (self.xpos<=-100 or self.xpos>=1100 or self.ypos<=-100 or self.ypos>=420)==False:
-                moveSprite(self.building,self.xpos,self.ypos)
-
-    class storage(object):
-        def __init__(self, builder):
-            self.xpos=builder.xpos
-            self.ypos=builder.ypos
-            self.building = makeSprite(storage)
-            self.hp = [200]
-            self.building.hp = self.hp
-            self.berry = 0
-            self.rock = 0
-            self.wood = 0
-            moveSprite(self.building, self.xpos, self.ypos)
-            showSprite(self.building)
-        def movescreen(self,screenx,screeny):
-            self.screenx=screenx
-            self.screeny=screeny
-            self.xpos+=screenx
-            self.ypos+=screeny
-            if (self.xpos<=-100 or self.xpos>=1100 or self.ypos<=-100 or self.ypos>=420)==False:
-                moveSprite(self.building,self.xpos,self.ypos)
-    class sawmill(object):
-        def __init__(self, builder,woods):
-            self.woods = woods
-            self.a = 0
-            self.near_woods = []
-            self.building = makeSprite(sawmill)
-            self.xpos = builder.xpos
-            self.ypos = builder.ypos
-            for i in range(len(self.woods)):
-                if ((((((self.woods[i].xpos - self.xpos)**2+(self.woods[i].ypos-self.ypos)**2) ** 0.5) <= 300))):
-                    self.near_woods.append(0)
-                    self.near_woods[self.a] = self.woods[i]
-                    self.a += 1
-            self.hp = [200]
-            self.building.hp = self.hp
-            self.wood = 0
-            self.damage_to_trees = 100
-            moveSprite(self.building,self.xpos, self.ypos)
-            showSprite(self.building)
-        def sawing(self):
-            if self.hp[0] > 0:
-                if len(self.near_woods):
-                    self.wood+=1
-                    self.near_woods[0].hp = [0]
-                    changeSpriteImage(self.near_woods[0].building,1)
-                    self.near_woods.pop(0)
-        def movescreen(self,screenx,screeny):
-            self.screenx=screenx
-            self.screeny=screeny
-            self.xpos+=screenx
-            self.ypos+=screeny
-            if (self.xpos<=-100 or self.xpos>=1100 or self.ypos<=-100 or self.ypos>=420)==False:
-                moveSprite(self.building,self.xpos,self.ypos)
-
-    class quarry(object):
-        def __init__(self, builder, stones):
-            self.stones = stones
-            self.a = 0
-            self.near_stones = []
-            self.building = makeSprite(quarry)
-            self.xpos = builder.xpos
-            self.ypos = builder.ypos
-            for i in range(len(self.stones)):
-                if (((self.stones[i].xpos - self.xpos) ** 2 + (self.stones[i].ypos - self.ypos) ** 2) ** 0.5) <= 300:
-                    self.near_stones.append(0)
-                    self.near_stones[self.a] = self.stones[i]
-                    self.a += 1
-            self.hp = [400]
-            self.building.hp = self.hp
-            self.rock = 0
-            self.damage_to_trees = 100
-            moveSprite(self.building, self.xpos, self.ypos)
-            showSprite(self.building)
-        def stonecutting(self):
-            if self.hp[0] > 0:
-                if len(self.near_stones):
-                    self.rock+=2
-                    self.near_stones[0].hp = [0]
-                    changeSpriteImage(self.near_stones[0].building, 1)
-                    self.near_stones.pop(0)
-        def movescreen(self,screenx,screeny):
-            self.screenx=screenx
-            self.screeny=screeny
-            self.xpos+=screenx
-            self.ypos+=screeny
-            if (self.xpos<=-100 or self.xpos>=1100 or self.ypos<=-100 or self.ypos>=420)==False:
-                moveSprite(self.building,self.xpos,self.ypos)
+        drawRect(0, 450, 1000, 280, "black")
+        updateDisplay()
+        if keyPressed("esc"):
+            endWait()
+if __name__ == '__main__':
+    main()
