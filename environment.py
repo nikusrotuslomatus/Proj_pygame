@@ -3,12 +3,9 @@ import random
 from collections import deque
 from units_and_buildings import *
 import numpy as np
-from numba import jit
 screenSize(1000, 730)
-nazi="Desktop/project folder/nazi.jpg"
-setBackgroundImage(nazi)
 text = makeTextBox(0, 450, 1000, fontSize=20)
-
+setBackgroundColour((52,170,93))
 xPositon = 500
 yPosition = 320
 #все массивы в которых будут
@@ -99,7 +96,6 @@ moveSprite(menuquarry, 825, 250)
 moveSprite(menuowl, 925, 250)
 moveSprite(menuwarrior, 725, 400)
 pos = (500, 300)
-@jit(fastmath=True)
 def menu(closing=False):
     for pebl in pebbles:
         if pebl.xpos >= 640 and pebl.xpos<=1100  and pebl.ypos >= 0 and pebl.ypos<=450:

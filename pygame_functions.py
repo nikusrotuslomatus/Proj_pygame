@@ -6,6 +6,7 @@
 
 import pygame, sys, os
 
+breaker = False
 pygame.mixer.pre_init(44100, -16, 2, 512)
 pygame.init()
 pygame.mixer.init()
@@ -237,6 +238,7 @@ class newTextBox(pygame.sprite.Sprite):
         self.image.blit(newSurface, [10, 5])
         if screenRefresh:
             updateDisplay()
+
 
 
 class newLabel(pygame.sprite.Sprite):
@@ -614,17 +616,22 @@ def makeTextBox(xpos, ypos, width, case=0, startingText="Please type here", maxL
 
 def textBoxInput(textbox, functionToCall=None, args=[]):
     # starts grabbing key inputs, putting into textbox until enter pressed
-    global keydict
+    global keydict,breaker
     textbox.text = ""
     returnVal = None
     while True:
+        if breaker == True:
+            return "zerotwo"
         updateDisplay()
         if functionToCall:
             returnVal = functionToCall(*args)
         for event in pygame.event.get():
+            if textbox.text == "exit()":
+                breaker = True
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_RETURN:
                     textbox.clear()
+                    #print("002")
                     if returnVal:
                         return textbox.text, returnVal
                     else:
@@ -637,6 +644,7 @@ def textBoxInput(textbox, functionToCall=None, args=[]):
             elif event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
+
 
 
 def clock():
