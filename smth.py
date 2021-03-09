@@ -131,31 +131,31 @@ def main():
 
     def menu():
         for pebl in pebbles:
-            if pebl.xpos >= 640 and pebl.xpos <= 1100 and pebl.ypos >= 0 and pebl.ypos <= 450:
+            if pebl.xpos >= 640 and pebl.xpos <= 1100 and pebl.ypos >= 0 and pebl.ypos <= 850:
                 if pebl.hp[0] <= 0:
                     killSprite(pebl.building)
                 else:
                     hideSprite(pebl.building)
         for rck in rocks:
-            if rck.xpos >= 640 and rck.xpos <= 1100 and rck.ypos >= 0 and rck.ypos <= 450:
+            if rck.xpos >= 640 and rck.xpos <= 1100 and rck.ypos >= 0 and rck.ypos <= 850:
                 if rck.hp[0] <= 0:
                     killSprite(rck.building)
                 else:
                     hideSprite(rck.building)
         for bsh in bushes:
-            if bsh.xpos >= 640 and bsh.xpos <= 1100 and bsh.ypos >= 0 and bsh.ypos <= 450:
+            if bsh.xpos >= 640 and bsh.xpos <= 1100 and bsh.ypos >= 0 and bsh.ypos <= 850:
                 if bsh.hp[0] <= 0:
                     killSprite(bsh.building)
                 else:
                     hideSprite(bsh.building)
         for wds in woods:
-            if wds.xpos >= 640 and wds.xpos <= 1100 and wds.ypos >= 0 and wds.ypos <= 450:
+            if wds.xpos >= 640 and wds.xpos <= 1100 and wds.ypos >= 0 and wds.ypos <= 850:
                 if wds.hp[0] <= 0:
                     killSprite(wds.building)
                 else:
                     hideSprite(wds.building)
         for brnch in branches:
-            if brnch.xpos >= 640 and brnch.xpos <= 1100 and brnch.ypos >= 0 and brnch.ypos <= 450:
+            if brnch.xpos >= 640 and brnch.xpos <= 1100 and brnch.ypos >= 0 and brnch.ypos <= 850:
                 if brnch.hp[0] <= 0:
                     killSprite(brnch.building)
                 else:
@@ -200,31 +200,31 @@ def main():
             menuowl.clickability = 0
             menuwarrior.clickability = 0
             for pebl in pebbles:
-                if pebl.xpos >= 640 and pebl.xpos <= 1100 and pebl.ypos >= 0 and pebl.ypos <= 450:
+                if pebl.xpos >= 640 and pebl.xpos <= 1100 and pebl.ypos >= 0 and pebl.ypos <= 850:
                     if pebl.hp[0] <= 0:
                         killSprite(pebl.building)
                     else:
                         showSprite(pebl.building)
             for rck in rocks:
-                if rck.xpos >= 640 and rck.xpos <= 1100 and rck.ypos >= 0 and rck.ypos <= 450:
+                if rck.xpos >= 640 and rck.xpos <= 1100 and rck.ypos >= 0 and rck.ypos <= 850:
                     if rck.hp[0] <= 0:
                         killSprite(rck.building)
                     else:
                         showSprite(rck.building)
             for bsh in bushes:
-                if bsh.xpos >= 640 and bsh.xpos <= 1100 and bsh.ypos >= 0 and bsh.ypos <= 450:
+                if bsh.xpos >= 640 and bsh.xpos <= 1100 and bsh.ypos >= 0 and bsh.ypos <= 850:
                     if bsh.hp[0] <= 0:
                         killSprite(bsh.building)
                     else:
                         showSprite(bsh.building)
             for wds in woods:
-                if wds.xpos >= 640 and wds.xpos <= 1100 and wds.ypos >= 0 and wds.ypos <= 450:
+                if wds.xpos >= 640 and wds.xpos <= 1100 and wds.ypos >= 0 and wds.ypos <= 850:
                     if wds.hp[0] <= 0:
                         killSprite(wds.thissprie)
                     else:
                         showSprite(wds.building)
             for brnch in branches:
-                if brnch.xpos >= 640 and brnch.xpos <= 1100 and brnch.ypos >= 0 and brnch.ypos <= 450:
+                if brnch.xpos >= 640 and brnch.xpos <= 1100 and brnch.ypos >= 0 and brnch.ypos <= 850:
                     if brnch.hp[0] <= 0:
                         killSprite(brnch.thissprie)
                     else:
@@ -242,8 +242,6 @@ def main():
         showSprite(pebbleicon)
         showSprite(branchicon)
         showSprite(berryicon)
-        showLabel(labelpebble)
-        showLabel(lableberry)
         showLabel(labelbranch)
         mainloopwoods = 0
         mainlooprocks = 0
@@ -462,7 +460,7 @@ def main():
                 if entry == "zerotwo":
                     for listsprite in allspries:
                         for sprite in listsprite:
-                            if sprite.xpos <= -100 or sprite.xpos >= 1100 or sprite.ypos <= -100 or sprite.ypos >= 410:
+                            if sprite.xpos <= -100 or sprite.xpos >= 1100 or sprite.ypos <= -100 or sprite.ypos >= 850:
                                 pass
                             else:
                                 showSprite(sprite.building)
@@ -480,7 +478,7 @@ def main():
                 for listsprite in allspries:
                     for sprite in listsprite:
                         sprite.movescreen(-0.012 * pos2[0] + 6, -0.01643835616438356 * pos2[1] + 6)
-                        if sprite.xpos <= -100 or sprite.xpos >= 1100 or sprite.ypos <= -100 or sprite.ypos >= 410:
+                        if sprite.xpos <= -100 or sprite.xpos >= 1100 or sprite.ypos <= -100 or sprite.ypos >= 850:
                             hideSprite(sprite.building)
                         else:
                             showSprite(sprite.building)

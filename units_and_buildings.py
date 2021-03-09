@@ -79,7 +79,7 @@ class units(object):
                             self.ypos-=0.01
                 else:
                     self.havecome=True
-                if self.ypos<=420 and self.xpos<=1100 and self.xpos>=-100 and self.ypos>=-100:
+                if self.ypos<=850 and self.xpos<=1100 and self.xpos>=-100 and self.ypos>=-100:
                     showSprite(self.building)
         def get(self,sawmills,bushes,quarries,pebbles,branches):
             if self.hp[0] > 0:
@@ -118,7 +118,7 @@ class units(object):
             self.screeny=screeny
             self.xpos+=screenx
             self.ypos+=screeny
-            if (self.xpos<=-50 or self.xpos>=1050 or self.ypos<=-50 or self.ypos>=420)==False:
+            if (self.xpos<=-50 or self.xpos>=1050 or self.ypos<=-50 or self.ypos>=850)==False:
                 moveSprite(self.building,self.xpos,self.ypos)
         def put_res(self,storage_name):
             if self.hp[0] > 0:
@@ -173,7 +173,7 @@ class units(object):
             self.screeny=screeny
             self.xpos+=screenx
             self.ypos+=screeny
-            if (self.xpos<=-50 or self.xpos>=1050 or self.ypos<=-50 or self.ypos>=420)==False:
+            if (self.xpos<=-50 or self.xpos>=1050 or self.ypos<=-50 or self.ypos>=850)==False:
                 moveSprite(self.building,self.xpos,self.ypos)
 class buildings(object):
     class environment(object):
@@ -188,14 +188,14 @@ class buildings(object):
             self.xpos = random.randint(-2500,2500)
             self.ypos = random.randrange(-1500,1500)
             moveSprite(self.building, self.xpos, self.ypos)
-            if (self.ypos>=410 and self.ypos<=750)==False:
+            if (self.ypos>=850 and self.ypos<=750)==False:
                 showSprite(self.building)    
         def movescreen(self,screenx,screeny):
             self.screenx=screenx
             self.screeny=screeny
             self.xpos+=screenx
             self.ypos+=screeny
-            if (self.xpos<=-100 or self.xpos>=1100 or self.ypos<=-100 or self.ypos>=420)==False:
+            if (self.xpos<=-100 or self.xpos>=1100 or self.ypos<=-100 or self.ypos>=850)==False:
                 moveSprite(self.building,self.xpos,self.ypos)
     class main_hall(object):
         def __init__(self,builder):
@@ -215,7 +215,7 @@ class buildings(object):
             self.screeny=screeny
             self.xpos+=screenx
             self.ypos+=screeny
-            if (self.xpos<=-100 or self.xpos>=1100 or self.ypos<=-100 or self.ypos>=420)==False:
+            if (self.xpos<=-100 or self.xpos>=1100 or self.ypos<=-100 or self.ypos>=850)==False:
                 moveSprite(self.building,self.xpos,self.ypos)
 
     class forge(object):
@@ -236,7 +236,7 @@ class buildings(object):
             self.screeny=screeny
             self.xpos+=screenx
             self.ypos+=screeny
-            if (self.xpos<=-100 or self.xpos>=1100 or self.ypos<=-100 or self.ypos>=420)==False:
+            if (self.xpos<=-100 or self.xpos>=1100 or self.ypos<=-100 or self.ypos>=850)==False:
                 moveSprite(self.building,self.xpos,self.ypos)
 
     class storage(object):
@@ -256,7 +256,7 @@ class buildings(object):
             self.screeny=screeny
             self.xpos+=screenx
             self.ypos+=screeny
-            if (self.xpos<=-100 or self.xpos>=1100 or self.ypos<=-100 or self.ypos>=420)==False:
+            if (self.xpos<=-100 or self.xpos>=1100 or self.ypos<=-100 or self.ypos>=850)==False:
                 moveSprite(self.building,self.xpos,self.ypos)
     class sawmill(object):
         def __init__(self, builder,woods):
@@ -289,7 +289,7 @@ class buildings(object):
             self.screeny=screeny
             self.xpos+=screenx
             self.ypos+=screeny
-            if (self.xpos<=-100 or self.xpos>=1100 or self.ypos<=-100 or self.ypos>=420)==False:
+            if (self.xpos<=-100 or self.xpos>=1100 or self.ypos<=-100 or self.ypos>=850)==False:
                 moveSprite(self.building,self.xpos,self.ypos)
 
     class quarry(object):
@@ -323,5 +323,5 @@ class buildings(object):
             self.screeny=screeny
             self.xpos+=screenx
             self.ypos+=screeny
-            if (self.xpos<=-100 or self.xpos>=1100 or self.ypos<=-100 or self.ypos>=420)==False:
+            if (self.xpos<=-100 or self.xpos>=1100 or self.ypos<=-100 or self.ypos>=850)==False:
                 moveSprite(self.building,self.xpos,self.ypos)
