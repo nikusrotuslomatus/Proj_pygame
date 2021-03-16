@@ -414,11 +414,11 @@ def main():
                 hideLabel(errorlabel)
         if len(sawmills):
             if clock() >= nextFrame_woods:
-                sawmills[0].sawing()
+                sawmills[0].do_smth()
                 nextFrame_woods += 200
         if len(quarries) and len(quarries[0].near_stones):
             if clock() >= nextFrame_rocks:
-                quarries[0].stonecutting()
+                quarries[0].do_smth()
                 nextFrame_rocks += 200
         fps = tick(100)
         changeLabel(fpsDisplay, "FPS: {0}".format(str(round(fps, 2))))

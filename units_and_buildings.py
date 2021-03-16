@@ -10,7 +10,7 @@ warriorowl="warriorowl.png"
 tree="tree.png"
 warriortree="warriortree.png"
 storage="storage.png"
-sawmill = 'sawmill.png'
+hellish_sawmill = 'sawmill.png'
 quarry = "quarry.png"
 '''
 wood = "Desktop/project folder/wood.png"
@@ -33,93 +33,125 @@ def iscollectible(x):
         return True
     else:
         return False
+class abstract_unit(object):
+    def __init__(self,xpos,ypos,hp,spritename):
+        self.xpos = xpos
+        self.ypos = ypos
+        self.hp = hp
+        self.havecome = False
+        self.building = makeSprite(spritename)
+        self.building.hp = self.hp
+        moveSprite(self.building, self.xpos, self.ypos)
+        showSprite(self.building)
+    def movescreen(self, screenx, screeny):
+        self.screenx = screenx
+        self.screeny = screeny
+        self.xpos += screenx
+        self.ypos += screeny
+        if (self.xpos <= -50 or self.xpos >= 1050 or self.ypos <= -50 or self.ypos >= 850) == False:
+            moveSprite(self.building, self.xpos, self.ypos)
+
+    def move(self):
+        if self.hp[0] > 0:
+            if keyPressed("left"):
+                self.xpos -= self.speed
+            elif keyPressed("right"):
+                self.xpos += self.speed
+            if keyPressed("up"):
+                self.ypos -= self.speed
+            elif keyPressed("down"):
+                self.ypos += self.speed
+            moveSprite(self.building, self.xpos, self.ypos)
+
+    def goto(self, xgoto, ygoto):
+        if self.hp[0] > 0:
+            self.xgoto = xgoto
+            self.ygoto = ygoto
+            if abs(self.xpos - self.xgoto) > 3 or abs(self.ypos - self.ygoto) > 3:
+                if self.havecome:
+                    self.havecome = False
+                for i in range(300):
+                    if self.xgoto > self.xpos:
+                        self.xpos += 0.01
+                    elif self.xgoto < self.xpos:
+                        self.xpos -= 0.01
+                    else:
+                        self.xpos = self.xgoto
+                    if self.ygoto > self.ypos:
+                        self.ypos += 0.01
+                    elif self.ygoto < self.ypos:
+                        self.ypos -= 0.01
+            else:
+                self.havecome = True
+            if self.ypos <= 850 and self.xpos <= 1100 and self.xpos >= -100 and self.ypos >= -100:
+                showSprite(self.building)
+
+
+class abstract_building(object):
+    def __init__(self, builder,hp,spritename):
+        self.building = makeSprite(spritename)
+        self.xpos = builder.xpos
+        self.ypos = builder.ypos
+        self.hp = hp
+        self.building.hp = self.hp
+        moveSprite(self.building, self.xpos, self.ypos)
+        showSprite(self.building)
+
+    def movescreen(self, screenx, screeny):
+        self.screenx = screenx
+        self.screeny = screeny
+        self.xpos += screenx
+        self.ypos += screeny
+        if (self.xpos <= -100 or self.xpos >= 1100 or self.ypos <= -100 or self.ypos >= 850) == False:
+            moveSprite(self.building, self.xpos, self.ypos)
+
+
 class units(object):
-    class normal_unit(object):
+    class normal_unit(abstract_unit):
         def __init__(self,xpos,ypos):
-            self.xpos=xpos
-            self.ypos=ypos
-            self.speed=3
-            self.building=makeSprite(owl)
+            abstract_unit.__init__(self,xpos,ypos,[50],owl)
             self.berry=10000
             self.wood=10000
             self.rock=10000
-            self.hp=[30]
-            self.building.hp = self.hp
-            self.havecome=False
-            moveSprite(self.building,self.xpos,self.ypos)
-            showSprite(self.building)
-        def move(self):
-            if self.hp[0] > 0:
-                if keyPressed("left"):
-                    self.xpos -= self.speed
-                elif keyPressed("right"):
-                    self.xpos += self.speed
-                if keyPressed("up"):
-                    self.ypos -= self.speed
-                elif keyPressed("down"):
-                    self.ypos += self.speed
-                moveSprite(self.building, self.xpos, self.ypos)
-        def goto(self,xgoto,ygoto):
-            if self.hp[0] > 0:
-                self.xgoto=xgoto
-                self.ygoto=ygoto
-                if abs(self.xpos-self.xgoto)>3 or abs(self.ypos-self.ygoto)>3:
-                    if self.havecome:
-                        self.havecome=False
-                    for i in range(300):
-                        if self.xgoto>self.xpos:
-                            self.xpos+=0.01
-                        elif self.xgoto<self.xpos:
-                            self.xpos-=0.01
+        def disti(self,resourses,name):
+            self.resourses = resourses
+            for i in range(len(self.resourses)):
+                if (((self.resourses[i].xpos - self.xpos) ** 2 + (
+                        self.resourses[i].ypos - self.ypos) ** 2) ** 0.5) <= 25 and self.resourses[i].hp[0] > 0:
+                    if name[0] == "1":
+                        if name[1] == "0":
+                            self.wood += self.resourses[i].wood
+                            self.resourses[i].wood = 0
                         else:
-                            self.xpos=self.xgoto
-                        if self.ygoto>self.ypos:
-                            self.ypos+=0.01
-                        elif self.ygoto<self.ypos:
-                            self.ypos-=0.01
-                else:
-                    self.havecome=True
-                if self.ypos<=850 and self.xpos<=1100 and self.xpos>=-100 and self.ypos>=-100:
-                    showSprite(self.building)
+                            self.wood += 1
+                            changeSpriteImage(self.resourses[i].building, 1)
+                            self.resourses[i].collectability = 1
+                            self.resourses[i].hp = [-1]
+                            killSprite(self.resourses[i].building)
+                    elif name[0] == "2":
+                        self.berry += 1
+                        changeSpriteImage(self.resourses[i].building, 1)
+                        self.resourses[i].collectability = 1
+                        self.resourses[i].hp = [-1]
+                    elif name[0] == "3":
+                        if name[1] == "0":
+                            self.rock += self.resourses[i].stones
+                            self.resourses[i].stones = 0
+                        else:
+                            self.rock += 1
+                            changeSpriteImage(self.resourses[i].building, 1)
+                            self.resourses[i].collectability = 1
+                            self.resourses[i].hp = [-1]
+                            killSprite(self.resourses[i].building)
+
         def get(self,sawmills,bushes,quarries,pebbles,branches):
             if self.hp[0] > 0:
-                self.sawmills=sawmills
-                self.bushes=bushes
-                self.quarries=quarries
-                self.pebbles=pebbles
-                self.branches=branches
-                for i in range(len(self.sawmills)):
-                    if (((self.sawmills[i].xpos - self.xpos)**2+(self.sawmills[i].ypos-self.ypos)**2) ** 0.5) <= 25 and self.sawmills[i].hp[0]>0:
-                        self.wood+=self.sawmills[i].wood
-                        self.sawmills[i].wood=0
-                for i in range(len(self.quarries)):
-                    if (((self.quarries[i].xpos - self.xpos)**2+(self.quarries[i].ypos-self.ypos)**2) ** 0.5) <= 25 and self.quarries[i].hp[0]>0:
-                        self.rock+=self.quarries[i].rock
-                        self.quarries[i].rock=0
-                for i in range(self.bushes.shape[0]):
-                    if (((((self.bushes[i].xpos - self.xpos) ** 2 + (self.bushes[i].ypos - self.ypos) ** 2) ** 0.5) <= 39) and iscollectible(bushes[i])) and self.bushes[i].hp[0]>0:
-                        changeSpriteImage(bushes[i].building,1)
-                        self.berry+=1
-                        bushes[i].collectability=1
-                for i in range(self.branches.shape[0]):
-                    if (((((self.branches[i].xpos - self.xpos) ** 2 + (self.branches[i].ypos - self.ypos) ** 2) ** 0.5) <= 39) and (iscollectible(branches[i]))) and self.branches[i].hp[0]>0:
-                        self.wood += 1
-                        branches[i].collectability = 1
-                        branches[i].hp=-1
-                        killSprite(branches[i].building)
-                for i in range(self.pebbles.shape[0]):
-                    if ((((self.pebbles[i].xpos - self.xpos) ** 2 + (self.pebbles[i].ypos - self.ypos) ** 2) ** 0.5) <= 39) and(iscollectible(pebbles[i])) and self.pebbles[i].hp[0]>0:
-                        self.rock += 1
-                        pebbles[i].collectability = 1
-                        pebbles[i].hp=-1
-                        killSprite(pebbles[i].building)
-        def movescreen(self,screenx,screeny):
-            self.screenx=screenx
-            self.screeny=screeny
-            self.xpos+=screenx
-            self.ypos+=screeny
-            if (self.xpos<=-50 or self.xpos>=1050 or self.ypos<=-50 or self.ypos>=850)==False:
-                moveSprite(self.building,self.xpos,self.ypos)
+                self.resourses = (sawmills,bushes,quarries,pebbles,branches)
+                self.disti(sawmills,"10")
+                self.disti(bushes,"21")
+                self.disti(quarries,"30")
+                self.disti(pebbles,"31")
+                self.disti(branches,"11")
         def put_res(self,storage_name):
             if self.hp[0] > 0:
                 self.storage_name=storage_name
@@ -141,26 +173,7 @@ class units(object):
                 hideLabel(reslabel2)
     class warrior(normal_unit):
         def __init__(self,xpos,ypos):
-            self.xpos=xpos
-            self.ypos=ypos
-            self.speed=3
-            self.building=makeSprite(warriorowl)
-            self.havecome=False
-            self.hp=[60]
-            self.building.hp = self.hp
-            moveSprite(self.building,self.xpos,self.ypos)
-            showSprite(self.building)
-        def move(self):
-            if self.hp[0] > 0:
-                if keyPressed("left"):
-                    self.xpos -= self.speed
-                elif keyPressed("right"):
-                    self.xpos += self.speed
-                if keyPressed("up"):
-                    self.ypos -= self.speed
-                elif keyPressed("down"):
-                    self.ypos += self.speed
-                moveSprite(self.building, self.xpos, self.ypos)
+            abstract_unit.__init__(self,xpos,ypos,[100],warriorowl)
         def attack(self):
             if self.hp[0] > 0:
                 enemies=allTouching(self.building)
@@ -168,160 +181,91 @@ class units(object):
                     enemy.hp[0] = 0
                     if enemy.hp[0]<=0:
                         killSprite(enemy)
-        def movescreen(self,screenx,screeny):
-            self.screenx=screenx
-            self.screeny=screeny
-            self.xpos+=screenx
-            self.ypos+=screeny
-            if (self.xpos<=-50 or self.xpos>=1050 or self.ypos<=-50 or self.ypos>=850)==False:
-                moveSprite(self.building,self.xpos,self.ypos)
 class buildings(object):
-    class environment(object):
-        def __init__(self,spritename,secondspritename,hp,collectability):
-            self.spritename = spritename
-            self.secondspritename = secondspritename
-            self.hp=hp
-            self.collectability=collectability
-            self.building=makeSprite(spritename)
-            self.building.hp=self.hp
-            addSpriteImage(self.building, self.secondspritename)
-            self.xpos = random.randint(-2500,2500)
-            self.ypos = random.randrange(-1500,1500)
-            moveSprite(self.building, self.xpos, self.ypos)
-            if (self.ypos>=850 and self.ypos<=750)==False:
-                showSprite(self.building)    
-        def movescreen(self,screenx,screeny):
-            self.screenx=screenx
-            self.screeny=screeny
-            self.xpos+=screenx
-            self.ypos+=screeny
-            if (self.xpos<=-100 or self.xpos>=1100 or self.ypos<=-100 or self.ypos>=850)==False:
-                moveSprite(self.building,self.xpos,self.ypos)
-    class main_hall(object):
+    class main_hall(abstract_building):
         def __init__(self,builder):
-            self.xpos=builder.xpos
-            self.ypos=builder.ypos
-            self.building=makeSprite(tree)
-            self.hp = [200]
-            self.building.hp = self.hp
-            moveSprite(self.building,self.xpos,self.ypos)
-            showSprite(self.building)
+            abstract_building.__init__(self,builder,[500],tree)
         def born_normal_unit(self):
             if self.hp[0] > 0:
                 self.normunit=units.normal_unit(self.xpos,self.ypos)
                 return self.normunit
-        def movescreen(self,screenx,screeny):
-            self.screenx=screenx
-            self.screeny=screeny
-            self.xpos+=screenx
-            self.ypos+=screeny
-            if (self.xpos<=-100 or self.xpos>=1100 or self.ypos<=-100 or self.ypos>=850)==False:
-                moveSprite(self.building,self.xpos,self.ypos)
 
-    class forge(object):
+    class forge(abstract_building):
         def __init__(self,builder):
-            self.xpos=builder.xpos
-            self.ypos=builder.ypos
-            self.building=makeSprite(warriortree)
-            self.hp=[300]
-            self.building.hp = self.hp
-            moveSprite(self.building,self.xpos,self.ypos)
-            showSprite(self.building)
+            abstract_building.__init__(self,builder,[500],warriortree)
         def born_warrior(self):
             if self.hp[0] > 0:
                 self.warriorowl=units.warrior(self.xpos,self.ypos)
                 return self.warriorowl
-        def movescreen(self,screenx,screeny):
-            self.screenx=screenx
-            self.screeny=screeny
-            self.xpos+=screenx
-            self.ypos+=screeny
-            if (self.xpos<=-100 or self.xpos>=1100 or self.ypos<=-100 or self.ypos>=850)==False:
-                moveSprite(self.building,self.xpos,self.ypos)
 
-    class storage(object):
-        def __init__(self, builder):
-            self.xpos=builder.xpos
-            self.ypos=builder.ypos
-            self.building = makeSprite(storage)
-            self.hp = [200]
-            self.building.hp = self.hp
+    class storage(abstract_building):
+        def __init__(self,builder):
+            abstract_building.__init__(self,builder,[500],storage)
             self.berry = 0
             self.rock = 0
             self.wood = 0
-            moveSprite(self.building, self.xpos, self.ypos)
-            showSprite(self.building)
-        def movescreen(self,screenx,screeny):
-            self.screenx=screenx
-            self.screeny=screeny
-            self.xpos+=screenx
-            self.ypos+=screeny
-            if (self.xpos<=-100 or self.xpos>=1100 or self.ypos<=-100 or self.ypos>=850)==False:
-                moveSprite(self.building,self.xpos,self.ypos)
-    class sawmill(object):
-        def __init__(self, builder,woods):
+    class sawmill(abstract_building):
+        def __init__(self,builder,woods):
+            abstract_building.__init__(self,builder,[500],hellish_sawmill)
             self.woods = woods
             self.a = 0
             self.near_woods = []
-            self.building = makeSprite(sawmill)
-            self.xpos = builder.xpos
-            self.ypos = builder.ypos
             for i in range(len(self.woods)):
                 if ((((((self.woods[i].xpos - self.xpos)**2+(self.woods[i].ypos-self.ypos)**2) ** 0.5) <= 300))):
                     self.near_woods.append(0)
                     self.near_woods[self.a] = self.woods[i]
                     self.a += 1
-            self.hp = [200]
-            self.building.hp = self.hp
             self.wood = 0
             self.damage_to_trees = 100
-            moveSprite(self.building,self.xpos, self.ypos)
-            showSprite(self.building)
-        def sawing(self):
+        def do_smth(self):
+            #sawing
             if self.hp[0] > 0:
                 if len(self.near_woods):
                     self.wood+=1
                     self.near_woods[0].hp = [0]
                     changeSpriteImage(self.near_woods[0].building,1)
                     self.near_woods.pop(0)
-        def movescreen(self,screenx,screeny):
-            self.screenx=screenx
-            self.screeny=screeny
-            self.xpos+=screenx
-            self.ypos+=screeny
-            if (self.xpos<=-100 or self.xpos>=1100 or self.ypos<=-100 or self.ypos>=850)==False:
-                moveSprite(self.building,self.xpos,self.ypos)
-
-    class quarry(object):
-        def __init__(self, builder, stones):
+    class quarry(abstract_building):
+        def __init__(self,builder, stones):
+            abstract_building.__init__(self, builder, [500], quarry)
             self.stones = stones
             self.a = 0
             self.near_stones = []
-            self.building = makeSprite(quarry)
-            self.xpos = builder.xpos
-            self.ypos = builder.ypos
             for i in range(len(self.stones)):
                 if (((self.stones[i].xpos - self.xpos) ** 2 + (self.stones[i].ypos - self.ypos) ** 2) ** 0.5) <= 300:
                     self.near_stones.append(0)
                     self.near_stones[self.a] = self.stones[i]
                     self.a += 1
-            self.hp = [400]
-            self.building.hp = self.hp
             self.rock = 0
             self.damage_to_trees = 100
-            moveSprite(self.building, self.xpos, self.ypos)
-            showSprite(self.building)
-        def stonecutting(self):
+        def do_smth(self):
+            #stonecutting
             if self.hp[0] > 0:
                 if len(self.near_stones):
                     self.rock+=2
                     self.near_stones[0].hp = [0]
                     changeSpriteImage(self.near_stones[0].building, 1)
                     self.near_stones.pop(0)
-        def movescreen(self,screenx,screeny):
-            self.screenx=screenx
-            self.screeny=screeny
-            self.xpos+=screenx
-            self.ypos+=screeny
-            if (self.xpos<=-100 or self.xpos>=1100 or self.ypos<=-100 or self.ypos>=850)==False:
-                moveSprite(self.building,self.xpos,self.ypos)
+
+    class environment(object):
+        def __init__(self, spritename, secondspritename, hp, collectability):
+            self.spritename = spritename
+            self.secondspritename = secondspritename
+            self.hp = hp
+            self.collectability = collectability
+            self.building = makeSprite(spritename)
+            self.building.hp = self.hp
+            addSpriteImage(self.building, self.secondspritename)
+            self.xpos = random.randint(-2500, 2500)
+            self.ypos = random.randrange(-1500, 1500)
+            moveSprite(self.building, self.xpos, self.ypos)
+            if (self.ypos >= 410 and self.ypos <= 750) == False:
+                showSprite(self.building)
+
+        def movescreen(self, screenx, screeny):
+            self.screenx = screenx
+            self.screeny = screeny
+            self.xpos += screenx
+            self.ypos += screeny
+            if (self.xpos <= -50 or self.xpos >= 1050 or self.ypos <= -50 or self.ypos >= 850) == False:
+                moveSprite(self.building, self.xpos, self.ypos)
