@@ -1,7 +1,7 @@
 from pygame_functions import *
 import random
+import numpy as np
 from collections import deque
-
 wood = "wood.png"
 rock = "rock.png"
 owl = "owl.png"
@@ -29,10 +29,7 @@ sawmill = "Desktop/project folder/sawmill.png"
 quarry = "Desktop/project folder/quarry.png"
 '''
 def iscollectible(x):
-    if x.collectability==0:
-        return True
-    else:
-        return False
+   return x.collectability == 0
 class abstract_unit(object):
     def __init__(self,xpos,ypos,hp,spritename):
         self.xpos = xpos
@@ -110,9 +107,9 @@ class units(object):
     class normal_unit(abstract_unit):
         def __init__(self,xpos,ypos):
             abstract_unit.__init__(self,xpos,ypos,[50],owl)
-            self.berry=10000
-            self.wood=10000
-            self.rock=10000
+            self.berry=1000
+            self.wood=1000
+            self.rock=1000
         def disti(self,resourses,name):
             self.resourses = resourses
             for i in range(len(self.resourses)):
@@ -128,6 +125,7 @@ class units(object):
                             self.resourses[i].collectability = 1
                             self.resourses[i].hp = [-1]
                             killSprite(self.resourses[i].building)
+                            resourses = np.delete(resourses, i)
                     elif name[0] == "2":
                         self.berry += 1
                         changeSpriteImage(self.resourses[i].building, 1)
@@ -136,17 +134,16 @@ class units(object):
                     elif name[0] == "3":
                         if name[1] == "0":
                             self.rock += self.resourses[i].stones
-                            self.resourses[i].stones = 0
+
                         else:
                             self.rock += 1
                             changeSpriteImage(self.resourses[i].building, 1)
                             self.resourses[i].collectability = 1
                             self.resourses[i].hp = [-1]
                             killSprite(self.resourses[i].building)
-
+                            resourses = np.delete(resourses, i)
         def get(self,sawmills,bushes,quarries,pebbles,branches):
             if self.hp[0] > 0:
-                self.resourses = (sawmills,bushes,quarries,pebbles,branches)
                 self.disti(sawmills,"10")
                 self.disti(bushes,"21")
                 self.disti(quarries,"30")
@@ -181,6 +178,7 @@ class units(object):
                     enemy.hp[0] = 0
                     if enemy.hp[0]<=0:
                         killSprite(enemy)
+                        enemies = np.delete(enemies,)
 class buildings(object):
     class main_hall(abstract_building):
         def __init__(self,builder):
