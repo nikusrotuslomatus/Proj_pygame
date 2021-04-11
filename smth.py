@@ -4,7 +4,7 @@ from collections import deque
 from units_and_buildings import *
 # from numba import *
 import numpy as np
-from console import *
+
 
 screenSize(1000, 730)
 setBackgroundColour((43, 94, 65))
@@ -105,8 +105,10 @@ def console_ended(entry,allspries):
         file.write('\n')
         file.write("    ")
         file.write(str(entry))
+
     return False
 def main():
+    label_array = []
     xpos = 10
     ypos = 80
     concole_switcher = False
@@ -448,6 +450,8 @@ def main():
         except Exception as e:
             print(e)
         if keyPressed("u"):
+            ypos = 50
+            label_array = []
             allspries = np.array(
                 [mainhalls, forges, warriors, quarries, sawmills, storages, normalunits, branches, pebbles, rocks,
                  woods, bushes])
@@ -463,24 +467,27 @@ def main():
             console_ended(entry,allspries)
             hideTextBox(wordBox)
             wordlabel = makeLabel(entry, 30, random.randint(1, 700), random.randint(50, 700), "yellow")
+            label_array.append(wordlabel)
             moveLabel(wordlabel, xpos, ypos)
             moveLabel(wordBox, xpos, ypos)
             ypos += 34
             if entry == "zerotwo":
                 hideLabel(wordlabel)
             while concole_switcher :
-
                 wordlabel = makeLabel(entry, 30, random.randint(1, 700), random.randint(50, 700), "yellow")
+                label_array.append(wordlabel)
                 showLabel(wordlabel)
                 moveLabel(wordlabel, xpos, ypos - 34)
                 wordBox = makeTextBox(xpos, ypos, 300, 1200, "Enter text here", 15, 24)
                 ypos += 34
                 entry = textBoxInput(wordBox)
-                hideLabel(wordlabel)
                 hideTextBox(wordBox)
                 if console_ended(entry,allspries):
+                    for i in label_array:
+                        hideLabel(i)
                     break
-            aa()
+
+            #from console import aa
         if keyPressed("space"):
             if pos2[0] <= 5 or pos2[0] >= 995 or pos2[1] <= 5 or pos2[1] >= 725:
                 allspries = np.array(
