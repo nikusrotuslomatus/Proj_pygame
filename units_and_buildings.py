@@ -62,6 +62,7 @@ class abstract_unit(object):
             moveSprite(self.building, self.xpos, self.ypos)
 
     def goto(self, xgoto, ygoto):
+        print("1")
         if self.hp[0] > 0:
             self.xgoto = xgoto
             self.ygoto = ygoto
@@ -83,6 +84,7 @@ class abstract_unit(object):
                 self.havecome = True
             if self.ypos <= 850 and self.xpos <= 1100 and self.xpos >= -100 and self.ypos >= -100:
                 showSprite(self.building)
+
 
 
 class abstract_building(object):

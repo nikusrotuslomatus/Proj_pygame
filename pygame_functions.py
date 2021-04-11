@@ -621,7 +621,7 @@ def textBoxInput(textbox, functionToCall=None, args=[]):
     returnVal = None
     while True:
         if breaker == True:
-            return "zerotwo"
+            return "ex"
         updateDisplay()
         if functionToCall:
             returnVal = functionToCall(*args)

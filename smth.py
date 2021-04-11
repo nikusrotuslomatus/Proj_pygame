@@ -1,6 +1,5 @@
 from pygame_functions import *
 import random
-from collections import deque
 from units_and_buildings import *
 # from numba import *
 import numpy as np
@@ -92,7 +91,7 @@ moveSprite(berryicon, 410, 10)
 pos = (500, 300)
 
 def console_ended(entry,allspries):
-    if entry == "zerotwo":
+    if entry == "ex":
         for listsprite in allspries:
             for sprite in listsprite:
                 if sprite.xpos <= -100 or sprite.xpos >= 1100 or sprite.ypos <= -100 or sprite.ypos >= 850:
@@ -285,15 +284,7 @@ def main():
         if mouseState[0] and keyPressed("space"):
             pos = [pygame.mouse.get_pos()[0] - 30, pygame.mouse.get_pos()[1] - 30]
             normalunits[0].havecome = False
-        if not acounter:
-            if not normalunits[0].havecome:
-                normalunits[0].goto(pos[0], pos[1])
-                if abs(normalunits[0].xpos - pos[0]) <= 3.2 and abs(normalunits[0].ypos - pos[1]) <= 3.1:
-                    normalunits[0].get(sawmills, bushes, quarries, pebbles, branches)
-        elif acounter:
-            warriors[0].goto(pos[0] - xmovescreen, pos[1] - ymovescreen)
-            if abs(warriors[0].xpos - pos[0]) <= 3.2 and abs(warriors[0].ypos - pos[1]) <= 3.1:
-                warriors[0].attack()
+
         if keyPressed("r"):
             try:
                 acounter = False
@@ -461,7 +452,7 @@ def main():
             #drawRect(0, 0, 1000, 1000, "black")
             setBackgroundColour(("black"))
             concole_switcher = True
-            wordBox = makeTextBox(10, 80, 300, 1200, "Enter text here", 15, 24)
+            wordBox = makeTextBox(10, 80, 800, 1200, "Enter text here", 150, 24)
             showTextBox(wordBox)
             entry = textBoxInput(wordBox)
             console_ended(entry,allspries)
@@ -471,14 +462,14 @@ def main():
             moveLabel(wordlabel, xpos, ypos)
             moveLabel(wordBox, xpos, ypos)
             ypos += 34
-            if entry == "zerotwo":
+            if entry == "ex":
                 hideLabel(wordlabel)
             while concole_switcher :
                 wordlabel = makeLabel(entry, 30, random.randint(1, 700), random.randint(50, 700), "yellow")
                 label_array.append(wordlabel)
                 showLabel(wordlabel)
                 moveLabel(wordlabel, xpos, ypos - 34)
-                wordBox = makeTextBox(xpos, ypos, 300, 1200, "Enter text here", 15, 24)
+                wordBox = makeTextBox(xpos, ypos, 800, 1200, "Enter text here", 150, 24)
                 ypos += 34
                 entry = textBoxInput(wordBox)
                 hideTextBox(wordBox)
@@ -487,7 +478,19 @@ def main():
                         hideLabel(i)
                     break
 
-            #from console import aa
+            from console import aa
+            aa(normalunits[0])
+        if not acounter:
+            pass
+            #aa(normalunits[0])
+            # if not normalunits[0].havecome:
+            #  normalunits[0].goto(pos[0], pos[1])
+            #   if abs(normalunits[0].xpos - pos[0]) <= 3.2 and abs(normalunits[0].ypos - pos[1]) <= 3.1:
+            #   normalunits[0].get(sawmills, bushes, quarries, pebbles, branches)
+        elif acounter:
+            warriors[0].goto(pos[0] - xmovescreen, pos[1] - ymovescreen)
+            if abs(warriors[0].xpos - pos[0]) <= 3.2 and abs(warriors[0].ypos - pos[1]) <= 3.1:
+                warriors[0].attack()
         if keyPressed("space"):
             if pos2[0] <= 5 or pos2[0] >= 995 or pos2[1] <= 5 or pos2[1] >= 725:
                 allspries = np.array(
