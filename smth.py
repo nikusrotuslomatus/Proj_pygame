@@ -4,6 +4,7 @@ from collections import deque
 from units_and_buildings import *
 # from numba import *
 import numpy as np
+from console import *
 
 screenSize(1000, 730)
 setBackgroundColour((43, 94, 65))
@@ -90,7 +91,21 @@ moveSprite(branchicon, 310, 10)
 moveSprite(berryicon, 410, 10)
 pos = (500, 300)
 
-
+def console_ended(entry,allspries):
+    if entry == "zerotwo":
+        for listsprite in allspries:
+            for sprite in listsprite:
+                if sprite.xpos <= -100 or sprite.xpos >= 1100 or sprite.ypos <= -100 or sprite.ypos >= 850:
+                    pass
+                else:
+                    showSprite(sprite.building)
+        setBackgroundColour((43, 94, 65))
+        return True
+    with open("console.py", mode='a') as file:
+        file.write('\n')
+        file.write("    ")
+        file.write(str(entry))
+    return False
 def main():
     xpos = 10
     ypos = 80
@@ -445,30 +460,27 @@ def main():
             wordBox = makeTextBox(10, 80, 300, 1200, "Enter text here", 15, 24)
             showTextBox(wordBox)
             entry = textBoxInput(wordBox)
+            console_ended(entry,allspries)
             hideTextBox(wordBox)
             wordlabel = makeLabel(entry, 30, random.randint(1, 700), random.randint(50, 700), "yellow")
             moveLabel(wordlabel, xpos, ypos)
             moveLabel(wordBox, xpos, ypos)
             ypos += 34
+            if entry == "zerotwo":
+                hideLabel(wordlabel)
             while concole_switcher :
+
                 wordlabel = makeLabel(entry, 30, random.randint(1, 700), random.randint(50, 700), "yellow")
                 showLabel(wordlabel)
                 moveLabel(wordlabel, xpos, ypos - 34)
                 wordBox = makeTextBox(xpos, ypos, 300, 1200, "Enter text here", 15, 24)
                 ypos += 34
                 entry = textBoxInput(wordBox)
-                if entry == "zerotwo":
-                    for listsprite in allspries:
-                        for sprite in listsprite:
-                            if sprite.xpos <= -100 or sprite.xpos >= 1100 or sprite.ypos <= -100 or sprite.ypos >= 850:
-                                pass
-                            else:
-                                showSprite(sprite.building)
-                    #hideTextBox(wordBox)
-                    hideLabel(wordlabel)
-                    setBackgroundColour((43, 94, 65))
-                    concole_switcher = False
+                hideLabel(wordlabel)
                 hideTextBox(wordBox)
+                if console_ended(entry,allspries):
+                    break
+            aa()
         if keyPressed("space"):
             if pos2[0] <= 5 or pos2[0] >= 995 or pos2[1] <= 5 or pos2[1] >= 725:
                 allspries = np.array(

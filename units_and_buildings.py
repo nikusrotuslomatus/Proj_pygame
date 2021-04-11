@@ -1,5 +1,6 @@
 from pygame_functions import *
 import random
+import functools
 import numpy as np
 from collections import deque
 wood = "wood.png"
@@ -110,45 +111,75 @@ class units(object):
             self.berry=1000
             self.wood=1000
             self.rock=1000
+            '''
         def disti(self,resourses,name):
-            self.resourses = resourses
-            for i in range(len(self.resourses)):
-                if (((self.resourses[i].xpos - self.xpos) ** 2 + (
-                        self.resourses[i].ypos - self.ypos) ** 2) ** 0.5) <= 25 and self.resourses[i].hp[0] > 0:
+            for i in range(len(resourses)):
+                if (((resourses[i].xpos - self.xpos) ** 2 + (
+                        resourses[i].ypos - self.ypos) ** 2) ** 0.5) <= 25 and resourses[i].hp[0] > 0:
                     if name[0] == "1":
                         if name[1] == "0":
-                            self.wood += self.resourses[i].wood
-                            self.resourses[i].wood = 0
+                            self.wood += resourses[i].wood
+                            resourses[i].wood = 0
                         else:
                             self.wood += 1
-                            changeSpriteImage(self.resourses[i].building, 1)
-                            self.resourses[i].collectability = 1
-                            self.resourses[i].hp = [-1]
-                            killSprite(self.resourses[i].building)
-                            resourses = np.delete(resourses, i)
+                            changeSpriteImage(resourses[i].building, 1)
+                            resourses[i].collectability = 1
+                            resourses[i].hp = [-1]
+                            killSprite(resourses[i].building)
+                            k = resourses[i]
+                            resourses[i] = buildings.environment(owl,owl,[10],1)
                     elif name[0] == "2":
                         self.berry += 1
-                        changeSpriteImage(self.resourses[i].building, 1)
-                        self.resourses[i].collectability = 1
-                        self.resourses[i].hp = [-1]
+                        changeSpriteImage(resourses[i].building, 1)
+                        resourses[i].collectability = 1
+                        resourses[i].hp = [-1]
                     elif name[0] == "3":
                         if name[1] == "0":
-                            self.rock += self.resourses[i].stones
+                            self.rock += resourses[i].stones
 
                         else:
                             self.rock += 1
-                            changeSpriteImage(self.resourses[i].building, 1)
-                            self.resourses[i].collectability = 1
-                            self.resourses[i].hp = [-1]
-                            killSprite(self.resourses[i].building)
-                            resourses = np.delete(resourses, i)
+                            changeSpriteImage(resourses[i].building, 1)
+                            resourses[i].collectability = 1
+                            resourses[i].hp = [-1]
+                            killSprite( resourses[i].building)
+                            resourses[i] = buildings.environment(owl,owl,[-1],1)
+                            '''
+        def touching_sprite(self,xpos,ypos,hp):
+            return (((xpos - self.xpos) ** 2 + (ypos - self.ypos) ** 2) ** 0.5) <= 25 and hp[0] > 0
+
         def get(self,sawmills,bushes,quarries,pebbles,branches):
             if self.hp[0] > 0:
-                self.disti(sawmills,"10")
-                self.disti(bushes,"21")
-                self.disti(quarries,"30")
-                self.disti(pebbles,"31")
-                self.disti(branches,"11")
+                for i in range(len(sawmills)):
+                    if self.touching_sprite(sawmills[i].xpos,sawmills[i].ypos,sawmills[i].hp) is True:
+                        self.wood += sawmills[i].wood
+                        sawmills[i].wood = 0
+                for i in range(len(bushes)):
+                    if self.touching_sprite(bushes[i].xpos,bushes[i].ypos,bushes[i].hp) is True:
+                        self.berry += 1
+                        changeSpriteImage(bushes[i].building, 1)
+                        bushes[i].collectability = 1
+                        bushes[i].hp = [-1]
+                for i in range(len(quarries)):
+                    if self.touching_sprite(quarries[i].xpos, quarries[i].ypos, quarries[i].hp) is True:
+                        self.rock += quarries[i].stones
+                        quarries[i].wood = 0
+                for i in range(len(pebbles)):
+                    if self.touching_sprite(pebbles[i].xpos,pebbles[i].ypos,pebbles[i].hp) is True:
+                        self.rock += 1
+                        changeSpriteImage(pebbles[i].building, 1)
+                        pebbles[i].collectability = 1
+                        pebbles[i].hp = [-1]
+                        killSprite(pebbles[i].building)
+                        pebbles[i] = buildings.environment(owl, owl, [10], 1)
+                for i in range(len(branches)):
+                    if self.touching_sprite(branches[i].xpos, branches[i].ypos, branches[i].hp) is True:
+                        self.wood += 1
+                        changeSpriteImage(branches[i].building, 1)
+                        branches[i].collectability = 1
+                        branches[i].hp = [-1]
+                        killSprite(branches[i].building)
+                        branches[i] = buildings.environment(owl, owl, [10], 1)
         def put_res(self,storage_name):
             if self.hp[0] > 0:
                 self.storage_name=storage_name
@@ -174,11 +205,11 @@ class units(object):
         def attack(self):
             if self.hp[0] > 0:
                 enemies=allTouching(self.building)
-                for enemy in enemies:
-                    enemy.hp[0] = 0
-                    if enemy.hp[0]<=0:
-                        killSprite(enemy)
-                        enemies = np.delete(enemies,)
+                for i in range(len(enemies)):
+                    enemies[i].hp[0] = -1
+                    if enemies[i].hp[0]<=0:
+                        killSprite(enemies[i])
+                        enemies[i] = buildings.environment(owl, owl, [-1], 1)
 class buildings(object):
     class main_hall(abstract_building):
         def __init__(self,builder):
